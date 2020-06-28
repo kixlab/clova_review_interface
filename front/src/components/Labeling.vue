@@ -1,0 +1,11 @@
+<template>
+  <v-row>
+    <v-card
+      tile
+      width="500px"
+      height="300px"
+      >
+      Labeling
+    </v-card>
+  </v-row>
+</template>
