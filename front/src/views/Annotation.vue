@@ -5,20 +5,28 @@
       color="indigo"
       dark
     >
-      <v-toolbar-title>HEADER</v-toolbar-title>
+      <v-toolbar-title>Annotation</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <img alt="Vue logo" src="../assets/logo.png">
+      <v-container fill-height>
       <v-row>
-        <v-col>
+        <!-- COL1 - IMAGE LOADER -->
+        <v-col cols="6">
         <image-panel/>
         </v-col>
-        <v-col>
-          <labeling/>
-          <linking/>
+
+        <!-- COL2 - ANNOTATION UI -->
+        <v-col cols="6">
+          <v-row dense>
+            <labeling-instruction/>
+            <labeling/>
+            <linking/>
+          </v-row>
         </v-col>
       </v-row>
+    </v-container>
+      
     </v-main>
   
     <v-footer
@@ -28,7 +36,7 @@
     >
       <v-spacer></v-spacer>
 
-      <span class="white--text">&copy; 2019</span>
+      <span class="white--text">&copy; 2020</span>
     </v-footer>
 
   </v-app>
@@ -40,13 +48,15 @@
 import ImagePanel from '@/components/ImagePanel.vue'
 import Labeling from '@/components/Labeling.vue'
 import Linking from '@/components/Linking.vue'
+import LabelingInstruction from '@/components/LabelingInstruction.vue'
 
 export default {
   name: 'Home',
   components: {
     ImagePanel,
     Linking,
-    Labeling
+    Labeling,
+    LabelingInstruction
   }
 }
 </script>
