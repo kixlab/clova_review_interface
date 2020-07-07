@@ -24,7 +24,7 @@ docker-compose exec server python manage.py migrate
 will reflect the updates in `models.py`.
 
 ```
-docker-compose exec server python manage.py createsuperuse
+docker-compose exec server python manage.py createsuperuser
 ```
 helps creating an admin account.
 
