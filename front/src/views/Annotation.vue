@@ -9,7 +9,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fill-height>
+      <v-container>
       <v-row>
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="6">
@@ -25,8 +25,13 @@
           </v-row>
         </v-col>
       </v-row>
-    </v-container>
+
+      <v-row justify='end'>
+        <submit-button/>
+      </v-row>
+      </v-container>
       
+
     </v-main>
   
     <v-footer
@@ -49,6 +54,7 @@ import ImagePanel from '@/components/ImagePanel.vue'
 import Labeling from '@/components/Labeling.vue'
 import Linking from '@/components/Linking.vue'
 import LabelingInstruction from '@/components/LabelingInstruction.vue'
+import SubmitButton from '@/components/SubmitButton.vue'
 
 export default {
   name: 'Home',
@@ -56,7 +62,8 @@ export default {
     ImagePanel,
     Linking,
     Labeling,
-    LabelingInstruction
+    LabelingInstruction,
+    SubmitButton
   }
 }
 </script>
