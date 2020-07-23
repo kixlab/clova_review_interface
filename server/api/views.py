@@ -2,14 +2,19 @@
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+import json
 
 from .models import Image
 
 @csrf_exempt
 def selectedImage(request):
     if request.method == 'GET':
-        print(Image.objects.get(pk=1))
-        item = Image.objects.get(pk=1)
-        print(item.image.url)
-        return JsonResponse(item.image.url, safe=False) 
+        item = Image.objects.filter(is_done=True)[1]
+        return HttpResponse(item.image.url)
+
+    elif request.method == 'POST':
+        query_json = json.loads(request.body)
+        if query_json['test'] == 'testText':
+            return HttpResponse("RECEIVED")
+        return HttpResponseBadRequest('Wrong test input received.')
