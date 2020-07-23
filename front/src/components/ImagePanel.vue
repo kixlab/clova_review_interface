@@ -4,22 +4,22 @@
     width="100%"
     height="100%"
     >
-    I am {{ image }}!
+    <!-- I am {{ image }}! -->
     
     <v-img :src=image_url contain width="400px" height="500px" @mousedown="clickDown" @mouseup="clickUp" style="justifyContent: center">
       <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
         <template slot-scope="{ startPoint }">
           {{startPoint}}
         <div v-if="image_box" ref="img_box">
-          <div v-for="box in image_box" v-bind:key="box.id">
+          <div v-for="box in image_box" :key="box.id">
             <div v-if="box.selected === true">
-              <bounding-box color="stroke:blue;" :x="box.x_pos" :y="box.y_pos" :w="box.x_len" :h="box.y_len"/>
+              <bounding-box color="stroke:blue;" :box_info="box"/>
             </div>
             <div v-else-if="box.annotated === true">
-              <bounding-box color="stroke:grey;" :x="box.x_pos" :y="box.y_pos" :w="box.x_len" :h="box.y_len"/>
+              <bounding-box color="stroke:grey;" :box_info="box"/>
             </div>
             <div v-else>
-              <bounding-box color="stroke:red;" :x="box.x_pos" :y="box.y_pos" :w="box.x_len" :h="box.y_len"/>
+              <bounding-box color="stroke:red;" :box_info="box"/>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
     <v-btn @click="loadImage">Load an image from the server</v-btn>
 
     <h3 style="marginTop: 15px"> Annotated boxes </h3>
-    <div v-for="box in image_box" v-bind:key="box.id">
+    <div v-for="box in image_box" :key="box.id">
       <div v-if="box.annotated === true">
         {{box.text}} - [{{box.label}}]
       </div>
@@ -43,34 +43,35 @@
 
 <script>
 import axios from "axios";
-import Vue from 'vue';
+// import Vue from 'vue';
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
+import BoundingBox from '@/components/BoundingBox.vue'
 
-// Bounding Box component
-const BoundingBox = Vue.component('bounding-box', {
-  props: ['color', 'x', 'y', 'w', 'h', 'border'],
-  data() {
-    return {
-      clicked: true, 
-    }
-  },
-  template: `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-      <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1.2;" :x="int(x)" :y="int(y)" :width="int(w)+2" :height="int(h)+2"/>
-  </svg>`,
-  methods: {
-    int: function(elem) {
-      return parseInt(elem)
-    },
-    add: function(li) {
-      var res = 0
-      for (var elem in li) {
-        res += this.int(li[elem])
-      }
-      return res
-    }
-  }
-});
+// // Bounding Box component
+// const BoundingBox = Vue.component('bounding-box', {
+//   props: ['color', 'x', 'y', 'w', 'h', 'border'],
+//   data() {
+//     return {
+//       clicked: true, 
+//     }
+//   },
+//   template: `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+//       <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1.2;" :x="int(x)" :y="int(y)" :width="int(w)+2" :height="int(h)+2"/>
+//   </svg>`,
+//   methods: {
+//     int: function(elem) {
+//       return parseInt(elem)
+//     },
+//     add: function(li) {
+//       var res = 0
+//       for (var elem in li) {
+//         res += this.int(li[elem])
+//       }
+//       return res
+//     }
+//   }
+// });
 
 
 
@@ -82,7 +83,7 @@ export default {
   },
   data() {
     return {
-      image_url: require('../assets/logo.png'),
+      image_url: {},
       image: this.$store.getters.getImage,
       image_box: this.$store.getters.getImageBoxes,
       color: 'stroke:red',
@@ -115,7 +116,6 @@ export default {
 
         axios.get("http://localhost:8000/api/image/")
           .then(function (res) {
-          //console.log(res.data)
           self.image_url = "http://localhost:8000" + res.data
         })
 
@@ -126,7 +126,6 @@ export default {
 
     },
 
-    
 
     getInitialPosition: function() {
       const box_pos = this.$refs.img_box.getBoundingClientRect()
@@ -195,6 +194,9 @@ export default {
     },
 
 
+  },
+  created: function () {
+    this.loadImage()
   },
   computed: mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
   

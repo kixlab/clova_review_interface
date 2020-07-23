@@ -4,30 +4,42 @@
       :loading="loading"
       :disabled="loading"
       color="secondary"
-      @click="loader = 'loading'"
+      @click="onSubmit"
     >
       Submit
     </v-btn>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ImagePanel",
   data() {
     return {
-      loader: null,
       loading: false,
     };
   },
-    watch: {
-      loader () {
-        const l = this.loader
-        this[l] = !this[l]
+  methods: {
+    onSubmit: function() {
+      const that = this;
+      that.loading = true
 
-        setTimeout(() => (this[l] = false), 3000)
+      axios.post("http://localhost:8000/api/image/", {
+        test: 'testText'
+      })
+      .then(function (res) {
+        console.log(res)
+        that.loading = false
+        alert("Server responded!!")
+      })
 
-        this.loader = null
-      },
-    },
+      .catch(function(err) {
+        that.loading = false
+        alert(err);
+      });
+
+    }
+  }
   }
 </script>
