@@ -17,8 +17,7 @@ class Box(models.Model):
     height = models.IntegerField(validators=[MaxValueValidator(256), MinValueValidator(0)])
 
 
-class Taxonomy(models.Model):
-    pass
+# class Taxonomy(models.Model):
+#     Not Implemented.
 
-# Taxonomy not Implemented.
-# Box group Not Implemented.
+

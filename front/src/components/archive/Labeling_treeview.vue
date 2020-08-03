@@ -6,23 +6,32 @@
       <v-card-text> 
         <v-row>
           <v-col>
-            <v-radio-group
+            <v-treeview
               v-model="selection"
-              hide-details
-            >
-            <v-radio v-for="item in items" 
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.name"/>
-
-            </v-radio-group>
+              :items="items"
+              selection-type="leaf"
+              selectable
+              return-object
+              open-on-click
+              open-all
+              dense
+            ></v-treeview>
+          </v-col>
+          <v-divider vertical></v-divider>
+          <v-col class="pa-6" cols="6">
+            <template v-if="!selection.length">
+              No nodes selected.
+            </template>
+            <template v-else>
+              <div v-for="node in selection" :key="node.id">
+                {{ node.parentname }} / 
+                {{ node.name }}
+              </div>
+            </template>
           </v-col>
         </v-row>
-        <v-divider/>
-        <br>
-        <v-row justify="start">
-          <v-btn @click="labelSelected" :disabled="emptySelection" class="btn"> RECORD </v-btn>
-        </v-row>
+        <br/>
+        <v-btn @click="labelSelected" :disabled="emptySelection"> RECORD </v-btn>
       </v-card-text>
 
     </v-card>
@@ -36,19 +45,37 @@ export default {
   name: 'Labeling',
   data() {
     return {
-      selection: null,
+      selectionType: 'leaf',
+      selection: [],
       items: [
-        { id: 1, name: 'menu.name'},
-        { id: 2, name: 'menu.unit_price'},
-        { id: 3, name: 'menu.count'},
-        { id: 4, name: 'menu.price'},
-        { id: 5, name: 'subtotal.subtotal_price'},
-        { id: 6, name: 'subtotal.tax_price'},
-        { id: 7, name: 'total.total_price'},
-        { id: 8, name: 'total.cash_price'},
-        { id: 9, name: 'total.credit_card_price'},
-        { id: 10, name: 'total.change_price'},
-        { id: 11, name: 'N/A (Not Applicable)'}
+        { 
+          id: 1, 
+          name: 'menu',
+          children: [
+            { id: 2, name: 'menu.name', parentname: 'menu' },
+            { id: 3, name: 'menu.unit_price', parentname: 'menu'},
+            { id: 4, name: 'menu.count', parentname: 'menu'},
+            { id: 5, name: 'menu.price', parentname: 'menu'},
+          ],
+        },
+        {
+          id: 6,
+          name: 'subtotal',
+          children: [
+            { id: 7, name: 'subtotal.subtotal_price', parentname: 'subtotal' },
+            { id: 8, name: 'subtotal.tax_price', parentname: 'subtotal' },
+          ],
+        },
+        { 
+          id: 9, 
+          name: 'total',
+          children: [
+            { id: 10, name: 'total.total_price', parentname: 'total' },
+            { id: 11, name: 'total.cash_price', parentname: 'total' },
+            { id: 11, name: 'total.credit_card_price', parentname: 'total' },
+            { id: 11, name: 'total.change_price', parentname: 'total' },
+          ],
+        },
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
@@ -72,7 +99,7 @@ export default {
 
   computed: {
     emptySelection() {
-      return (this.selection === null)
+      return !(this.selection.length === 1)
     }
   },
 
@@ -83,7 +110,7 @@ export default {
       this.getImageBoxes()
       const imageBox = this.image_box
       //const selectedBoxes = this.image_box.filter(v => v.selected === true)
-      const label = this.selection
+      const label = this.selection[0].name
       
       for (var box in imageBox) {
         if (imageBox[box].selected === true) {
@@ -96,7 +123,7 @@ export default {
 
       //console.log(this.image_box)
       this.updateImageBoxes(this.image_box)
-      this.selection = null
+      this.selection = []
 
     }
   },
@@ -113,9 +140,6 @@ export default {
 .blue-text {
   color:blue;
   font-weight: bold;
-}
-.btn {
-  margin-left: 1rem;
 }
 
 </style>

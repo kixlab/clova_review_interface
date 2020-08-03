@@ -1,4 +1,4 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +10,7 @@ from .models import Image
 @csrf_exempt
 def selectedImage(request):
     if request.method == 'GET':
-        item = Image.objects.filter(is_done=True)[1]
+        item = Image.objects.filter(is_done=True)[0]
         return HttpResponse(item.image.url)
 
     elif request.method == 'POST':

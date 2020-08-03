@@ -8,7 +8,8 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Annotation',
-    component: Annotation
+    component: Annotation,
+    props: (route) => ({ user_id: route.query.uid })
   }
   // {
   //   path: '/about',
