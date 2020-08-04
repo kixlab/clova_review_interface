@@ -5,12 +5,12 @@
       color="indigo"
       dark
     >
-      <v-toolbar-title>Annotation</v-toolbar-title>
+      <v-toolbar-title>Annotation - {{user_id}}</v-toolbar-title>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="noPadding">
       <v-container>
-      <v-row>
+      <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="6">
         <image-panel/>
@@ -21,14 +21,13 @@
           <v-row dense>
             <labeling-instruction/>
             <labeling/>
-            <linking/>
+          </v-row>
+          <v-row justify='end'>
+            <submit-button/>
           </v-row>
         </v-col>
       </v-row>
 
-      <v-row justify='end'>
-        <submit-button/>
-      </v-row>
       </v-container>
       
 
@@ -52,7 +51,7 @@
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
 import Labeling from '@/components/Labeling.vue'
-import Linking from '@/components/Linking.vue'
+// import Linking from '@/components/Linking.vue'
 import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
 
@@ -60,10 +59,26 @@ export default {
   name: 'Home',
   components: {
     ImagePanel,
-    Linking,
+    // Linking,
     Labeling,
     LabelingInstruction,
     SubmitButton
+  },
+  props: {
+    user_id: {
+      type: String,
+      default: null
+    }
+  },
+  beforeMount () {
+    if (this.user_id.length < 1) throw new Error('User ID must be passed in URL!')
+    return true
   }
 }
 </script>
+
+<style scoped>
+.noPadding {
+  padding-top: 0px !important;
+}
+</style>
