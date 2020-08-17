@@ -8,9 +8,9 @@ import json
 from .models import Image
 
 @csrf_exempt
-def selectedImage(request):
+def selectedImage(request, num):
     if request.method == 'GET':
-        item = Image.objects.filter(is_done=True)[0]
+        item = Image.objects.filter(is_done=True)[int(num)]
         return HttpResponse(item.image.url)
 
     elif request.method == 'POST':
@@ -18,3 +18,8 @@ def selectedImage(request):
         if query_json['test'] == 'testText':
             return HttpResponse("RECEIVED")
         return HttpResponseBadRequest('Wrong test input received.')
+
+def selectedImageBox(request, num):
+    if request.method == 'GET':
+        item = Image.objects.filter(is_done=True)[int(num)]
+        return HttpResponse(item.box_info)

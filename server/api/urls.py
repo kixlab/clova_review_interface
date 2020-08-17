@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('image/', views.selectedImage)
+    path(r'image/<num>/', views.selectedImage, name='num'),
+    path(r'image/box_info/<num>', views.selectedImageBox, name='num')
 ]

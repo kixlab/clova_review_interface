@@ -13,14 +13,16 @@
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="6">
-        <image-panel/>
+          <labeling-instruction/>
+          <image-panel/>
         </v-col>
 
         <!-- COL2 - ANNOTATION UI -->
         <v-col cols="6">
           <v-row dense>
-            <labeling-instruction/>
-            <labeling/>
+            
+            <label-list/>
+            <labeled-boxes/>
           </v-row>
           <v-row justify='end'>
             <submit-button/>
@@ -39,8 +41,21 @@
       app
     >
       <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-row justify="center">
+          <page-buttons/>
+        </v-row>
+      </v-col>
+      
+      <v-col cols="3">
+        <v-row>
+          <v-spacer></v-spacer>
+          <end-exp-button/>
+          <span class="white--text"> &copy; 2020</span>
+        </v-row>
+      </v-col>
 
-      <span class="white--text">&copy; 2020</span>
+      
     </v-footer>
 
   </v-app>
@@ -49,20 +64,24 @@
 
 <script>
 // @ is an alias to /src
+import PageButtons from '@/components/PageButtons.vue'
 import ImagePanel from '@/components/ImagePanel.vue'
-import Labeling from '@/components/Labeling.vue'
-// import Linking from '@/components/Linking.vue'
+import LabelList from '@/components/LabelList.vue'
+import LabeledBoxes from '@/components/LabeledBoxes.vue'
 import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
+import EndExpButton from '@/components/EndExpButton.vue'
 
 export default {
   name: 'Home',
   components: {
+    PageButtons,
     ImagePanel,
-    // Linking,
-    Labeling,
+    LabelList,
+    LabeledBoxes,
     LabelingInstruction,
-    SubmitButton
+    SubmitButton,
+    EndExpButton,
   },
   props: {
     user_id: {

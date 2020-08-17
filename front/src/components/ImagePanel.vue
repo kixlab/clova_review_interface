@@ -2,24 +2,28 @@
   <v-card
     tile
     width="100%"
-    height="100%"
+    height="80%"
+    @mousedown="clickDown" @mouseup="clickUp"
     >
     <!-- I am {{ image }}! -->
     
-    <v-img :src=image_url contain width="400px" height="500px" @mousedown="clickDown" @mouseup="clickUp" style="justifyContent: center">
+    <v-img :src=image_url contain width="400px" height="500px" style="justifyContent: center">
       <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
         <template slot-scope="{ startPoint }">
           {{startPoint}}
         <div v-if="image_box" ref="img_box">
           <div v-for="box in image_box" :key="box.id">
             <div v-if="box.selected === true">
-              <bounding-box color="stroke:blue;" :box_info="box"/>
+              <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
             </div>
-            <div v-else-if="box.annotated === true">
-              <bounding-box color="stroke:grey;" :box_info="box"/>
+            <div v-else-if="box.annotated === true && box.hover === false">
+              <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
+            </div>
+            <div v-else-if="box.annotated === true && box.hover === true">
+              <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
             </div>
             <div v-else>
-              <bounding-box color="stroke:red;" :box_info="box"/>
+              <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
             </div>
           </div>
         </div>
@@ -27,15 +31,17 @@
         </template>
       </drag-select-container>
     </v-img>
-    
-    <v-btn @click="loadImage">Load an image from the server</v-btn>
+    <br/>
 
+    <!--
+    <v-btn @click="loadImage">Load box info from the server</v-btn>
     <h3 style="marginTop: 15px"> Annotated boxes </h3>
     <div v-for="box in image_box" :key="box.id">
       <div v-if="box.annotated === true">
         {{box.text}} - [{{box.label}}]
       </div>
     </div>
+    -->
     
   </v-card>
 </template>
@@ -97,33 +103,45 @@ export default {
     this.image = this.$store.getters.getImage,
     this.image_box = this.$store.getters.getImageBoxes,
     this.getInitialPosition()
+    this.loadImage()
 
     this.$store.subscribeAction((action) => {
-      if (action.type === 'setImageBoxes') {
-        //console.log("Updated")
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes') {
+        console.log("BEING CALLED TOO")
         this.image_box = this.$store.getters.getImageBoxes
       }
     })
   },
 
   methods: {
-    ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes']),
+    ...mapActions(/*'images', */['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
+    //...mapActions('workers', ['initalizeImages']),
     loadImage: function() {
       const self = this;
       self.setImage('00001')
-      self.setImageBoxes('00001')
       .then(() => {
-
-        axios.get("http://localhost:8000/api/image/")
+        axios.get("http://localhost:8000/api/image/2")
           .then(function (res) {
+            console.log(res)
           self.image_url = "http://localhost:8000" + res.data
         })
-
         .catch(function(err) {
           alert(err);
         });
       })
-
+      .then(() => {
+        axios.get("http://localhost:8000/api/image/box_info/2")
+          .then(function (res) {
+            //console.log(res)
+            self.setImageBoxes(res.data)
+          //self.image_url = "http://localhost:8000" + res.data
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+      })
+      
+      //this.initializeImages()
     },
 
 
@@ -182,7 +200,7 @@ export default {
         var y2 = boxes[box].y_pos + boxes[box].y_len
 
         if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
-          console.log("** box", box, ":", boxes[box].text, /*"(", boxes[box].x_pos, boxes[box].y_pos, ")"*/)
+          //console.log("** box", box, ":", boxes[box].text, /*"(", boxes[box].x_pos, boxes[box].y_pos, ")"*/)
           if (this.image_box[box].annotated === false) {
             this.image_box[box].selected = !this.image_box[box].selected
           }

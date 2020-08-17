@@ -1,18 +1,23 @@
 <template>
   <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-    <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1.2;" :x="x" :y="y" :width="w" :height="h"/>
+    <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1;" :x="x" :y="y" :width="w" :height="h"/>
+    <!--
+    <template v-if="circle === 'yes'">
+      <circle style="stroke:red; fill:red; stroke-width:1.2;" :cx="x+w-1" :cy="y" r="2"/>
+    </template>
+    -->
   </svg>
 </template>
 
 <script>
 export default {
   name: 'BoundingBox',
-  props: ['color', 'box_info', 'border'],
+  props: ['color', 'box_info', 'border', 'circle'],
   data() {
     return {
       clicked: true,
       selected: false,
-      annotated: false
+      annotated: false,
     }
   },
   computed: {

@@ -5,7 +5,9 @@ from django.db import models
 # Create your models here.
 class Image(models.Model):
     image = models.ImageField(upload_to='', null=True, blank=True)
+    box_info = models.TextField(null=True, blank=True)
     is_done = models.BooleanField(default=True)
+
 
 class Box(models.Model):
     image = models.ForeignKey(Image, on_delete=models.CASCADE)

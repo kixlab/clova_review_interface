@@ -1,11 +1,32 @@
-//import axios from 'axios'
-import json from '../../assets/receipt_00001.json';
+/*
+var image_id = []
+var image_box_num = []
+
+for (var i=0; i<10; i++) {
+    var id = ('00'+i).slice(-3)
+    //console.log(id)
+    image_id.push('../../assets/jsons/receipt_00'+id+'.json')
+    
+}
+//console.log(image_id)
+image_id.map(v => {
+    const json1 = require(v)
+    //import * as data from v;
+    var validData = json1.valid_line.map(v => v.words).flat(1)
+    image_box_num.push(validData)
+})
+
+
+console.log(image_box_num)
+*/
+
 
 const state = {
     imageFile: "logo.png",
     imageBoxes: [],
     imageRatio: '',
     selectedBoxes: [],
+    annotatedBoxes: [],
 }
 
 const getters = {
@@ -13,6 +34,7 @@ const getters = {
     getImageBoxes: (state) => state.imageBoxes,
     getImageRatio: (state) => state.imageRatio,
     getSelectedBoxes: (state) => state.selectedBoxes,
+    getAnnotatedBoxes: (state) => state.annotatedBoxes,
 }
 
 const actions = {
@@ -28,14 +50,12 @@ const actions = {
     },
 
     setImage({ commit }, id) {
-        //const imageBoxes = "receipt_" + id.toString() + ".json"
         const imageFile = "receipt_" + id.toString() + ".png"
         commit('setCurrImage', imageFile)
-        //commit('setCurrBox', imageBoxes)
     },
 
-    setImageBoxes({ commit }, id) {
-        console.log("ID:", id)
+    setImageBoxes({ commit }, json) {
+        //console.log("ID:", id)
 
         const img_w = json.meta.image_size.width
         const img_h = json.meta.image_size.height
@@ -54,7 +74,6 @@ const actions = {
 
         commit('setImageRatio', ratio)
         
-
         const validData = json.valid_line.map(v => v.words).flat(1)
         const processedData = validData.map(function(i) {
             return {row_id: i.row_id,
@@ -65,6 +84,7 @@ const actions = {
                     y_len: (i.quad.y3-i.quad.y2)/ratio, 
                     selected: false, 
                     annotated: false, 
+                    hover: false,
                     label: ""}
         })
         
@@ -76,6 +96,16 @@ const actions = {
 
         commit('setCurrBox', json)
         commit('setSelectedBox', selected)
+        console.log('BOX_STATUS:', json)
+    },
+
+    updateAnnotatedBoxes({ commit }, json) {
+        if (json[1] === "add") {
+            commit('addAnnotatedBox', json[0])
+        }
+        else if (json[1] === "remove") {
+            commit('removeAnnotationBox', json[0])
+        }
     }
 
 }
@@ -99,6 +129,13 @@ const mutations = {
         state.selectedBoxes = selectedBoxes
         //console.log("NEW SELBOXES:", state.selectedBoxes)
     },
+    addAnnotatedBox: (state, annotatedBoxes) => {
+        state.annotatedBoxes.push(annotatedBoxes)
+        console.log("ANNOTATED:", state.annotatedBoxes)
+    },
+    removeAnnotationBox: (state, annotatedBoxes) => {
+        state.annotatedBoxes.splice(state.annotatedBoxes.indexOf(annotatedBoxes), 1)
+    }
 }
 
 export default {
