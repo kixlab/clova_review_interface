@@ -22,6 +22,7 @@ console.log(image_box_num)
 
 
 const state = {
+    imageURL: '',
     imageFile: "logo.png",
     imageBoxes: [],
     imageRatio: '',
@@ -30,11 +31,18 @@ const state = {
 }
 
 const getters = {
+    getImageURL: (state) => state.imgaeURL,
     getImage: (state) => state.imageFile,
     getImageBoxes: (state) => state.imageBoxes,
     getImageRatio: (state) => state.imageRatio,
     getSelectedBoxes: (state) => state.selectedBoxes,
     getAnnotatedBoxes: (state) => state.annotatedBoxes,
+    getIfAllBoxesAnnotated: function (state) {
+        if (state.imageBoxes.length === 0) {
+            return false
+        }
+        return state.imageBoxes.every(box => box.annotated === true)
+    }
 }
 
 const actions = {
@@ -123,6 +131,10 @@ const mutations = {
     },
     setImageRatio: (state, imageRatio) => {
         state.imageRatio = imageRatio
+        //console.log("New RATIO:", state.imageRatio)
+    },
+    setImageURL: (state, url) => {
+        state.imageURL = "http://localhost:8000" + url
         //console.log("New RATIO:", state.imageRatio)
     },
     setSelectedBox: (state, selectedBoxes) => {

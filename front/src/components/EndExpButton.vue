@@ -1,5 +1,5 @@
 <template>
-    <v-btn outlined style="margin-right: 10%">End Experiment</v-btn>
+    <v-btn outlined>End Experiment</v-btn>
 </template>
 
 <script>

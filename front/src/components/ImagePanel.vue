@@ -2,11 +2,11 @@
   <v-card
     tile
     width="100%"
-    height="80%"
     @mousedown="clickDown" @mouseup="clickUp"
     >
-    <!-- I am {{ image }}! -->
-    
+    <v-card-text>
+    <h3 class="instruction"> 1. Drag <span class="red-text">red box(es)</span> on the image. </h3>
+    <br>
     <v-img :src=image_url contain width="400px" height="500px" style="justifyContent: center">
       <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
         <template slot-scope="{ startPoint }">
@@ -31,55 +31,16 @@
         </template>
       </drag-select-container>
     </v-img>
-    <br/>
-
-    <!--
-    <v-btn @click="loadImage">Load box info from the server</v-btn>
-    <h3 style="marginTop: 15px"> Annotated boxes </h3>
-    <div v-for="box in image_box" :key="box.id">
-      <div v-if="box.annotated === true">
-        {{box.text}} - [{{box.label}}]
-      </div>
-    </div>
-    -->
-    
+    </v-card-text>   
   </v-card>
 </template>
 
 
 <script>
 import axios from "axios";
-// import Vue from 'vue';
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
 import BoundingBox from '@/components/BoundingBox.vue'
-
-// // Bounding Box component
-// const BoundingBox = Vue.component('bounding-box', {
-//   props: ['color', 'x', 'y', 'w', 'h', 'border'],
-//   data() {
-//     return {
-//       clicked: true, 
-//     }
-//   },
-//   template: `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-//       <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1.2;" :x="int(x)" :y="int(y)" :width="int(w)+2" :height="int(h)+2"/>
-//   </svg>`,
-//   methods: {
-//     int: function(elem) {
-//       return parseInt(elem)
-//     },
-//     add: function(li) {
-//       var res = 0
-//       for (var elem in li) {
-//         res += this.int(li[elem])
-//       }
-//       return res
-//     }
-//   }
-// });
-
-
 
 export default {
   name: "ImagePanel",
@@ -120,9 +81,10 @@ export default {
       const self = this;
       self.setImage('00001')
       .then(() => {
-        axios.get("http://localhost:8000/api/image/2")
+        axios.get("http://localhost:8000/api/image/")
           .then(function (res) {
-            console.log(res)
+          console.log(res)
+          
           self.image_url = "http://localhost:8000" + res.data
         })
         .catch(function(err) {
@@ -130,7 +92,7 @@ export default {
         });
       })
       .then(() => {
-        axios.get("http://localhost:8000/api/image/box_info/2")
+        axios.get("http://localhost:8000/api/image/box_info/")
           .then(function (res) {
             //console.log(res)
             self.setImageBoxes(res.data)
@@ -223,5 +185,14 @@ export default {
 </script>
 
 <style scoped>
+.instruction {
+  text-align: left;
+  padding-left: 20px;
+  color: black;
+}
 
+.red-text {
+  color: red;
+  font-weight: bold;
+}
 </style>

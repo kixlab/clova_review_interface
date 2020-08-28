@@ -55,8 +55,7 @@ export default {
       }
 
       axios.post("http://localhost:8000/api/image/", {
-        //image_id: this.$store.getters.getImage,
-        //annotation_data: annotationData,
+        // user_id: "user_id",
         test: "testText"
       })
       .then(function (res) {
@@ -73,12 +72,7 @@ export default {
 
   computed: {
     disabled() {
-      for (var box in this.image_box) {
-        if (this.image_box[box].annotated === false) {
-          return true
-        }
-      }
-      return false
+      return !this.$store.getters.getIfAllBoxesAnnotated
     }
   }
 }

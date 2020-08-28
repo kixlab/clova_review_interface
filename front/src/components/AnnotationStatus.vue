@@ -1,14 +1,21 @@
 <template>
     <v-col cols="12">
         <v-card tile>
-            <v-card-title># Annotation Status - hover to see corresponding boxes </v-card-title>
-            <v-card-text style="min-height:200px" scrollable max-height="200px"> 
-                <div v-for="group in annotated_box" :key="group.id">
+            <v-card-title>## Hover your cursor over a record to see corresponding boxes on the image. </v-card-title>
+            <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
+                
+                <div v-if="isAnnotationExist">
+                    No annotations yet for this image :-(
+                </div>
+
+                <div v-else v-for="group in annotated_box" :key="group.id">
                     <v-btn-toggle dense style="padding:5px">
-                        <v-btn text small tile depressed class="text-none" @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)"> {{group.label}} </v-btn>
+                        <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)"> 
+                            {{group.label}} 
+                        </v-btn>
                         
                         <div v-for="box in group.boxes" :key="box.id">
-                            <v-btn small tile depressed @mouseover="highlight(box)" @mouseout="undoHighlight(box)" class="text-none"> 
+                            <v-btn small tile depressed @mouseover="highlight(box)" @mouseout="undoHighlight(box)"> 
                                 {{box.text}}  
                             </v-btn>
                         </div>
@@ -20,6 +27,7 @@
                         </v-tooltip>
                     </v-btn-toggle>
                 </div>
+
             </v-card-text>
         </v-card>
     </v-col>
@@ -85,6 +93,11 @@ export default {
 
 
     },
+    computed: {
+        isAnnotationExist () {
+            return (this.annotated_box.length < 1)
+        }
+    }
 
     
 }

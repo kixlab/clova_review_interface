@@ -4,100 +4,60 @@
       app
       color="indigo"
       dark
+      absolute
     >
-      <v-toolbar-title>Annotation - {{user_id}}</v-toolbar-title>
+      <v-toolbar-title>Annotation</v-toolbar-title>
+      <v-spacer/>
+      <end-exp-button/>
     </v-app-bar>
 
-    <v-main class="noPadding">
+    <v-main>
       <v-container>
+      <v-row>
+        <labeling-instruction/>
+      </v-row>
+      <v-divider/>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="6">
-          <labeling-instruction/>
           <image-panel/>
         </v-col>
 
         <!-- COL2 - ANNOTATION UI -->
         <v-col cols="6">
           <v-row dense>
-            
-            <label-list/>
-            <labeled-boxes/>
+            <labeling/>
+            <annotation-status/>
           </v-row>
           <v-row justify='end'>
             <submit-button/>
           </v-row>
         </v-col>
       </v-row>
-
       </v-container>
-      
-
     </v-main>
-  
-    <v-footer
-      dark
-      indigo
-      app
-    >
-      <v-spacer></v-spacer>
-      <v-col cols="6">
-        <v-row justify="center">
-          <page-buttons/>
-        </v-row>
-      </v-col>
-      
-      <v-col cols="3">
-        <v-row>
-          <v-spacer></v-spacer>
-          <end-exp-button/>
-          <span class="white--text"> &copy; 2020</span>
-        </v-row>
-      </v-col>
-
-      
-    </v-footer>
-
   </v-app>
 
 </template>
 
 <script>
 // @ is an alias to /src
-import PageButtons from '@/components/PageButtons.vue'
 import ImagePanel from '@/components/ImagePanel.vue'
-import LabelList from '@/components/LabelList.vue'
-import LabeledBoxes from '@/components/LabeledBoxes.vue'
+import AnnotationStatus from '@/components/AnnotationStatus.vue'
 import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
 import EndExpButton from '@/components/EndExpButton.vue'
+import Labeling from '@/components/Labeling.vue'
 
 export default {
   name: 'Home',
   components: {
-    PageButtons,
     ImagePanel,
-    LabelList,
-    LabeledBoxes,
+    AnnotationStatus,
     LabelingInstruction,
     SubmitButton,
     EndExpButton,
-  },
-  props: {
-    user_id: {
-      type: String,
-      default: null
-    }
-  },
-  beforeMount () {
-    if (this.user_id.length < 1) throw new Error('User ID must be passed in URL!')
-    return true
+    Labeling,
   }
 }
 </script>
-
-<style scoped>
-.noPadding {
-  padding-top: 0px !important;
-}
-</style>
