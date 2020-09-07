@@ -6,21 +6,23 @@
       dark
       absolute
     >
-      <v-toolbar-title>Annotation</v-toolbar-title>
+      <v-toolbar-title>Image Annotation</v-toolbar-title>
       <v-spacer/>
       <end-exp-button/>
     </v-app-bar>
 
     <v-main>
-      <v-container>
-      <v-row>
+      <v-container fluid fill-height>
+      <v-row dense>
         <labeling-instruction/>
       </v-row>
       <v-divider/>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="6">
-          <image-panel/>
+          <v-row dense>
+            <image-panel/>
+          </v-row>
         </v-col>
 
         <!-- COL2 - ANNOTATION UI -->

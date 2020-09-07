@@ -1,7 +1,8 @@
 <template>
   <v-col cols="12">
     <v-card tile>
-      <h3 class="instruction"> <br> 2. Choose a label that best describes the <span class="blue-text">selected box(es)</span>. </h3>
+      <v-card-title style="font-size: 110%"><b> 2. Choose a label that best describes the <span class="red-text">selected box(es)</span>.</b> </v-card-title>
+      <v-card-subtitle class='text-left'>There are <b style="color:blue;">11 labels</b> in total. Please scroll down to take a look at all of them.</v-card-subtitle>
       <v-card-text> 
         <v-row>
           <v-col>
@@ -9,25 +10,30 @@
                 <template v-slot:default>
                 <thead>
                     <tr>
-                        <th style="textAlign: center"></th>
-                        <th style="textAlign: center">Label</th>
-                        <th style="textAlign: center">Description</th>
+                      <th style="textAlign: center; background-color: lightGrey;"></th>
+                      <th style="textAlign: center; background-color: lightGrey;">#</th>
+                      <th style="textAlign: center; background-color: lightGrey;">Category</th>
+                      <th style="textAlign: center; background-color: lightGrey;">Label</th>
+                      <th style="textAlign: center; background-color: lightGrey;">Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in labelTable" :key="item.id">
-                        <td style="padding:0">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn small icon color="darkgrey" @click="annotate(item)" :disabled=isDisabled v-bind="attrs" v-on="on">
-                                        <v-icon>edit</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>annotate</span>
-                            </v-tooltip>
-                        </td>
-                        <td>{{ item.label }}</td>
-                        <td>{{ item.description }}</td>
+                      <td style="padding:0; width: 35px;">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn small icon color="darkgrey" @click="annotate(item)" :disabled=isDisabled v-bind="attrs" v-on="on">
+                              <v-icon>text_rotation_down</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>annotate</span>
+                        </v-tooltip>
+                      </td>
+                      <td style="background-color: #eee">{{ item.id }}</td>
+                      <td>{{ item.label }}</td>
+                      <td style="background-color: #eee">{{ item.sublabel }}</td>
+                      <td>{{ item.description }}</td>
+                        
                     </tr>
                 </tbody>
                 </template>
@@ -48,17 +54,17 @@ export default {
     return {
       selection: [],
       labelTable: [
-          { id: 1, label: 'menu.name', description: 'Name of the menu'},
-          { id: 2, label: 'menu.unit_price', description: 'Unit price of the menu'},
-          { id: 3, label: 'menu.count', description: 'Number of the menu consumed'},
-          { id: 4, label: 'menu.price', description: 'Total price of the menu'},
-          { id: 5, label: 'subtotal.subtotal_price', description: 'Subotal price excluding tax'},
-          { id: 6, label: 'subtotal.tax_price', description: 'Tax price'},
-          { id: 7, label: 'total.total_price', description: 'Total price'},
-          { id: 8, label: 'total.cash_price', description: 'Price paid by cash'},
-          { id: 9, label: 'total.credit_card_price', description: 'Price paid by credit card'},
-          { id: 10, label: 'total.change_price', description: 'Amount of change received'},
-          { id: 11, label: 'N/A (Not Applicable)', description: 'None of the labels above matched with a box'}
+          { id: 1, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
+          { id: 2, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
+          { id: 3, label: 'menu', sublabel: 'count', description: 'Number of the menu consumed'},
+          { id: 4, label: 'menu', sublabel: 'price', description: 'Total price of the menu'},
+          { id: 5, label: 'subtotal', sublabel: 'subtotal price', description: 'Subotal price excluding tax'},
+          { id: 6, label: 'subtotal', sublabel: 'tax price', description: 'Tax price'},
+          { id: 7, label: 'total', sublabel: 'total price', description: 'Total price'},
+          { id: 8, label: 'total', sublabel: 'cash price', description: 'Price paid by cash'},
+          { id: 9, label: 'total', sublabel: 'credit card price', description: 'Price paid by credit card'},
+          { id: 10, label: 'total', sublabel: 'change price', description: 'Amount of change received'},
+          { id: 11, label: 'N/A', sublabel: 'N/A (Not Applicable)', description: 'None of the labels above matched with a box'}
           
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
@@ -99,7 +105,7 @@ export default {
           for (var box in imageBox) {
               if (imageBox[box].selected === true) {
                   var currBox = this.image_box[box]
-                  currBox.label = item.label
+                  currBox.label = item.label + "." + item.sublabel
                   currBox.selected = false
                   currBox.annotated = true
                   group.push(currBox)
@@ -107,7 +113,7 @@ export default {
           }
 
           this.updateImageBoxes(this.image_box)
-          this.updateAnnotatedBoxes([{label: item.label, boxes: group}, "add"])
+          this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
       },
   },
   computed: {
@@ -123,11 +129,16 @@ export default {
   text-align: left;
   padding-left: 20px;
 }
-.blue-text {
-  color:blue;
+.red-text {
+  color:red;
   font-weight: bold;
 }
 .btn {
   margin-left: 1rem;
+}
+
+th {
+  text-align: center; 
+  background-color: lightGrey;
 }
 </style>

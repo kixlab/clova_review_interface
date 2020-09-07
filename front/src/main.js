@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from '@/plugins/vuetify' // path to vuetify export
 
 Vue.config.productionTip = false
+Vue.prototype.$localmode = true
 
 new Vue({
   router,

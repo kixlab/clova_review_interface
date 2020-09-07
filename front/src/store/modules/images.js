@@ -70,12 +70,12 @@ const actions = {
         var ratio = 1
         var padding_x = 0
         var padding_y = 0
-        if (img_w/400 >= img_h/500) {
-            ratio = img_w/400
-            padding_y = (500-(img_h/ratio))/2
+        if (img_w/450 >= img_h/560) {
+            ratio = img_w/450
+            padding_y = (560-(img_h/ratio))/2
         } else {
-            ratio = img_h/500
-            padding_x = (400-(img_w/ratio))/2
+            ratio = img_h/560
+            padding_x = (450-(img_w/ratio))/2
         }
         //console.log("padding_x:", padding_x/ratio, ", padding_y:", padding_y/ratio)
         //const ratio = Math.max(img_w/400, img_h/500)
@@ -104,7 +104,7 @@ const actions = {
 
         commit('setCurrBox', json)
         commit('setSelectedBox', selected)
-        console.log('BOX_STATUS:', json)
+        //console.log('BOX_STATUS:', json)
     },
 
     updateAnnotatedBoxes({ commit }, json) {
@@ -113,6 +113,9 @@ const actions = {
         }
         else if (json[1] === "remove") {
             commit('removeAnnotationBox', json[0])
+        }
+        else if (json[1] === "reset") {
+            commit('resetAnnotationBox', [])
         }
     }
 
@@ -147,7 +150,11 @@ const mutations = {
     },
     removeAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.splice(state.annotatedBoxes.indexOf(annotatedBoxes), 1)
-    }
+    },
+    resetAnnotationBox: (state, annotatedBoxes) => {
+        state.annotatedBoxes = annotatedBoxes
+        console.log(state.annotatedBoxes)
+    },
 }
 
 export default {
