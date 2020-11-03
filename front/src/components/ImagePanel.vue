@@ -7,46 +7,53 @@
     >
     <v-card-title style="font-size: 110%"><b> 1. Drag or click to select <span class="red-text">red box(es)</span> on the image. </b></v-card-title>
     <v-card-text>
-      <div class="text-left" style="font-size: 100%; padding: 5px;"> 
-        <b><span style="color: red">{{this.$store.getters.getImageBoxes.filter(v=>v.annotated === false).length}}</span> out of <span style="color:blue">{{this.image_box.length}}</span> boxes </b>are not yet annotated!
-        <br/>
-        
-        <b>Selected boxes: </b>
-        <div style="display:flex;" class="flex-wrap"> 
-          <div v-for="elem in this.$store.getters.getImageBoxes.filter(v=>v.selected)" :key="elem.id" >
-            <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ elem.text }}</b> </span>
-          </div>
-        </div>
-        <br/>
-        <v-btn small color="secondary" depressed :disabled=isDisabled @click="unselect">Undo all selections</v-btn> <span> </span>
+      <v-row>
+        <v-col cols="6">
+          <v-img :src=image_url contain width="450" height="560" style="justifyContent: center">
+            <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
+              <template slot-scope="{ startPoint }">
+                {{startPoint}}
+              <div v-if="image_box" ref="img_box">
+                <div v-for="box in image_box" :key="box.id">
+                  <div v-if="box.selected === true">
+                    <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                  </div>
+                  <div v-else-if="box.annotated === true && box.hover === false">
+                    <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
+                  </div>
+                  <div v-else-if="box.annotated === true && box.hover === true">
+                    <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
+                  </div>
+                  <div v-else>
+                    <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+                  </div>
+                </div>
+              </div>
 
-      </div>
-      
-      <br>
-      <v-img :src=image_url contain width="450" height="560" style="justifyContent: center">
-        <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
-          <template slot-scope="{ startPoint }">
-            {{startPoint}}
-          <div v-if="image_box" ref="img_box">
-            <div v-for="box in image_box" :key="box.id">
-              <div v-if="box.selected === true">
-                <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
-              </div>
-              <div v-else-if="box.annotated === true && box.hover === false">
-                <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
-              </div>
-              <div v-else-if="box.annotated === true && box.hover === true">
-                <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
-              </div>
-              <div v-else>
-                <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+              </template>
+            </drag-select-container>
+          </v-img>
+        </v-col>
+
+        <v-col cols="6">
+          <div class="text-left" style="font-size: 100%; padding: 5px;"> 
+            <b><span style="color: red">{{this.$store.getters.getImageBoxes.filter(v=>v.annotated === false).length}}</span> out of <span style="color:blue">{{this.image_box.length}}</span> boxes </b>are not yet annotated!
+            <br/>
+            
+            <b>Selected boxes: </b>
+            <div style="display:flex;" class="flex-wrap"> 
+              <div v-for="elem in this.$store.getters.getImageBoxes.filter(v=>v.selected)" :key="elem.id" >
+                <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ elem.text }}</b> </span>
               </div>
             </div>
-          </div>
+            <br/>
+            <v-btn small color="secondary" depressed :disabled=isDisabled @click="unselect">Undo all selections</v-btn> <span> </span>
 
-          </template>
-        </drag-select-container>
-      </v-img>
+          </div>
+        </v-col>
+
+      </v-row>
+
     </v-card-text>   
   </v-card>
  </v-col>
@@ -105,18 +112,18 @@ export default {
       const self = this;
       self.setImage('00001')
       .then(() => {
-        axios.get("http://localhost:8000/api/image/")
+        axios.get(this.$store.state.server_url + "/api/image/")
           .then(function (res) {
           console.log(res)
           
-          self.image_url = "http://localhost:8000" + res.data
+          self.image_url = this.$store.state.server_url + res.data
         })
         .catch(function(err) {
           alert(err);
         });
       })
       .then(() => {
-        axios.get("http://localhost:8000/api/image/box_info/")
+        axios.get(this.$store.state.server_url + "/api/image/box_info/")
           .then(function (res) {
             //console.log(res)
             self.setImageBoxes(res.data)

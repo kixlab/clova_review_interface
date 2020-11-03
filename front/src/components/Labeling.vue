@@ -23,7 +23,7 @@
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn small icon color="darkgrey" @click="annotate(item)" :disabled=isDisabled v-bind="attrs" v-on="on">
-                              <v-icon>text_rotation_down</v-icon>
+                              <v-icon>check_circle</v-icon>
                             </v-btn>
                           </template>
                           <span>annotate</span>
