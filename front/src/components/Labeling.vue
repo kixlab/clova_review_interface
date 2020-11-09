@@ -1,8 +1,14 @@
 <template>
   <v-col cols="12">
     <v-card tile>
-      <v-card-title style="font-size: 110%"><b> 2. Choose a label that best describes the <span class="red-text">selected box(es)</span>.</b> </v-card-title>
-      <v-card-subtitle class='text-left'>There are <b style="color:blue;">11 labels</b> in total. Please scroll down to take a look at all of them.</v-card-subtitle>
+      <v-card-title style="font-size: 110%">
+        <b> 2. Choose a label that best describes the <span class="red-text">selected box(es)</span>.</b> 
+      </v-card-title>
+      
+      <v-card-subtitle class='text-left'>
+        There are <b style="color:blue;">11 labels</b> in total. Please scroll down to take a look at all of them.
+      </v-card-subtitle>
+      
       <v-card-text> 
         <v-row>
           <v-col>
@@ -72,12 +78,11 @@ export default {
     }
   },
   mounted: function () {
-      this.$store.subscribeAction((action) => {
-          if (action.type === 'updateImageBoxes') {
-              //console.log("BEING CALLED")
-              this.image_box = this.$store.getters.getImageBoxes
-          }
-      })
+    this.$store.subscribeAction((action) => {
+      if (action.type === 'updateImageBoxes') {
+          this.image_box = this.$store.getters.getImageBoxes
+      }
+    })
   },
 
   methods: {
@@ -85,35 +90,31 @@ export default {
       ...mapGetters(['getImageBoxes']),
 
       add() {
-          this.$refs.form.validate()
-          
-          var id = this.labelTable.length
-          this.labelTable.push({checked: false, id: id, label: this.label, description: this.description})
-          
-          this.label = ''
-          this.description = ''
-
+        this.$refs.form.validate()
+        
+        var id = this.labelTable.length
+        this.labelTable.push({checked: false, id: id, label: this.label, description: this.description})
+        
+        this.label = '';
+        this.description = '';
       },
 
       annotate(item) {
-          
-          console.log(this.getImageBoxes())
-          console.log(this.image_box)
-          const imageBox = this.getImageBoxes()//this.image_box
-          var group = []
+        const imageBox = this.getImageBoxes()//this.image_box
+        var group = []
 
-          for (var box in imageBox) {
-              if (imageBox[box].selected === true) {
-                  var currBox = this.image_box[box]
-                  currBox.label = item.label + "." + item.sublabel
-                  currBox.selected = false
-                  currBox.annotated = true
-                  group.push(currBox)
-              }
-          }
+        for (var box in imageBox) {
+            if (imageBox[box].selected === true) {
+                var currBox = this.image_box[box]
+                currBox.label = item.label + "." + item.sublabel
+                currBox.selected = false
+                currBox.annotated = true
+                group.push(currBox)
+            }
+        }
 
-          this.updateImageBoxes(this.image_box)
-          this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
+        this.updateImageBoxes(this.image_box)
+        this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
       },
   },
   computed: {

@@ -21,6 +21,7 @@
 
 <script>
 import axios from "axios";
+import {mapActions} from 'vuex';
 
 export default {
   name: "ImagePanel",
@@ -36,35 +37,43 @@ export default {
   mounted() {
     this.$store.subscribeAction((action) => {
         if (action.type === 'updateImageBoxes') {
-            //console.log("BEING CALLED")
             this.image_box = this.$store.getters.getImageBoxes
         }
     })
 
   },
   methods: {
+    ...mapActions(['setImageBoxes', 'updateAnnotatedBoxes',]),
     onSubmit: function() {
-      const that = this;
-      that.loading = true
+      const self = this;
+      self.loading = true
 
       // Polish annotation data
       var annotationData = []
-      for (var group in this.annotated_boxes) {
-        var tempGroup = this.annotated_boxes[group]
+      for (var group in self.annotated_boxes) {
+        var tempGroup = self.annotated_boxes[group]
         annotationData.push({boxes: tempGroup.boxes, label: tempGroup.label, group_id: group})
       }
 
-      axios.post("http://localhost:8000/api/image/", {
+      axios.post(self.$store.state.server_url + "/api/image/", {
         // user_id: "user_id",
         test: "testText"
       })
       .then(function (res) {
-        console.log(res)
-        that.loading = false
+        console.log(res);
+
+        self.$store.commit('new_image');
+        axios.get(self.$store.getters.json_url).then(res => {
+          console.log(res)
+          self.setImageBoxes(res.data);
+          self.updateAnnotatedBoxes([[], "reset"])
+        })  
+        self.loading = false;
+        
         alert("Server responded!!")
       })
       .catch(function(err) {
-        that.loading = false
+        self.loading = false
         alert(err);
       });
     }

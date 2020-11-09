@@ -49,7 +49,6 @@ export default {
     mounted() {
         this.$store.subscribeAction({after: (action) => {
             if (action.type === 'updateImageBoxes') {
-                //console.log("BEING CALLED")
                 this.image_box = this.$store.getters.getImageBoxes
             }
             if (action.type === 'updateAnnotatedBoxes') {

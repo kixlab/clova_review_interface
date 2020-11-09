@@ -11,7 +11,7 @@
         <svg width="14" height="14"><rect style="fill:red; fill-opacity:0.1; stroke:red; stroke-width: 4px;" width="14" height="14"/></svg>
         <span style="color: red; font-weight: 900;"> solid red</span> box(es).<br>
       2. Choose one label that best describes the selected box(es) by clicking the 
-        <v-btn small icon color="darkgrey"> <v-icon>text_rotation_down</v-icon></v-btn> button. 
+        <v-btn small icon color="darkgrey"> <v-icon>check_circle</v-icon></v-btn> button. 
         The labeled boxes become  
         <svg width="13" height="12"><rect style="fill:grey; fill-opacity:0.4; stroke:grey;" width="13" height="12"/></svg>
         <span class="gray-text"> gray</span>.<br>

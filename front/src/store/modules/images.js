@@ -1,25 +1,3 @@
-/*
-var image_id = []
-var image_box_num = []
-
-for (var i=0; i<10; i++) {
-    var id = ('00'+i).slice(-3)
-    //console.log(id)
-    image_id.push('../../assets/jsons/receipt_00'+id+'.json')
-    
-}
-//console.log(image_id)
-image_id.map(v => {
-    const json1 = require(v)
-    //import * as data from v;
-    var validData = json1.valid_line.map(v => v.words).flat(1)
-    image_box_num.push(validData)
-})
-
-
-console.log(image_box_num)
-*/
-
 
 const state = {
     imageURL: '',
@@ -136,8 +114,9 @@ const mutations = {
         state.imageRatio = imageRatio
         //console.log("New RATIO:", state.imageRatio)
     },
-    setImageURL: (state, url) => {
-        state.imageURL = "http://localhost:8000" + url
+    setImageURL: (state, commit, rootState) => {
+        console.log(rootState.image_url)
+        state.imageURL = rootState.image_url
         //console.log("New RATIO:", state.imageRatio)
     },
     setSelectedBox: (state, selectedBoxes) => {
