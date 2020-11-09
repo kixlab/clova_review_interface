@@ -1,4 +1,3 @@
-
 const state = {
     imageURL: '',
     imageFile: "logo.png",
@@ -41,26 +40,22 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        //console.log("ID:", id)
-
-        const img_w = json.meta.image_size.width
-        const img_h = json.meta.image_size.height
+        const img_w = json[0].meta.image_size.width
+        const img_h = json[0].meta.image_size.height
         var ratio = 1
         var padding_x = 0
         var padding_y = 0
-        if (img_w/450 >= img_h/560) {
-            ratio = img_w/450
-            padding_y = (560-(img_h/ratio))/2
+        if (img_w/json[1] >= img_h/json[2]) {
+            ratio = img_w/json[1]
+            padding_y = (json[2]-(img_h/ratio))/2
         } else {
-            ratio = img_h/560
-            padding_x = (450-(img_w/ratio))/2
+            ratio = img_h/json[2]
+            padding_x = (json[1]-(img_w/ratio))/2
         }
-        //console.log("padding_x:", padding_x/ratio, ", padding_y:", padding_y/ratio)
-        //const ratio = Math.max(img_w/400, img_h/500)
 
         commit('setImageRatio', ratio)
         
-        const validData = json.valid_line.map(v => v.words).flat(1)
+        const validData = json[0].valid_line.map(v => v.words).flat(1)
         const processedData = validData.map(function(i) {
             return {row_id: i.row_id,
                     text: i.text,
@@ -71,9 +66,11 @@ const actions = {
                     selected: false, 
                     annotated: false, 
                     hover: false,
+                    quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
                     label: ""}
         })
         
+        //console.log("HERE!!", processedData)
         commit('setCurrBox', processedData)
     },
 

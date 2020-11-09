@@ -9,7 +9,8 @@
     <v-card-text>
       <v-row>
         <v-col cols="6">
-          <v-img :src=image_url contain width="450" height="560" style="justifyContent: center">
+          <div ref="img_container">
+          <v-img :src=image_url contain style="justifyContent: center">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
@@ -33,6 +34,7 @@
               </template>
             </drag-select-container>
           </v-img>
+          </div>
         </v-col>
 
         <v-col cols="6">
@@ -80,7 +82,11 @@ export default {
       color: 'stroke:red',
       initialPosition: [],
       startPoint: [],
-      endPoint: []
+      endPoint: [],
+
+      original_box: [],
+      width: 0,
+      height: 0,
     };
   },
 
@@ -95,8 +101,13 @@ export default {
     if (this.$localmode) {
       // this.image_url = this.$store.getters.image_url;
       axios.get(this.$store.getters.json_url).then(res => {
-        this.setImageBoxes(res.data);
+        var json = res.data;
+        this.setImageBoxes([json, this.width, this.width*json.meta.image_size.height/json.meta.image_size.width]);
+        this.original_box = json;
       })      
+      // this.image_url = require('@/assets/receipt_00008.png')
+      // this.setImageBoxes([json, this.width, this.width*json.meta.image_size.height/json.meta.image_size.width])
+      // this.original_box = json
     }
 
     this.$store.subscribeAction({after: (action) => {
@@ -114,14 +125,62 @@ export default {
         .then(function (res) {
         self.image_url = this.$store.state.server_url + res.data;
       })
-      .catch(function(err) {
-        alert(err);
-      });
+      .then(() => {
+        axios.get(this.$store.state.server_url + "/api/image/box_info/")
+          .then(function (res) {
+            //console.log(res)
+            self.setImageBoxes([res.data, this.width, this.width*res.data.meta.image_size.height/res.data.meta.image_size.width])
+            self.original_box = res.data
+          //self.image_url = "http://localhost:8000" + res.data
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+      })
+      
+    },
+
+    newSize: function() {
+      const cont_pos = this.$refs.img_container.getBoundingClientRect()
+      const width = cont_pos.right-cont_pos.left
+      const height = cont_pos.bottom-cont_pos.top
+      this.width = width
+      this.height = height
+      //console.log("New Size:", cont_pos.right-cont_pos.left, cont_pos.bottom-cont_pos.top)
+
+      const img_w = this.original_box.meta.image_size.width
+      const img_h = this.original_box.meta.image_size.height
+      var ratio = 1
+      var padding_x = 0
+      var padding_y = 0
+      if (img_w/width >= img_h/height) {
+          ratio = img_w/width
+          padding_y = (height-(img_h/ratio))/2
+      } else {
+          ratio = img_h/height
+          padding_x = (width-(img_w/ratio))/2
+      }
+
+      var temp_image_box = this.image_box
+      for (var box in temp_image_box) {
+        var temp = temp_image_box[box]
+        temp.x_pos = temp.quad.x1/ratio+padding_x
+        temp.y_pos = temp.quad.y1/ratio+padding_y
+        temp.x_len = (temp.quad.x2-temp.quad.x1)/ratio
+        temp.y_len = (temp.quad.y3-temp.quad.y2)/ratio
+      }
+      this.updateImageBoxes(temp_image_box)
     },
 
     getInitialPosition: function() {
-      const box_pos = this.$refs.img_box.getBoundingClientRect();
-      this.initialPosition = [box_pos.x, box_pos.y];
+      const box_pos = this.$refs.img_box.getBoundingClientRect()
+      //console.log("Initial Position:", box_pos.x, box_pos.y)
+      this.initialPosition = [box_pos.x, box_pos.y]
+
+      const cont_pos = this.$refs.img_container.getBoundingClientRect()
+      //console.log("Original Size:", cont_pos.right-cont_pos.left, cont_pos.bottom-cont_pos.top)
+      this.width = cont_pos.right-cont_pos.left
+      this.height = cont_pos.bottom-cont_pos.top
     },
 
     clickDown: function(event) {
@@ -196,6 +255,15 @@ export default {
       }
       this.updateImageBoxes(boxes);
     },
+
+
+
+  },
+  created() {
+    window.addEventListener("resize", this.newSize);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.newSize);
   },
 
   computed: {
