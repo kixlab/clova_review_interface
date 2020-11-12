@@ -59,12 +59,9 @@ export default {
         // user_id: "user_id",
         test: "testText"
       })
-      .then(function (res) {
-        console.log(res);
-
-        self.$store.commit('new_image');
+      .then(function () {
+        self.$store.commit('update_image_count');
         axios.get(self.$store.getters.json_url).then(res => {
-          console.log(res)
           self.setImageBoxes(res.data);
           self.updateAnnotatedBoxes([[], "reset"])
         })  

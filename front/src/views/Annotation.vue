@@ -19,15 +19,16 @@
       <v-divider/>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
-        <v-col cols="6">
+        <v-col cols="5">
           <v-row dense>
             <image-panel/>
           </v-row>
         </v-col>
 
         <!-- COL2 - ANNOTATION UI -->
-        <v-col cols="6">
+        <v-col cols="7">
           <v-row dense>
+            <box-selection-status/>
             <labeling/>
             <annotation-status/>
           </v-row>
@@ -50,6 +51,7 @@ import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
 import EndExpButton from '@/components/EndExpButton.vue'
 import Labeling from '@/components/Labeling.vue'
+import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 
 export default {
   name: 'Home',
@@ -60,6 +62,7 @@ export default {
     SubmitButton,
     EndExpButton,
     Labeling,
+    BoxSelectionStatus,
   }
 }
 </script>

@@ -5,10 +5,10 @@
     width="100%"
     @mousedown="clickDown" @mouseup="clickUp"
     >
-    <v-card-title style="font-size: 110%"><b> 1. Drag or click to select <span class="red-text">red box(es)</span> on the image. </b></v-card-title>
+    <v-card-title style="font-size: 110%"><b> Image </b></v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="6">
+        <v-col>
           <div ref="img_container">
           <v-img :src=image_url contain style="justifyContent: center">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
@@ -37,23 +37,6 @@
           </div>
         </v-col>
 
-        <v-col cols="6">
-          <div class="text-left" style="font-size: 100%; padding: 5px;"> 
-            <b><span style="color: red">{{this.$store.getters.getImageBoxes.filter(v=>v.annotated === false).length}}</span> out of <span style="color:blue">{{this.image_box.length}}</span> boxes </b>are not yet annotated!
-            <br/>
-            
-            <b>Selected boxes: </b>
-            <div style="display:flex;" class="flex-wrap"> 
-              <div v-for="elem in this.$store.getters.getImageBoxes.filter(v=>v.selected)" :key="elem.id" >
-                <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ elem.text }}</b> </span>
-              </div>
-            </div>
-            <br/>
-            <v-btn small color="secondary" depressed :disabled=isDisabled @click="unselect">Undo all selections</v-btn> <span> </span>
-
-          </div>
-        </v-col>
-
       </v-row>
 
     </v-card-text>   
@@ -76,14 +59,11 @@ export default {
   },
   data() {
     return {
-      // image_url: {},
       image: this.$store.getters.getImage,
       image_box: this.$store.getters.getImageBoxes,
-      color: 'stroke:red',
       initialPosition: [],
       startPoint: [],
       endPoint: [],
-
       original_box: [],
       width: 0,
       height: 0,
@@ -245,19 +225,6 @@ export default {
       }
       this.updateImageBoxes(this.image_box);
     },
-
-    unselect: function() {
-      var boxes = this.image_box
-      for (var i in boxes) {
-        if (boxes[i].selected === true) {
-          boxes[i].selected = false
-        }
-      }
-      this.updateImageBoxes(boxes);
-    },
-
-
-
   },
   created() {
     window.addEventListener("resize", this.newSize);
@@ -268,9 +235,6 @@ export default {
 
   computed: {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
-    isDisabled() {
-      return this.$store.getters.getImageBoxes.filter(v=>v.selected).length === 0
-    },
     image_url() {
       return this.$store.getters.image_url;
     }
