@@ -6,7 +6,7 @@
       </v-card-title>
       
       <v-card-subtitle class='text-left'>
-        There are <b style="color:blue;">11 labels</b> in total. Please scroll down to take a look at all of them.
+        There are <b style="color:blue;">10 categories</b> and <b style="color:red;">N/A</b>. Please scroll down to take a look at all of them.
       </v-card-subtitle>
       
       <v-card-text> 
@@ -60,6 +60,7 @@ export default {
     return {
       selection: [],
       labelTable: [
+          { id: 0, label: 'N/A', sublabel: 'N/A (Not Applicable)', description: 'None of the labels matched with a box'},
           { id: 1, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
           { id: 2, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
           { id: 3, label: 'menu', sublabel: 'count', description: 'Number of the menu consumed'},
@@ -70,8 +71,6 @@ export default {
           { id: 8, label: 'total', sublabel: 'cash price', description: 'Price paid by cash'},
           { id: 9, label: 'total', sublabel: 'credit card price', description: 'Price paid by credit card'},
           { id: 10, label: 'total', sublabel: 'change price', description: 'Amount of change received'},
-          { id: 11, label: 'N/A', sublabel: 'N/A (Not Applicable)', description: 'None of the labels above matched with a box'}
-          
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,

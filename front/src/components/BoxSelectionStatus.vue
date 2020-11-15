@@ -1,35 +1,44 @@
 <template>
     <v-col cols="12">
-        <v-card tile>
-            <v-card-title style="font-size: 110%" class="text-left"><b>
-              1. Drag or click to select <span class="red-text">red box(es)</span> on the image.</b> 
-            </v-card-title>
-            <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
-                <div class="text-left" style="font-size: 100%; padding: 5px;"> 
-                    <b>
-                      <span style="color: red">{{image_box_todo_num}}</span>
-                        out of <span style="color: blue">{{image_box_num}}</span> boxes
-                    </b> 
-                    are not yet annotated!<br/>
-                    
-                    <b>Selected boxes: </b>
-                    <div style="display:flex;" class="flex-wrap"> 
-                    <div v-for="box in selected_box" :key="box.id" >
-                        <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ box.text }}</b> </span>
-                    </div>
-                    </div>
-                    <br/>
-                    <v-btn 
-                      :disabled="selected_box.length === 0"
-                      @click="unselect"
-                      small 
-                      color="secondary" 
-                      depressed>
-                      Undo all selections
-                      </v-btn> 
-                </div>
-            </v-card-text>
-        </v-card>
+      <v-progress-linear
+        color="lime"
+        style="margin-bottom: 10px"
+        :value="annot_progress"
+        :height="25"
+      >
+        <b>
+        {{ annot_progress }}% 
+          (
+            <span style="color: red">{{image_box_num - image_box_todo_num}}</span>
+          / {{image_box_num}} boxes
+          )
+        </b>
+      </v-progress-linear>
+
+      <v-card tile>
+      <v-card-title style="font-size: 110%" class="text-left"><b>
+        1. Drag or click to select <span class="red-text">red box(es)</span> on the image.</b> 
+      </v-card-title>
+      <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
+        <div class="text-left" style="font-size: 100%; padding: 5px;"> 
+          <b>Selected boxes: </b>
+          <div style="display:flex;" class="flex-wrap"> 
+          <div v-for="box in selected_box" :key="box.id" >
+              <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ box.text }}</b> </span>
+          </div>
+          </div>
+          <br/>
+          <v-btn 
+            :disabled="selected_box.length === 0"
+            @click="unselect"
+            small 
+            color="secondary" 
+            depressed>
+            Undo all selections
+            </v-btn> 
+        </div>
+      </v-card-text>
+  </v-card>
     </v-col>
 </template>
 
@@ -42,19 +51,18 @@ export default {
         return {};
     },
 
-    mounted() {
-        this.$store.subscribeAction({after: (action) => {
-            if (action.type === 'updateImageBoxes') {
-                this.image_box = this.$store.getters.getImageBoxes
-            }
-            if (action.type === 'updateAnnotatedBoxes') {
-                this.annotated_box = this.$store.getters.getAnnotatedBoxes
-            }
+    // mounted() {
+    //     this.$store.subscribeAction({after: (action) => {
+    //         if (action.type === 'updateImageBoxes') {
+    //             this.image_box = this.$store.getters.getImageBoxes
+    //         }
+    //         if (action.type === 'updateAnnotatedBoxes') {
+    //             this.annotated_box = this.$store.getters.getAnnotatedBoxes
+    //         }
             
-        }})
+    //     }})
 
-    },
-
+    // },
 
     methods: {
         ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
@@ -91,6 +99,9 @@ export default {
         },
         image_box_todo_num () {
             return this.image_box.filter(v=>v.annotated === false).length;
+        },
+        annot_progress () {
+            return 100-Math.ceil((this.image_box_todo_num/this.image_box_num)*100);
         },
         selected_box() {
             return this.$store.getters.getImageBoxes.filter(v=>v.selected);

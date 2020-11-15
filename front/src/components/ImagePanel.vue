@@ -5,8 +5,8 @@
     width="100%"
     @mousedown="clickDown" @mouseup="clickUp"
     >
-    <v-card-title style="font-size: 110%"><b> Image </b></v-card-title>
-    <v-card-text>
+    <!-- <v-card-title style="font-size: 110%"><b> Image </b></v-card-title> -->
+    <!-- <v-card-text> -->
       <v-row>
         <v-col>
           <div ref="img_container">
@@ -39,7 +39,7 @@
 
       </v-row>
 
-    </v-card-text>   
+    <!-- </v-card-text>    -->
   </v-card>
  </v-col>
 </template>
@@ -50,6 +50,7 @@ import axios from "axios";
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
 import BoundingBox from '@/components/BoundingBox.vue'
+import json from '../assets/receipt_00008.json';
 
 export default {
   name: "ImagePanel",
@@ -71,6 +72,10 @@ export default {
   },
 
   mounted() {
+    this.$root.$on('newImage', () => {
+      this.loadImage()
+    })
+    
     this.image = this.$store.getters.getImage;
     this.image_box = this.$store.getters.getImageBoxes;
     this.getInitialPosition();
@@ -79,15 +84,8 @@ export default {
     }
 
     if (this.$localmode) {
-      // this.image_url = this.$store.getters.image_url;
-      axios.get(this.$store.getters.json_url).then(res => {
-        var json = res.data;
-        this.setImageBoxes([json, this.width, this.width*json.meta.image_size.height/json.meta.image_size.width]);
-        this.original_box = json;
-      })      
-      // this.image_url = require('@/assets/receipt_00008.png')
-      // this.setImageBoxes([json, this.width, this.width*json.meta.image_size.height/json.meta.image_size.width])
-      // this.original_box = json
+      this.image_url = require('@/assets/receipt_00008.png')
+      this.setImageBoxes(json)
     }
 
     this.$store.subscribeAction({after: (action) => {
@@ -101,23 +99,14 @@ export default {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadImage: function() {
       const self = this;
-      axios.get(this.$store.state.server_url + "/api/image/")
-        .then(function (res) {
-        self.image_url = this.$store.state.server_url + res.data;
+      axios.get(self.$store.getters.json_url).then(function(res) {
+          var json = res.data;
+          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width]);
+          self.original_box = json;
       })
-      .then(() => {
-        axios.get(this.$store.state.server_url + "/api/image/box_info/")
-          .then(function (res) {
-            //console.log(res)
-            self.setImageBoxes([res.data, this.width, this.width*res.data.meta.image_size.height/res.data.meta.image_size.width])
-            self.original_box = res.data
-          //self.image_url = "http://localhost:8000" + res.data
-        })
-        .catch(function(err) {
-          alert(err);
-        });
-      })
-      
+      .catch(function(err) {
+        alert(err);
+      });
     },
 
     newSize: function() {
@@ -126,7 +115,6 @@ export default {
       const height = cont_pos.bottom-cont_pos.top
       this.width = width
       this.height = height
-      //console.log("New Size:", cont_pos.right-cont_pos.left, cont_pos.bottom-cont_pos.top)
 
       const img_w = this.original_box.meta.image_size.width
       const img_h = this.original_box.meta.image_size.height
@@ -154,11 +142,9 @@ export default {
 
     getInitialPosition: function() {
       const box_pos = this.$refs.img_box.getBoundingClientRect()
-      //console.log("Initial Position:", box_pos.x, box_pos.y)
       this.initialPosition = [box_pos.x, box_pos.y]
 
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
-      //console.log("Original Size:", cont_pos.right-cont_pos.left, cont_pos.bottom-cont_pos.top)
       this.width = cont_pos.right-cont_pos.left
       this.height = cont_pos.bottom-cont_pos.top
     },

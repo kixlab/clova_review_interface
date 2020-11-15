@@ -2,21 +2,19 @@
   <v-app class="annotation">
     <v-app-bar
       app
-      color="indigo"
+      color="indigo lighten-1"
       dark
-      absolute
+      dense
+      fixed
     >
-      <v-toolbar-title>Image Annotation</v-toolbar-title>
+      <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
       <v-spacer/>
-      <end-exp-button/>
+      <instruction-button/>
+      <submit-button/>
     </v-app-bar>
 
     <v-main>
       <v-container fluid fill-height>
-      <v-row dense>
-        <labeling-instruction/>
-      </v-row>
-      <v-divider/>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="5">
@@ -32,9 +30,6 @@
             <labeling/>
             <annotation-status/>
           </v-row>
-          <v-row justify='end'>
-            <submit-button/>
-          </v-row>
         </v-col>
       </v-row>
       </v-container>
@@ -47,9 +42,10 @@
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
 import AnnotationStatus from '@/components/AnnotationStatus.vue'
-import LabelingInstruction from '@/components/LabelingInstruction.vue'
+// import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
-import EndExpButton from '@/components/EndExpButton.vue'
+// import EndExpButton from '@/components/EndExpButton.vue'
+import InstructionButton from '@/components/InstructionButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 
@@ -58,9 +54,9 @@ export default {
   components: {
     ImagePanel,
     AnnotationStatus,
-    LabelingInstruction,
+    // LabelingInstruction,
     SubmitButton,
-    EndExpButton,
+    InstructionButton,
     Labeling,
     BoxSelectionStatus,
   }

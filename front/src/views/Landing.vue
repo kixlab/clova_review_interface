@@ -1,0 +1,109 @@
+<template>
+<v-container>
+  <v-row justify="center" align-content="center" align="center" class="up_margin">
+    <div style="width: 80%;">
+    <h1> Welcome! </h1>
+    Thank you for your participation!<br><br>
+
+    This task is conducted as a part of a research project in which we try to re-design the taxonomy generation for annotation with crowdsourcing. 
+    In this task, you will be asked to annotate the text boxes on an image with an appropriate label.<br>
+
+    <br><v-divider/><br>
+
+    <h3 style="color:red;"> CAUTIONS </h3>
+    <ul>
+      <li> <b>A MTurk user can participate in this task only once.</b> </li>
+      <li> This task is expected to take 30 (to be modified) minutes at maximum.</li>
+      <li> You will be provided with a token after completing the task. You <b>MUST</b> submit this token to the Amazon MTurk website to get rewards. </li>
+      <li> If majority of your annotations are found to not follow the instructions, you may not be rewarded.</li>
+      <li> It is strongly recommended that you use <a target="_blank" rel="noopener noreferrer" href="https://www.google.com/chrome/">chrome</a> browser in your desktop/laptop for the task. 
+      Other browsers or mobile devices may show unexpected behaviors.</li>
+    </ul>
+    <br>
+
+    <h3> STEPS </h3>
+    <ol>
+      <li> Read instruction </li>
+      <li> Annotation for 20 images </li>
+      <li> Submit a token to Amazon MTurk webpage</li>
+    </ol>
+    <br><br>
+
+    <h4> Contact : <a>hoonhan.d@kaist.ac.kr</a> </h4>
+    <h4>Fill in the blank with your MTurk ID and click the button below to proceed to the next step.</h4>
+    <v-form
+      ref="form"
+      v-model="valid"
+      style="width:40%;"
+    >
+    <v-text-field
+      v-model="turk_id"
+      :rules="idRules"
+      label="MTurk ID"
+      required
+    ></v-text-field>
+    </v-form>
+  <v-divider/>
+    </div>
+  </v-row>
+
+  <v-row justify="space-around" align="start" class="up_margin">
+    <v-btn
+      :disabled="!valid"
+      @click="onClickNext"
+      
+      color="indigo lighten-1"
+      class="mr-4"
+    >
+      Next
+    </v-btn>
+  </v-row>
+</v-container>
+</template>
+
+
+<script>
+// @ is an alias to /src
+import { mapState } from "vuex";
+
+export default {
+  name: 'Landing',
+  data: () => ({
+    valid: true,
+    turk_id: '',
+    idRules: [
+      v => !!v || 'MTurk ID is required',
+    ]
+  }),
+  computed: {
+    ...mapState(['mturk_id'])
+  },
+  methods: {
+    onClickNext: function () {
+      const self = this;
+      self.$refs.form.validate()
+      self.$store.commit('set_mturk_id', self.turk_id.trim())
+      self.$helpers.server_get(self, "/api/check-user", 
+        function(self, res){
+          if (res.data.consentAgreed === false){
+            self.$router.push('/informed-consent')
+          } else if (res.data.step <= 20) {
+            self.$router.push('/instruction')
+          } else {
+            self.$router.push('/after-done')
+          }
+      })
+    }
+  },
+  mounted() {
+    this.turk_id = this.mturk_id;
+  }
+}
+</script>
+
+<style scoped>
+.up_margin {
+  margin-top:2rem;
+  text-align: left;
+}
+</style>

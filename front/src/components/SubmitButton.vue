@@ -1,12 +1,12 @@
 <template>
-  <v-tooltip left :disabled="!disabled">
+  <v-tooltip bottom :disabled="!disabled">
     <template v-slot:activator="{ on, attrs }">
       <div v-on="on">
       <v-btn
         class="ma-2"
         :loading="loading"
         :disabled="disabled"
-        color="secondary"
+        color="error"
         @click="onSubmit"
         v-bind="attrs"
         v-on="on"
@@ -15,7 +15,7 @@
       </v-btn>
       </div>
     </template>
-    <span>Annotate all the boxes to submit!</span>
+    Annotate all the boxes to submit!
   </v-tooltip>
 </template>
 
@@ -28,7 +28,6 @@ export default {
   data() {
     return {
       loading: false,
-
       image_box: this.$store.getters.getImageBoxes,
       annotated_boxes: this.$store.getters.getAnnotatedBoxes,
     };
@@ -46,7 +45,7 @@ export default {
     ...mapActions(['setImageBoxes', 'updateAnnotatedBoxes',]),
     onSubmit: function() {
       const self = this;
-      self.loading = true
+      self.loading = true;
 
       // Polish annotation data
       var annotationData = []
@@ -57,20 +56,16 @@ export default {
 
       axios.post(self.$store.state.server_url + "/api/image/", {
         // user_id: "user_id",
+        annotationData: annotationData,
         test: "testText"
-      })
-      .then(function () {
+      }).then(function () {
         self.$store.commit('update_image_count');
-        axios.get(self.$store.getters.json_url).then(res => {
-          self.setImageBoxes(res.data);
-          self.updateAnnotatedBoxes([[], "reset"])
-        })  
+        self.$root.$emit('newImage');
+        self.updateAnnotatedBoxes([[], "reset"])
         self.loading = false;
-        
-        alert("Server responded!!")
       })
       .catch(function(err) {
-        self.loading = false
+        self.loading = false;
         alert(err);
       });
     }

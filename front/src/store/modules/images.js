@@ -122,14 +122,14 @@ const mutations = {
     },
     addAnnotatedBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.push(annotatedBoxes)
-        console.log("ANNOTATED:", state.annotatedBoxes)
+        // console.log("ANNOTATED:", state.annotatedBoxes)
     },
     removeAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.splice(state.annotatedBoxes.indexOf(annotatedBoxes), 1)
     },
     resetAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes = annotatedBoxes
-        console.log(state.annotatedBoxes)
+        // console.log(state.annotatedBoxes)
     },
 }
 
