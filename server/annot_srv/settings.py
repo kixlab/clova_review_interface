@@ -145,4 +145,6 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
+    'http://13.209.4.171',
+    'http://172.31.26.161'
 )
