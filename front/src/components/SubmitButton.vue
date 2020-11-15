@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import {mapActions} from 'vuex';
 
 export default {
@@ -54,20 +54,20 @@ export default {
         annotationData.push({boxes: tempGroup.boxes, label: tempGroup.label, group_id: group})
       }
 
-      axios.post(self.$store.state.server_url + "/api/image/", {
-        // user_id: "user_id",
-        annotationData: annotationData,
-        test: "testText"
-      }).then(function () {
+      // axios.post(self.$store.state.server_url + "/api/image/", {
+      //   // user_id: "user_id",
+      //   annotationData: annotationData,
+      //   test: "testText"
+      // }).then(function () {
         self.$store.commit('update_image_count');
         self.$root.$emit('newImage');
         self.updateAnnotatedBoxes([[], "reset"])
         self.loading = false;
-      })
-      .catch(function(err) {
-        self.loading = false;
-        alert(err);
-      });
+      // })
+      // .catch(function(err) {
+      //   self.loading = false;
+      //   alert(err);
+      // });
     }
   },
 

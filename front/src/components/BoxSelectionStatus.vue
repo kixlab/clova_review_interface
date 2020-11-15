@@ -19,6 +19,10 @@
       <v-card-title style="font-size: 110%" class="text-left"><b>
         1. Drag or click to select <span class="red-text">red box(es)</span> on the image.</b> 
       </v-card-title>
+      <v-card-subtitle class='text-left'>
+        <b><span style="color:red;">You should select one group of box(es) at a time</span> unless the corresponding label is N/A.<br>
+        For example, for 'menu name' label, you should <span style="color:red;">NOT</span> select two menu names "Gorgonzola Pizza Ice Tea" at the same time, but "Gorgonzola Pizza" and "Ice Tea" one by one.</b>
+      </v-card-subtitle>
       <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
         <div class="text-left" style="font-size: 100%; padding: 5px;"> 
           <b>Selected boxes: </b>
@@ -48,21 +52,19 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     name: "BoxSelectionStatus",
     data() {
-        return {};
+        return {
+          image_box : this.$store.getters.getImageBoxes,
+        };
     },
 
-    // mounted() {
-    //     this.$store.subscribeAction({after: (action) => {
-    //         if (action.type === 'updateImageBoxes') {
-    //             this.image_box = this.$store.getters.getImageBoxes
-    //         }
-    //         if (action.type === 'updateAnnotatedBoxes') {
-    //             this.annotated_box = this.$store.getters.getAnnotatedBoxes
-    //         }
-            
-    //     }})
+    mounted() {
+      this.$store.subscribeAction({after: (action) => {
+        if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+          this.image_box = this.$store.getters.getImageBoxes;
+        }
+      }})
 
-    // },
+    },
 
     methods: {
         ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
@@ -88,11 +90,8 @@ export default {
         },
     },
     computed: {
-        isAnnotationExist () {
-            return (this.annotated_box.length < 1)
-        },
-        image_box () {
-            return this.$store.getters.getImageBoxes;
+        selected_box() {
+          return this.$store.getters.getImageBoxes.filter(v=>v.selected);
         },
         image_box_num () {
             return this.image_box.length;
@@ -102,13 +101,7 @@ export default {
         },
         annot_progress () {
             return 100-Math.ceil((this.image_box_todo_num/this.image_box_num)*100);
-        },
-        selected_box() {
-            return this.$store.getters.getImageBoxes.filter(v=>v.selected);
-        },
-        annotated_box () {
-            return this.$store.getters.getAnnotatedBoxes
-        },
+        }
     }
     
 }

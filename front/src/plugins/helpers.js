@@ -23,7 +23,6 @@ export default {
     },
     isWrongAccess(self) {
       if (self.$store.state.mturk_id === null) {
-        self.$store.commit('reset_mturk_id')
         self.$router.push('landing')
         alert("You should register your mturk ID to proceed to the task.\n")
       }

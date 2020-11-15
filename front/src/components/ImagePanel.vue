@@ -73,14 +73,18 @@ export default {
 
   mounted() {
     this.$root.$on('newImage', () => {
-      this.loadImage()
+      this.loadNewImage()
     })
     
     this.image = this.$store.getters.getImage;
     this.image_box = this.$store.getters.getImageBoxes;
     this.getInitialPosition();
     if (!this.$localmode) {
-      this.loadImage();
+      if (this.$store.getters.getImageBoxes.length === 0){
+        this.loadNewImage();
+      } else {
+        this.loadImage();
+      }
     }
 
     if (this.$localmode) {
@@ -101,14 +105,24 @@ export default {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
-          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width]);
+          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width, false]);
           self.original_box = json;
       })
       .catch(function(err) {
         alert(err);
       });
     },
-
+    loadNewImage: function() {
+      const self = this;
+      axios.get(self.$store.getters.json_url).then(function(res) {
+          var json = res.data;
+          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width, true]);
+          self.original_box = json;
+      })
+      .catch(function(err) {
+        alert(err);
+      });
+    },
     newSize: function() {
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
       const width = cont_pos.right-cont_pos.left

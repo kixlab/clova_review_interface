@@ -2,7 +2,7 @@
   <v-col cols="12">
     <v-card tile>
       <v-card-title style="font-size: 110%" class="text-left"><b>3. Hover to see corresponding boxes on the image.</b> </v-card-title>
-      <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
+      <v-card-text style="min-height:200px; text-align:left;" scrollable>
         <div v-if="isAnnotationExist">
             No annotations yet for this image :-(
         </div>

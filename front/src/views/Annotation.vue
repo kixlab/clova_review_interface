@@ -42,9 +42,7 @@
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
 import AnnotationStatus from '@/components/AnnotationStatus.vue'
-// import LabelingInstruction from '@/components/LabelingInstruction.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
-// import EndExpButton from '@/components/EndExpButton.vue'
 import InstructionButton from '@/components/InstructionButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
@@ -54,11 +52,13 @@ export default {
   components: {
     ImagePanel,
     AnnotationStatus,
-    // LabelingInstruction,
     SubmitButton,
     InstructionButton,
     Labeling,
     BoxSelectionStatus,
+  },
+  beforeCreate() {
+    this.$helpers.isWrongAccess(this)
   }
 }
 </script>

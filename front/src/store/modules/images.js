@@ -55,6 +55,9 @@ const actions = {
 
         commit('setImageRatio', ratio)
         
+        const is_new = json[3];
+        if(is_new) {
+        
         const validData = json[0].valid_line.map(v => v.words).flat(1)
         const processedData = validData.map(function(i) {
             return {row_id: i.row_id,
@@ -72,6 +75,7 @@ const actions = {
         
         //console.log("HERE!!", processedData)
         commit('setCurrBox', processedData)
+        }
     },
 
     updateImageBoxes({ commit }, json) {
