@@ -1,25 +1,55 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
-
 from django.db import models
+from django.utils import timezone
+
+from django.utils.translation import gettext_lazy as _
+from django.core.validators import validate_comma_separated_integer_list
+
+
 
 # Create your models here.
-class Image(models.Model):
-    image = models.ImageField(upload_to='', null=True, blank=True)
-    box_info = models.TextField(null=True, blank=True)
-    is_done = models.BooleanField(default=True)
+class User(models.Model):
+    mturk_id = models.TextField()
+    
+    consentAgreed = models.BooleanField(default=False)
+    step = models.IntegerField(default=1)
 
+    joinTime = models.DateTimeField(auto_now_add=True)
+    consentEndTime = models.DateTimeField(default=timezone.now)
+    instrEndTime = models.DateTimeField(default=timezone.now)
 
-class Box(models.Model):
-    image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    parent = models.IntegerField() # id
-    child = models.IntegerField() # id
-    left_top_x = models.IntegerField(validators=[MaxValueValidator(256), MinValueValidator(0)])
-    left_top_y = models.IntegerField(validators=[MaxValueValidator(256), MinValueValidator(0)])
-    width = models.IntegerField(validators=[MaxValueValidator(256), MinValueValidator(0)])
-    height = models.IntegerField(validators=[MaxValueValidator(256), MinValueValidator(0)])
+    def step_up(self):        
+        self.step += 1
+        self.save()
 
+    def instrEnd(self):
+        self.instrEndTime = timezone.now()
+        self.save()
 
-# class Taxonomy(models.Model):
-#     Not Implemented.
+    def consentEnd(self):
+        self.consentAgreed = True
+        self.consentEndTime = timezone.now()
+        self.save()
 
+class Log(models.Model):
+    class BehaviorTypes(models.TextChoices):
+        null = 'NL', _('NULL')
+        selectBox = 'SB', _('SelectBox')
+        unselectBox = 'UB', _('UnselectBox')
+        unselectAllBox = 'UA', _('UnselectAllBox')
+        
+        chooseLabel = 'CL', _('ChooseLabel')
 
+        removeAnnotation = 'RA', _('RemoveAnnotation')
+        removeAllAnnotation = 'RL', _('RemoveAllAnnotation')
+
+        readInstruction = 'RI', _('ReadInstruction')
+        submit = 'SU', _('Submit')
+
+    
+    ImageID = models.IntegerField()
+    boxIDs = models.TextField(validators=[validate_comma_separated_integer_list])
+    behavior = models.CharField(
+        max_length = 2,
+        choices = BehaviorTypes.choices,
+        default=BehaviorTypes.null
+    )
