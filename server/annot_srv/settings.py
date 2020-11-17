@@ -25,7 +25,10 @@ SECRET_KEY = 'zf%(k#^&(_044^ypb_&@6s+)1yozp=h0roq^khh^x&e&^)08u1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://13.209.4.171',
+    'http://172.31.26.161'
+    ]
 
 
 # Application definition
@@ -91,7 +94,7 @@ WSGI_APPLICATION = 'annot_srv.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

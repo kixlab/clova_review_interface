@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: 'PreSurvey',
+  name: 'InformedConsent',
   methods: {
     onClickNext: function () {
       const self = this;
@@ -46,7 +46,7 @@ export default {
         })
     }
   },
-  beforeMount() {
+  beforeCreate() {
     this.$helpers.isWrongAccess(this)
   }
 }

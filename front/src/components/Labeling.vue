@@ -68,9 +68,9 @@ export default {
           { id: 5, label: 'subtotal', sublabel: 'subtotal price', description: 'Subotal price excluding tax'},
           { id: 6, label: 'subtotal', sublabel: 'tax price', description: 'Tax price'},
           { id: 7, label: 'total', sublabel: 'total price', description: 'Total price'},
-          { id: 8, label: 'total', sublabel: 'cash price', description: 'Price paid by cash'},
-          { id: 9, label: 'total', sublabel: 'credit card price', description: 'Price paid by credit card'},
-          { id: 10, label: 'total', sublabel: 'change price', description: 'Amount of change received'},
+          { id: 8, label: 'payment', sublabel: 'cash price', description: 'Price paid by cash'},
+          { id: 9, label: 'payment', sublabel: 'credit card price', description: 'Price paid by credit card'},
+          { id: 10, label: 'payment', sublabel: 'change price', description: 'Amount of change received'},
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
@@ -101,17 +101,19 @@ export default {
       annotate(item) {
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
+        var label = item.label + "." + item.sublabel
 
         for (var box in imageBox) {
             if (imageBox[box].selected === true) {
                 var currBox = this.image_box[box]
-                currBox.label = item.label + "." + item.sublabel
+                currBox.label = label
                 currBox.selected = false
                 currBox.annotated = true
                 group.push(currBox)
             }
         }
 
+        this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
         this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
       },

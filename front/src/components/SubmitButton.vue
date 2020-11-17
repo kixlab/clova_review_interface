@@ -51,15 +51,24 @@ export default {
       var annotationData = []
       for (var group in self.annotated_boxes) {
         var tempGroup = self.annotated_boxes[group]
-        annotationData.push({boxes: tempGroup.boxes, label: tempGroup.label, group_id: group})
+        var boxIDs = tempGroup.boxes.map((i) => {
+          return i.box_id;
+        })
+        annotationData.push({boxes: boxIDs, label: tempGroup.label, group_id: group})
       }
 
-      axios.post(self.$store.state.server_url + "/api/image/", {
-        // user_id: "user_id",
+      axios.post(self.$store.state.server_url + "/api/submit/", {
+        mturk_id: self.$store.state.mturk_id,
+        image_id: self.$store.state.image_order,
         annotationData: annotationData,
-        test: "testText"
-      }).then(function () {
-        self.$store.commit('update_image_count');
+      }).then(function (res) {
+        
+        if (res.data.step >= 20) {
+          self.$router.push('after-done')
+        }
+        self.$store.commit('set_step', res.data.step)
+        self.$store.commit('set_image_count', res.data.step + res.data.start_image_id)
+
         self.$root.$emit('newImage');
         self.updateAnnotatedBoxes([[], "reset"])
         self.loading = false;

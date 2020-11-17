@@ -72,43 +72,82 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('newImage', () => {
-      this.loadImage()
+    this.loadImageID(function(self) {
+
+    self.$root.$on('newImage', () => {
+      self.loadNewImage()
     })
     
-    this.image = this.$store.getters.getImage;
-    this.image_box = this.$store.getters.getImageBoxes;
-    this.getInitialPosition();
-    if (!this.$localmode) {
-      this.loadImage();
+    self.image = self.$store.getters.getImage;
+    self.image_box = self.$store.getters.getImageBoxes;
+    self.getInitialPosition();
+    if (!self.$localmode) {
+      if (self.$store.getters.getImageBoxes.length === 0){
+        self.loadNewImage();
+      } else {
+        self.loadImage();
+      }
     }
 
-    if (this.$localmode) {
-      this.image_url = require('@/assets/receipt_00008.png')
-      this.setImageBoxes(json)
+    if (self.$localmode) {
+      self.image_url = require('@/assets/receipt_00008.png')
+      self.setImageBoxes(json)
     }
 
-    this.$store.subscribeAction({after: (action) => {
+    self.$store.subscribeAction({after: (action) => {
       if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
-        this.image_box = this.$store.getters.getImageBoxes;
+        self.image_box = self.$store.getters.getImageBoxes;
       }
     }})
+    })
   },
 
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
+    loadImageID: function (callback) {
+      const self = this;
+      axios.get(self.$store.state.server_url + "/api/get-image-id", {
+        params: {
+          mturk_id: self.$store.state.mturk_id
+        }
+      }).then(function (res) {
+        if (res.data.consent_agreed === false) {
+          alert('You should agree the informed consent to start this task!\n');
+          self.$router.push('informed-consent')
+        } else if (res.data.step >= 20) {
+          alert('You already finished the task!\n');
+          self.$router.push('after-done')
+        }
+        self.$store.commit('set_step', res.data.step)
+        self.$store.commit('set_image_count', res.data.step + res.data.start_image_id)
+        callback(self);
+
+      }).catch(function(err) {
+        alert('Please refresh this page.\nIf this error repeats, please contact us via hoonhan.d@kaist.ac.kr \n' + err);
+      });
+    },
     loadImage: function() {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
-          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width]);
+          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width, false]);
           self.original_box = json;
       })
       .catch(function(err) {
         alert(err);
       });
     },
-
+    loadNewImage: function() {
+      const self = this;
+      axios.get(self.$store.getters.json_url).then(function(res) {
+          var json = res.data;
+          self.setImageBoxes([json, self.width, self.width*json.meta.image_size.height/json.meta.image_size.width, true]);
+          self.original_box = json;
+      })
+      .catch(function(err) {
+        alert(err);
+      });
+    },
     newSize: function() {
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
       const width = cont_pos.right-cont_pos.left
@@ -171,11 +210,16 @@ export default {
           if (x11-1 < this.startPoint[0]-this.initialPosition[0] && x22+1 > this.startPoint[0]-this.initialPosition[0] && y11-1 < this.startPoint[1]-this.initialPosition[1] && y22+1 > this.startPoint[1]-this.initialPosition[1]) {
             if (boxes[i].annotated === false) {
               boxes[i].selected = !boxes[i].selected;
+              if (boxes[i].selected === true) {
+                this.$helpers.server_log(this, 'SB', boxes[i].box_id);
+              } else {
+                this.$helpers.server_log(this, 'UB', boxes[i].box_id);
+              }
             }
             this.updateImageBoxes(boxes);
           }
         }
-      }
+      } else {
       if (this.startPoint[0] <= this.endPoint[0]) {
         if (this.startPoint[1] <= this.endPoint[1]) {
           start = [this.startPoint[0]-this.initialPosition[0], this.startPoint[1]-this.initialPosition[1]];
@@ -197,6 +241,8 @@ export default {
         }
       }
 
+      var selected_box = [];
+      var unselected_box = [];
       for (var box in boxes) {
         var x1 = boxes[box].x_pos;
         var x2 = boxes[box].x_pos + boxes[box].x_len;
@@ -206,10 +252,23 @@ export default {
         if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
           if (this.image_box[box].annotated === false) {
             this.image_box[box].selected = !this.image_box[box].selected;
+            if (this.image_box[box].selected === true) {
+              selected_box.push(this.image_box[box].box_id)
+            } else {
+              unselected_box.push(this.image_box[box].box_id)
+            }
           }
         } 
       }
+      if (selected_box.length > 0){
+        this.$helpers.server_log(this, 'SB', selected_box);
+      }
+      if (unselected_box.length > 0){
+        this.$helpers.server_log(this, 'UB', unselected_box);
+      }
+
       this.updateImageBoxes(this.image_box);
+      }
     },
   },
   created() {

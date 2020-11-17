@@ -8,6 +8,7 @@
         outlined
         v-bind="attrs"
         v-on="on"
+        @click="openInstruction"
       >
         Instruction
       </v-btn>
@@ -17,6 +18,9 @@
       <v-card-title>
        <b># Instruction</b>
       </v-card-title>
+      <v-card-subtitle> 
+       <b>Please read the instruction below very carefully before moving on to the task.</b>
+      </v-card-subtitle>
       <v-card-text style="line-height: 1.8; color:black">
       1. Drag or click to select one or more 
         <svg width="12" height="12"><rect style="fill:transparent; stroke:red" width="12" height="12"/></svg>
@@ -28,8 +32,30 @@
         The labeled boxes become  
         <svg width="13" height="12"><rect style="fill:grey; fill-opacity:0.4; stroke:grey;" width="13" height="12"/></svg>
         <span class="gray-text"> gray</span>.<br>
-      3. The label status is shown on the right bottom corner. Please hover to see corresponding boxes and undo annotation if necessary. <br/>
-      4. Once all boxes are labeled, click the <span class="bold-text">SUBMIT</span> button. A new set of image and boxes will be loaded.<br>
+        These are the five labeling categories.
+        <ul>
+          <li> <b style="color:red;">N/A</b>: If none of the labels below match with a box, you should select this label.</li>
+          <li> <b style="color:blue;">Menu</b>: Labels that describe the menu on the receipt
+            <ul>
+              <li>name, unit price, count, price</li>
+            </ul>
+          <li> <b style="color:blue;">Subtotal</b>: The prices in this category will be added up to be the total price. 
+            <ul>
+              <li>subtotal price, tax price</li>
+            </ul>
+          <li> <b style="color:blue;">Total</b>: The total price is the amount that a customer should pay.
+            <ul>
+              <li>total price</li>
+            </ul>
+          </li>
+          <li> <b style="color:blue;">Payment</b>: The price paid by each payment method
+            <ul>
+              <li>cash price, credit card price, change price</li>
+            </ul>
+          </li>
+        </ul>
+      3. You can check the labeled boxes on the image and on the box at the bottom. Hover to see corresponding boxes and undo annotation if necessary. <br/>
+      4. Once all boxes are labeled, <span class="bold-text">SUBMIT</span> button at the top right corner will be activated. Click the button, and a new set of image and boxes will be loaded.<br>
       </v-card-text>
 
       <v-divider></v-divider>
@@ -57,12 +83,16 @@ export default {
         };
     },
 
-    mounted() {
-        
-    },
-
     methods: {
-
+      openInstruction: function () {
+        const self=this;
+        self.dialog = true;
+        self.$helpers.server_log(self, 'RI', [])
+      }
+    },
+    mounted() {
+      // this.dialog = true;
+      this.openInstruction();
     },
 }
 </script>
