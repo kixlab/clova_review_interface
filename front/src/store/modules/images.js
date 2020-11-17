@@ -59,8 +59,9 @@ const actions = {
         if(is_new) {
         
         const validData = json[0].valid_line.map(v => v.words).flat(1)
-        const processedData = validData.map(function(i) {
+        const processedData = validData.map(function(i, idx) {
             return {row_id: i.row_id,
+                    box_id: idx,
                     text: i.text,
                     x_pos: i.quad.x1/ratio+padding_x, 
                     y_pos: i.quad.y1/ratio+padding_y, 
@@ -72,8 +73,7 @@ const actions = {
                     quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
                     label: ""}
         })
-        
-        //console.log("HERE!!", processedData)
+
         commit('setCurrBox', processedData)
         }
     },

@@ -8,6 +8,7 @@
         outlined
         v-bind="attrs"
         v-on="on"
+        @click="openInstruction"
       >
         Instruction
       </v-btn>
@@ -31,10 +32,10 @@
         The labeled boxes become  
         <svg width="13" height="12"><rect style="fill:grey; fill-opacity:0.4; stroke:grey;" width="13" height="12"/></svg>
         <span class="gray-text"> gray</span>.<br>
-        These are four labeling categories.
+        These are the five labeling categories.
         <ul>
           <li> <b style="color:red;">N/A</b>: If none of the labels below match with a box, you should select this label.</li>
-          <li> <b style="color:blue;">Menu</b>: Labels that describe the menu on the receipt.
+          <li> <b style="color:blue;">Menu</b>: Labels that describe the menu on the receipt
             <ul>
               <li>name, unit price, count, price</li>
             </ul>
@@ -44,7 +45,12 @@
             </ul>
           <li> <b style="color:blue;">Total</b>: The total price is the amount that a customer should pay.
             <ul>
-              <li>total price, cash price, credit card price, change price</li>
+              <li>total price</li>
+            </ul>
+          </li>
+          <li> <b style="color:blue;">Payment</b>: The price paid by each payment method
+            <ul>
+              <li>cash price, credit card price, change price</li>
             </ul>
           </li>
         </ul>
@@ -77,8 +83,16 @@ export default {
         };
     },
 
+    methods: {
+      openInstruction: function () {
+        const self=this;
+        self.dialog = true;
+        self.$helpers.server_log(self, 'RI', [])
+      }
+    },
     mounted() {
-      this.dialog = true;
+      // this.dialog = true;
+      this.openInstruction();
     },
 }
 </script>

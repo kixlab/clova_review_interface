@@ -6,5 +6,8 @@ urlpatterns = [
     # path(r'image/box_info/', views.selectedImageBox)
     path('log/', views.recordLog),
     path('check-user/', views.checkUser),
-    path('consent-agreed/', views.consentAgreed),
+    path('consent-agreed/', views.recordconsentAgreed),
+    path('instr-done/', views.recordInstrDone),
+    path('get-image-id/', views.getImageID),
+    path('submit/', views.submit)
 ]

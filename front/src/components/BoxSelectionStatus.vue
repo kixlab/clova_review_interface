@@ -20,8 +20,7 @@
         1. Drag or click to select <span class="red-text">red box(es)</span> on the image.</b> 
       </v-card-title>
       <v-card-subtitle class='text-left'>
-        <b><span style="color:red;">You should select one group of box(es) at a time</span> unless the corresponding label is N/A.<br>
-        For example, for 'menu name' label, you should <span style="color:red;">NOT</span> select two menu names "Gorgonzola Pizza Ice Tea" at the same time, but "Gorgonzola Pizza" and "Ice Tea" one by one.</b>
+        <b><span style="color:red;">You should select one group of box(es) at a time</span> that indicate a single entity.<br></b>
       </v-card-subtitle>
       <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
         <div class="text-left" style="font-size: 100%; padding: 5px;"> 
@@ -81,11 +80,14 @@ export default {
 
         unselect: function() {
           var boxes = this.image_box;
+          var selected_boxes = [];
           for (var i in boxes) {
             if (boxes[i].selected === true) {
               boxes[i].selected = false
+              selected_boxes.push(parseInt(i));
             }
           }
+          this.$helpers.server_log(this, 'UA', selected_boxes);
           this.updateImageBoxes(boxes);
         },
     },

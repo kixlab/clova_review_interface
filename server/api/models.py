@@ -11,7 +11,9 @@ class User(models.Model):
     mturk_id = models.TextField()
     
     consentAgreed = models.BooleanField(default=False)
-    step = models.IntegerField(default=1)
+    instrEnded = models.BooleanField(default=False)
+    start_image_id = models.IntegerField(default=0)
+    step = models.IntegerField(default=0)
 
     joinTime = models.DateTimeField(auto_now_add=True)
     consentEndTime = models.DateTimeField(default=timezone.now)
@@ -21,13 +23,15 @@ class User(models.Model):
         self.step += 1
         self.save()
 
-    def instrEnd(self):
-        self.instrEndTime = timezone.now()
-        self.save()
-
     def consentEnd(self):
         self.consentAgreed = True
         self.consentEndTime = timezone.now()
+        self.save()
+
+    def startTask(self, valid_usrs):
+        self.instrEnded = True
+        self.instrEndTime = timezone.now()
+        self.start_image_id = (valid_usrs // 4) * 20
         self.save()
 
 class Log(models.Model):
@@ -45,11 +49,22 @@ class Log(models.Model):
         readInstruction = 'RI', _('ReadInstruction')
         submit = 'SU', _('Submit')
 
-    
-    ImageID = models.IntegerField()
-    boxIDs = models.TextField(validators=[validate_comma_separated_integer_list])
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    logTime = models.DateTimeField(auto_now_add=True)
+    imageID = models.IntegerField(default=-1)
+    boxIDs = models.TextField(default=[], validators=[validate_comma_separated_integer_list])
+    label = models.CharField(max_length = 255)
     behavior = models.CharField(
         max_length = 2,
         choices = BehaviorTypes.choices,
         default=BehaviorTypes.null
     )
+
+class Label(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    imageID = models.IntegerField()
+    groupID = models.IntegerField()
+    boxIDs = models.TextField(validators=[validate_comma_separated_integer_list])
+    label = models.CharField(max_length = 255)
+
+

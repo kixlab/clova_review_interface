@@ -131,6 +131,7 @@ export default {
         }
       }
 
+      this.$helpers.server_log(this, 'RA', group.boxes.map((i) => {return i.box_id}))
       this.updateImageBoxes(this.image_box)
       this.updateAnnotatedBoxes([group, "remove"])
     },
@@ -142,6 +143,7 @@ export default {
         temp.label = '';
       }
 
+      this.$helpers.server_log(this, 'RL', [])
       this.updateImageBoxes(this.image_box)
       this.updateAnnotatedBoxes([[], "reset"])
       this.undo_warning = false;

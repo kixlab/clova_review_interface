@@ -6,8 +6,8 @@
         <v-card-text>
         <h2>Please carefully read the instruction below.<br>
         As it is expected to take a minute to read, 
-        <span v-if="time_now < 60" class="red">you can leave this page after {{60 - time_now}} seconds from now.</span>
-        <span v-else class="red"> you can leave this page now.</span>
+        <span v-if="time_now < 60" class="reds">you can leave this page after {{60 - time_now}} seconds from now.</span>
+        <span v-else class="reds"> you can leave this page now.</span>
         </h2>
         </v-card-text>
       </v-card>
@@ -26,7 +26,7 @@
           v-for="(item,i) in items"
           :key="i">
 
-        <v-img v-if="i<4" :src="item.src" :contain="true" style="width:auto; max-height:100%; max-width:100%;">
+        <v-img v-if="i<items.length-1" :src="item.src" :contain="true" style="width:auto; max-height:100%; max-width:100%;">
           <template v-slot:placeholder>
             <v-row
               class="fill-height ma-0"
@@ -79,10 +79,11 @@ export default {
     time_now: 0,
     passOneMinute: false,
     items: [
-      // {src: require('@/assets/tutorial_c_1.png')},
-      // {src: require('@/assets/tutorial_c_2.png')},
-      // {src: require('@/assets/tutorial_c_3.png')},
-      // {src: require('@/assets/tutorial_c_4.png')},
+      {src: require('@/assets/tutorial_clova1.png')},
+      {src: require('@/assets/tutorial_clova2.png')},
+      {src: require('@/assets/tutorial_clova3.png')},
+      {src: require('@/assets/tutorial_clova4.png')},
+      {src: require('@/assets/tutorial_clova5.png')},
       {}
     ]
   }),
@@ -90,9 +91,10 @@ export default {
     onClickNext: function () {
       const self = this;
 
-      self.$helpers.server_call(self, function(self, res){ // eslint-disable-line no-unused-vars
-        self.$router.push('annotation')
-      }, "/record_intro_done")
+      self.$helpers.server_get(self, "/api/instr-done", 
+        function(self, res){ // eslint-disable-line no-unused-vars
+          self.$router.push('annotation')
+        })
     }
   },
   beforeCreate() {
@@ -126,7 +128,7 @@ export default {
   background-color: white !important;
 }
 
-.red {
+.reds {
   color:red;
   background-color:white !important;
 }

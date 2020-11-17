@@ -6,7 +6,7 @@
     Thank you for your participation!<br><br>
 
     This task is conducted as a part of a research project in which we try to re-design the taxonomy generation for annotation with crowdsourcing. 
-    In this task, you will be asked to annotate the text boxes on a receipt image with an appropriate label.<br>
+    In this task, you will be asked to annotate text boxes on a receipt image with an appropriate labels.<br>
 
     <br><v-divider/><br>
 
@@ -24,7 +24,7 @@
     <h3> STEPS </h3>
     <ol>
       <li> Read instruction </li>
-      <li> Annotation for 20 receipt images </li>
+      <li> Annotate 20 receipt images </li>
       <li> Submit a token to Amazon MTurk webpage</li>
     </ol>
     <br><br>
@@ -85,9 +85,11 @@ export default {
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.$helpers.server_get(self, "/api/check-user", 
         function(self, res){
-          if (res.data.consentAgreed === false){
+          if(res.data.task_done) {
+            alert("Thank you for your interest, but no more tasks are left now.\n We ask for your kind understanding.")
+          } else if (res.data.consent_agreed === false){
             self.$router.push('/informed-consent')
-          } else if (res.data.step <= 20) {
+          } else if (res.data.step < 20) {
             self.$router.push('/instruction')
           } else {
             self.$router.push('/after-done')
