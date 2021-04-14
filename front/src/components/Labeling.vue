@@ -11,6 +11,69 @@
       
       <v-card-text> 
         <v-row>
+          <v-col class="text-left">
+            <div v-for="category in table" :key="category" style="padding: 4px;">
+              <v-menu open-on-hover right offset-x>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="text-none"
+                    color="normal"
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    {{ category }}
+                  </v-btn>
+                </template>
+                <v-list dense>
+                  <v-list-item
+                    v-for="(item, index) in labelTable.filter(e => e.label == category)"
+                    :key="index"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-btn class="text-none" color="normal" small text @click="clicked(item.sublabel); annotate(item)" :disabled=isDisabled>
+                        {{ item.sublabel }}
+                        </v-btn>
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <br/>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="text-left">
+            <v-autocomplete
+              clearable
+              dense
+              filled
+              :items="labelTable"
+              label="Search for the label.."
+            >
+              <template v-slot:selection="data">
+                {{ data.item.label.concat(' - ', data.item.sublabel) }}
+              </template>
+              <template v-slot:item="data">
+                <!--<div v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item"></v-list-item-content>
+                </div>
+                <div v-else>-->
+                  <v-list-item-content>
+                    <v-list-item-title v-html="data.item.label.concat(' - ', data.item.sublabel)"></v-list-item-title>
+                    <v-list-item-subtitle v-html="data.item.description"></v-list-item-subtitle>
+                  </v-list-item-content>
+                <!--</div>-->
+              </template>
+            </v-autocomplete>
+          </v-col>
+        </v-row>
+
+        <v-row>
           <v-col>
             <v-simple-table fixed-header height="250px">
                 <template v-slot:default>
@@ -74,6 +137,7 @@ export default {
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
+      table: ['N/A', 'menu', 'subtotal', 'total', 'payment']
     }
   },
   mounted: function () {
@@ -117,6 +181,10 @@ export default {
         this.updateImageBoxes(this.image_box)
         this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
       },
+
+      clicked(label) {
+        console.log("Clicked", label)
+      }
   },
   computed: {
     isDisabled() {
