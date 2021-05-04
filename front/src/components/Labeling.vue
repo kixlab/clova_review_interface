@@ -11,6 +11,50 @@
       
       <v-card-text> 
         <v-row>
+          <v-col :cols="4" style="text-align:left;">
+            Category
+            <v-list >
+              <v-list-item-group
+                mendatory
+                active-class="border"
+                color="indigo"
+              >
+                <v-list-item v-for="(category, index) in table" :key='index' @click="selectCategory(category)">
+                  <b>{{category}}</b>
+                </v-list-item>
+                <v-list-item v-if="isAdding">
+                  <v-text-field label="new category" id='newCat'></v-text-field>
+                  <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="addCategory()">+ add</v-btn>
+                  <v-btn x-small outlined color="red" v-on:click.stop="cancelAdd()">X</v-btn>
+                </v-list-item>
+                <v-list-item v-if="!isAdding" v-on:click.stop="getCategory()"><b>+</b> add</v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-col>
+
+          <v-col :cols="8" style="text-align:left;">
+            Sub-category
+             <v-list>
+              <v-list-item-group
+                active-class="border"
+                color="indigo"
+              >
+                <v-list-item v-for="(item, index) in labelTable.filter(e=>e.label == category)" :key="index">
+                  <b>{{item.sublabel}} </b>: {{item.description}}
+                </v-list-item>
+                <v-list-item v-if="isAddingSub">
+                  <v-text-field label="new subcategory" id='newSubCat'></v-text-field>
+                  :
+                  <v-text-field label="description" id='newDesc'></v-text-field>
+                  <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="addSubCategory()">+ add</v-btn>
+                  <v-btn x-small outlined color="red" v-on:click.stop="cancelAddSub()">X</v-btn>
+                </v-list-item>
+                <v-list-item v-if="isCategorySelected&&(!isAddingSub)" v-on:click.stop="getSubCategory()"><b>+</b> add</v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-col>
+        </v-row>
+        <!-- <v-row>
           <v-col class="text-left">
             <div v-for="category in table" :key="category" style="padding: 4px;">
               <v-menu open-on-hover right offset-x>
@@ -44,8 +88,8 @@
               <br/>
             </div>
           </v-col>
-        </v-row>
-
+        </v-row> -->
+<!-- 
         <v-row>
           <v-col class="text-left">
             <v-autocomplete
@@ -59,15 +103,7 @@
                 {{ data.item.label.concat(' - ', data.item.sublabel) }}
               </template>
               <template v-slot:item="data">
-                <!--<div v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item"></v-list-item-content>
-                </div>
-                <div v-else>-->
-                  <v-list-item-content>
-                    <v-list-item-title v-html="data.item.label.concat(' - ', data.item.sublabel)"></v-list-item-title>
-                    <v-list-item-subtitle v-html="data.item.description"></v-list-item-subtitle>
-                  </v-list-item-content>
-                <!--</div>-->
+                
               </template>
             </v-autocomplete>
           </v-col>
@@ -108,7 +144,7 @@
                 </template>
             </v-simple-table>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-card-text>
 
     </v-card>
@@ -123,7 +159,6 @@ export default {
     return {
       selection: [],
       labelTable: [
-          { id: 0, label: 'N/A', sublabel: 'N/A (Not Applicable)', description: 'None of the labels matched with a box'},
           { id: 1, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
           { id: 2, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
           { id: 3, label: 'menu', sublabel: 'count', description: 'Number of the menu consumed'},
@@ -137,7 +172,11 @@ export default {
       ],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
-      table: ['N/A', 'menu', 'subtotal', 'total', 'payment']
+      table: ['menu', 'subtotal', 'total', 'payment'],
+      category:'',
+      subcategory:'',
+      addcat: false,
+      addsubcat: false,
     }
   },
   mounted: function () {
@@ -151,6 +190,36 @@ export default {
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
       ...mapGetters(['getImageBoxes']),
+
+      selectCategory(selectedCategory){
+        this.category=selectedCategory;
+        this.addsubcat=false;
+      },
+
+      getCategory(){
+        this.category='';
+        this.addcat=true;
+      },
+      getSubCategory(){
+        this.subcategory='';
+        this.addsubcat=true;
+      },
+
+      addCategory(){
+        this.addcat=false;
+        console.log(this.addcat);
+        var newcat=document.getElementById('newCat').value;
+        this.table.push(newcat);        
+      },
+       addSubCategory(){
+        this.addsubcat=false;
+        var newsubcat=document.getElementById('newSubCat').value;
+        var newdesc=document.getElementById('newDesc').value;
+        this.labelTable.push({label: this.category, sublabel: newsubcat, description: newdesc});        
+      },
+      cancelAdd(){
+        this.addcat=false;
+      },
 
       add() {
         this.$refs.form.validate()
@@ -189,6 +258,18 @@ export default {
   computed: {
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
+    },
+    isCategorySelected(){
+      return (this.category!='')
+    },
+    isSubSelected(){
+      return (this.subcategory!='')
+    },
+    isAdding(){
+      return (this.addcat)
+    },
+    isAddingSub(){
+      return (this.addsubcat)
     }
   },
 }

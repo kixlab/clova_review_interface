@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.apps import apps
 
-from .models import User, Log, Label
 
-admin.site.register(User)
-admin.site.register(Log)
-admin.site.register(Label)
+app=apps.get_app_config('api')
+
+for model_name, model in app.models.items():
+    admin.site.register(model)
+
