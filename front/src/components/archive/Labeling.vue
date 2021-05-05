@@ -87,7 +87,6 @@ export default {
       
       for (var box in imageBox) {
         if (imageBox[box].selected === true) {
-          console.log(this.image_box)
           this.image_box[box].label = label
           this.image_box[box].selected = false
           this.image_box[box].annotated = true

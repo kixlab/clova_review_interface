@@ -39,7 +39,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="(item, index) in labelTable.filter(e=>e.label == category)" :key="index">
+                <v-list-item v-for="(item, index) in labelTable.filter(e=>e.label == category)" :key="index" @click="annotate(item)">
                   <b>{{item.sublabel}} </b>: {{item.description}}
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
@@ -54,7 +54,7 @@
             </v-list>
           </v-col>
         </v-row>
-        <!-- <v-row>
+         <!-- <v-row>
           <v-col class="text-left">
             <div v-for="category in table" :key="category" style="padding: 4px;">
               <v-menu open-on-hover right offset-x>
@@ -88,8 +88,8 @@
               <br/>
             </div>
           </v-col>
-        </v-row> -->
-<!-- 
+        </v-row>
+
         <v-row>
           <v-col class="text-left">
             <v-autocomplete
@@ -107,9 +107,9 @@
               </template>
             </v-autocomplete>
           </v-col>
-        </v-row>
+        </v-row> -->
 
-        <v-row>
+        <!-- <v-row>
           <v-col>
             <v-simple-table fixed-header height="250px">
                 <template v-slot:default>
@@ -249,6 +249,7 @@ export default {
         this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
         this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
+
       },
 
       clicked(label) {
