@@ -45,7 +45,7 @@ def recordInstrDone(request):
 def recordLog(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        print(query_json)
+        print("Hi", query_json)
         mturk_id = query_json['mturk_id']
         behavior_type = query_json['type']
         box_ids = query_json['box_ids']
