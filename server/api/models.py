@@ -71,7 +71,7 @@ class Label(models.Model):
 class Class(models.Model):
     document=models.CharField(max_length=50)
     className=models.CharField(max_length=50)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    username = models.CharField(max_length=50)
     def __str__(self):
         return self.document+'-'+self.className
 
@@ -80,6 +80,6 @@ class SubClass(models.Model):
     className=models.ForeignKey('Class', on_delete=models.CASCADE)
     subclassName=models.CharField(max_length=100)
     decription=models.CharField(max_length=200)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    username = models.CharField(max_length=50)
     def __str__(self):
         return self.className.document+'-'+self.className.className+'-'+self.subclassName
