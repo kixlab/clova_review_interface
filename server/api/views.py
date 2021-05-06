@@ -11,7 +11,7 @@ import json
 def checkUser(request):
     if request.method == 'GET':
         mturk_id = request.GET['mturk_id']
-        print(mturk_id)
+        print("Hi",mturk_id)
         user, created = User.objects.get_or_create(mturk_id=mturk_id)
         task_done = len(list(User.objects.filter(instrEnded = True))) > 15
         response = {
