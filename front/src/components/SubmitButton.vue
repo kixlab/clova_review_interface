@@ -62,6 +62,7 @@ export default {
         image_id: self.$store.state.image_order,
         annotationData: annotationData,
       }).then(function (res) {
+        console.log(res)
         
         if (res.data.step >= 20) {
           self.$router.push('after-done')

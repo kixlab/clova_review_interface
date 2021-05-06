@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 
   const routes = [
   {
-    path: '/annotation/:docType/:imgNo/',
+    path: '/annotation/:docType/',
     name: 'Annotation',
     component: Annotation
   },

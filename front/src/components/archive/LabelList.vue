@@ -171,8 +171,6 @@ export default {
 
         annotate(item) {
             
-            console.log(this.getImageBoxes())
-            console.log(this.image_box)
             const imageBox = this.getImageBoxes()//this.image_box
             var group = []
 
@@ -191,7 +189,6 @@ export default {
         },
 
         checkAddButton() {
-            console.log(this.selected_boxes)
             if (this.selected_boxes.length === 0) {
                 return true
             }

@@ -31,7 +31,7 @@ class User(models.Model):
     def startTask(self, valid_usrs):
         self.instrEnded = True
         self.instrEndTime = timezone.now()
-        self.start_image_id = (valid_usrs // 4) * 20
+        self.start_image_id = 0
         self.save()
 
 class Log(models.Model):
@@ -71,6 +71,7 @@ class Label(models.Model):
 class Class(models.Model):
     document=models.CharField(max_length=50)
     className=models.CharField(max_length=50)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     def __str__(self):
         return self.document+'-'+self.className
 
@@ -79,5 +80,6 @@ class SubClass(models.Model):
     className=models.ForeignKey('Class', on_delete=models.CASCADE)
     subclassName=models.CharField(max_length=100)
     decription=models.CharField(max_length=200)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     def __str__(self):
         return self.className.document+'-'+self.className.className+'-'+self.subclassName

@@ -77,6 +77,7 @@ def getImageID(request):
         }
         return JsonResponse(response)
 
+
 @csrf_exempt
 def submit(request):
     if request.method == 'POST':

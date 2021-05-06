@@ -9,5 +9,6 @@ urlpatterns = [
     path('consent-agreed/', views.recordconsentAgreed),
     path('instr-done/', views.recordInstrDone),
     path('get-image-id/', views.getImageID),
-    path('submit/', views.submit)
+    path('submit/', views.submit),
+    path('get-category/', views.getCategory)
 ]

@@ -58,7 +58,6 @@ export default {
     'drag-select-container': DragSelect
   },
   data() {
-    console.log(this.$store.getters.getImageBoxes)
     return {
       image: this.$store.getters.getImage,
       image_box: this.$store.getters.getImageBoxes,
@@ -156,7 +155,6 @@ export default {
 
       const img_w = this.original_box.meta === undefined ? this.original_box.image_size.width : this.original_box.meta.image_size.width;
       const img_h = this.original_box.meta === undefined ? this.original_box.image_size.height : this.original_box.meta.image_size.height;
-      console.log("Hello",img_w, img_h)
       var ratio = 1
       var padding_x = 0
       var padding_y = 0
@@ -182,11 +180,8 @@ export default {
     getInitialPosition: function() {
       const box_pos = this.$refs.img_box.getBoundingClientRect()
       this.initialPosition = [box_pos.x, box_pos.y]
-      console.log(this.$refs.img_box)
-      console.log(box_pos)
 
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
-      console.log(this.$refs.img_container)
       this.width = cont_pos.right-cont_pos.left
       this.height = cont_pos.bottom-cont_pos.top
     },
