@@ -9,6 +9,7 @@ import json
 
 @csrf_exempt
 def checkUser(request):
+    print("Hi?")
     if request.method == 'GET':
         mturk_id = request.GET['mturk_id']
         print("Hi",mturk_id)
