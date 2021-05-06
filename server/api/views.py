@@ -12,7 +12,11 @@ def checkUser(request):
     print("Hi?")
     if request.method == 'GET':
         mturk_id = request.GET['mturk_id']
-        print("Hi",mturk_id)
+        if(len(User.objects.filter(mturk_id=mturk_id))==0):
+            user=User(mturk_id=mturk_id)
+            user.save()
+        else: 
+            user=User.objects.get(mturk_id=mturk_id)
         user, created = User.objects.get_or_create(mturk_id=mturk_id)
         task_done = len(list(User.objects.filter(instrEnded = True))) > 15
         response = {
