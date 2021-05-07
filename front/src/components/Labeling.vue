@@ -156,23 +156,72 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Labeling',
   data() {
+    var categories=[]
+    var subcats=[]
+    switch(this.$route.params.docType){ 
+      case 'receipt':
+        categories=['menu', 'subtotal', 'total', 'payment']
+        subcats=[
+          { id: 1, label: 'menu', sublabel: 'id', description: 'ID of the menu'},
+          { id: 2, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
+          { id: 3, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
+          { id: 4, label: 'menu', sublabel: 'count', description: 'Number of the menu consumed'},
+          { id: 5, label: 'menu', sublabel: 'price', description: 'Total price of the menu'},
+          { id: 6, label: 'subtotal', sublabel: 'menu count', description: 'Number of unique menus'},
+          { id: 7, label: 'subtotal', sublabel: 'item count', description: 'Number of items'},
+          { id: 8, label: 'subtotal', sublabel: 'price', description: 'Subotal price excluding tax'},
+          { id: 9, label: 'subtotal', sublabel: 'service charge', description: 'Service charge'},
+          { id: 10, label: 'subtotal', sublabel: 'tax price', description: 'Tax price'},
+          { id: 11, label: 'total', sublabel: 'total price', description: 'Total price'},
+          { id: 12, label: 'payment', sublabel: 'cash payment', description: 'Price paid by cash'},
+          { id: 13, label: 'payment', sublabel: 'credit card payment', description: 'Price paid by credit card'},
+          { id: 14, label: 'payment', sublabel: 'change', description: 'Amount of change received'},
+      ]
+      break;
+      case 'resume':
+        categories=['personal info', 'employment', 'education', 'experience', 'publication', 'committee', 'awards']
+        subcats=[
+          { id: 1, label: 'personal info', sublabel: 'name', description: 'Name of the person'},
+          { id: 2, label: 'personal info', sublabel: 'office address', description: 'Address of the office'},
+          { id: 3, label: 'personal info', sublabel: 'office no', description: 'Phone number of the office'},
+          { id: 4, label: 'personal info', sublabel: 'job title', description: 'Title of the current job'},
+          { id: 5, label: 'personal info', sublabel: 'institution', description: 'Institution that the person works at'},
+          { id: 6, label: 'personal info', sublabel: 'birthplace', description: 'Birthplace of the person'},
+          { id: 7, label: 'personal info', sublabel: 'birthdate', description: 'Birthdate of the person'},
+          { id: 8, label: 'personal info', sublabel: 'research interest', description: 'Field that the person is working on or interested in'},
+          { id: 9, label: 'employment', sublabel: 'title', description: 'Title of the job'},
+          { id: 10, label: 'employment', sublabel: 'institution', description: 'Institution that the person worked at'},
+          { id: 11, label: 'employment', sublabel: 'location', description: 'Location of the institution'},
+          { id: 12, label: 'employment', sublabel: 'year', description: 'Dates of the experience'},
+          { id: 13, label: 'education', sublabel: 'degree', description: 'Degree that the person has'},
+          { id: 14, label: 'education', sublabel: 'institution', description: 'Institution or school that the person received the degree'},
+          { id: 15, label: 'education', sublabel: 'location', description: 'Location of the institution'},
+          { id: 16, label: 'education', sublabel: 'major', description: 'Major field of study for the degree'},
+          { id: 17, label: 'education', sublabel: 'graduation year', description: 'Year that the person received the degree'},
+          { id: 18, label: 'experience', sublabel: 'title', description: 'Title of the experience'},
+          { id: 19, label: 'experience', sublabel: 'institution', description: 'Title of the experience'},
+          { id: 20, label: 'experience', sublabel: 'location', description: 'Location of the experience'},
+          { id: 21, label: 'experience', sublabel: 'role description', description: 'Role description of the experience'},
+          { id: 22, label: 'experience', sublabel: 'year', description: 'Dates of the experience'},
+          { id: 23, label: 'publication', sublabel: 'title', description: 'Publication title'},
+          { id: 24, label: 'publication', sublabel: 'year', description: 'Publication year'},
+          { id: 25, label: 'publication', sublabel: 'venue', description: 'Journal or conference the paper was published'},
+          { id: 26, label: 'publication', sublabel: 'authors', description: 'Author list of the publication'},
+          { id: 27, label: 'committee', sublabel: 'title', description: 'Title of the committee that the person belongs to'},
+          { id: 28, label: 'committee', sublabel: 'organization', description: 'Organization of the committee'},
+          { id: 29, label: 'committee', sublabel: 'year', description: 'Dates that the person served in the committee'},
+          { id: 30, label: 'awards', sublabel: 'title', description: 'Title of the award'},
+          { id: 31, label: 'awards', sublabel: 'institution', description: 'Institution that gave the award'},
+          { id: 32, label: 'awards', sublabel: 'yaer', description: 'Dates that the person received the award'},
+      ]
+
+    }
     return {
       selection: [],
-      labelTable: [
-          { id: 1, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
-          { id: 2, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
-          { id: 3, label: 'menu', sublabel: 'count', description: 'Number of the menu consumed'},
-          { id: 4, label: 'menu', sublabel: 'price', description: 'Total price of the menu'},
-          { id: 5, label: 'subtotal', sublabel: 'subtotal price', description: 'Subotal price excluding tax'},
-          { id: 6, label: 'subtotal', sublabel: 'tax price', description: 'Tax price'},
-          { id: 7, label: 'total', sublabel: 'total price', description: 'Total price'},
-          { id: 8, label: 'payment', sublabel: 'cash price', description: 'Price paid by cash'},
-          { id: 9, label: 'payment', sublabel: 'credit card price', description: 'Price paid by credit card'},
-          { id: 10, label: 'payment', sublabel: 'change price', description: 'Amount of change received'},
-      ],
+      labelTable: subcats,
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
-      table: ['menu', 'subtotal', 'total', 'payment'],
+      table: categories,
       category:'',
       subcategory:'',
       addcat: false,

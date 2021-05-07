@@ -11,7 +11,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        Submit
+        Next
       </v-btn>
       </div>
     </template>
@@ -68,6 +68,7 @@ export default {
           self.$router.push('after-done')
         }
         self.$store.commit('set_step', res.data.step)
+        self.$store.commit('set_image_count', res.data.step + res.data.start_image_id)
 
         self.$root.$emit('newImage');
         self.updateAnnotatedBoxes([[], "reset"])
