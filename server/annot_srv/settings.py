@@ -42,8 +42,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
-
-
 INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
@@ -58,6 +56,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,5 +150,6 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
     'http://13.209.4.171',
+    'http://13.209.4.171:8080',
     'http://172.31.26.161'
 )
