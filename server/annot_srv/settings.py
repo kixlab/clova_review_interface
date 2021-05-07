@@ -42,6 +42,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8080',
+    'http://13.209.4.171',
+    'http://13.209.4.171:8080',
+    'http://172.31.26.161'
+)
+
 INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
@@ -145,11 +155,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_root")
 
-CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',
-    'http://13.209.4.171',
-    'http://13.209.4.171:8080',
-    'http://172.31.26.161'
-)
