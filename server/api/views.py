@@ -156,9 +156,16 @@ def submit(request):
             imageID = image_id,
             behavior = 'SU'
         )
+        yetdocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
+        if(len(yetdocs)>0):
+            startno=yetdocs[0].document.doc_no
+        else:
+            startno=99
+
+        donedocs=Status.objects.filter(user=user, document__doctype=doctype, status=True)
 
         response = {
-            'start_image_id': user.start_image_id,
-            'step': user.step,
+            'next_img': startno,
+            'step': len(donedocs)
         }
         return JsonResponse(response)
