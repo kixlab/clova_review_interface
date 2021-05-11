@@ -111,9 +111,7 @@ def getCats(request):
         subcats=[]
         for usercat in usercats:
             for subcat in UserSubcat.objects.filter(usercat=usercat):
-                print(subcat)
                 subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description})
-        print(subcats)
         response = {
             'cats': [usercat.cat_text for usercat in usercats],
             'subcats': subcats
@@ -130,7 +128,7 @@ def submit(request):
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
-        
+        print(annotation_data)
         print(doctypetext, image_id)
 
 
@@ -144,7 +142,6 @@ def submit(request):
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
 
-        print(annotation_data)
 
         for group in annotation_data:
             box_ids = group['boxes']
