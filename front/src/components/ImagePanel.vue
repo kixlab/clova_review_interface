@@ -142,7 +142,12 @@ export default {
           image_id: self.$store.state.image_order
         }
       }).then(function(res){
-        console.log(res.data)
+        var annotations=res.data.annotations;
+        const imageBox = this.getImageBoxes();
+        // construct group-based data 
+        console.log(annotations);
+
+        
       })
     },
     newSize: function() {
