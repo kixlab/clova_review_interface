@@ -13,7 +13,7 @@ export default new Vuex.Store({
   })],
   state: {
     mturk_id: null,
-    server_url: 'http://13.209.4.171:8000',
+    server_url: 'http://3.34.46.125:8000',
     image_order: 0
   },
   mutations: {
