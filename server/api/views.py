@@ -130,6 +130,7 @@ def getAnnotations(request):
         annots=Annotation.objects.filter(user=user, document=document)
 
         gids=list(annots.order_by().values_list('group_id').distinct())
+        print(gids)
         annotations=[]
 
         for gid in gids:
