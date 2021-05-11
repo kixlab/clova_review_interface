@@ -12,8 +12,8 @@ class User(models.Model):
     
     consentAgreed = models.BooleanField(default=False)
     instrEnded = models.BooleanField(default=False)
-    start_image_id = models.IntegerField(default=0)
-    step = models.IntegerField(default=0)
+    # start_image_id = models.IntegerField(default=0)
+    # step = models.IntegerField(default=0)
 
     joinTime = models.DateTimeField(auto_now_add=True)
     consentEndTime = models.DateTimeField(default=timezone.now)
@@ -66,4 +66,54 @@ class Label(models.Model):
     groupID = models.IntegerField()
     boxIDs = models.TextField(validators=[validate_comma_separated_integer_list])
     label = models.CharField(max_length = 255)
+
+
+class DocType(models.Model):
+    doctype=models.CharField(max_length=250)
+    def __str__(self):
+        return self.doctype
+
+class Document(models.Model):
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
+    doc_no=models.IntegerField()
+    def __str__(self):
+        return self.doc_id
+
+class InitCat(models.Model):
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
+    cat_no=models.IntegerField()
+    cat_text=models.CharField(max_length=255)
+
+class InitSubCat(models.Model):
+    initcat=models.ForeignKey('InitCat', on_delete=models.CASCADE)
+    subcat_no=models.IntegerField()
+    subcat_text=models.CharField(max_length=255)
+    subcat_description=models.CharField(max_length=255)
+
+class UserCat(models.Model):
+    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
+    cat_no=models.IntegerField()
+    cat_text=models.CharField(max_length=255)
+
+class UserSubcat(models.Model):
+    usercat=models.ForeignKey('UserCat', on_delete=models.CASCADE)
+    subcat_no=models.IntegerField()
+    subcat_text=models.CharField(max_length=255)
+    subcat_description=models.CharField(max_length=255)
+
+class Annotation(models.Model):
+    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    doc_no=models.IntegerField(default=1)
+    box_id=models.IntegerField(default=1)
+    status=models.BooleanField(default=False)
+    label=models.ForeignKey('UserSubcat', on_delete=models.SET_NULL, blank=True, null=True)
+
+class Status(models.Model):
+    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
+    start=models.IntegerField(default=1)
+    def __str__(self):
+        return self.user.username+'-'+self.doctype+'-'+str(self.start)
+
 

@@ -3,18 +3,27 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from .models import User, Log, Label
+from .models import *
 
 import json
 
 @csrf_exempt
 def checkUser(request):
-    print("Hi?")
     if request.method == 'GET':
         mturk_id = request.GET['mturk_id']
         if(len(User.objects.filter(mturk_id=mturk_id))==0):
             user=User(mturk_id=mturk_id)
             user.save()
+            # initialize status 
+            for doctype in DocType.objects.all():
+                Status(user=user, doctype=DocType.objects.get(doctype=doctype), start=1).save()
+            # initialize usercats
+            for initcat in InitCat.objects.all():
+                UserCat(user=user, doctype=initcat.doctype, cat_no=initcat.cat_no, cat_text=initcat.cat_text).save()
+            # initialize usersubcats 
+            for initsubcat in InitSubCat.objects.all():
+                usercat=UserCat.objects.get(user=user, doctype=initsubcat.doctype, cat_no=initsubcat.cat_no)
+                UserSubcat(usercat=usercat,subcat_no=initsubcat.subcat_no, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
         else: 
             user=User.objects.get(mturk_id=mturk_id)
         user, created = User.objects.get_or_create(mturk_id=mturk_id)
