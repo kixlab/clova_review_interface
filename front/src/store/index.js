@@ -46,6 +46,9 @@ export default new Vuex.Store({
 //      var imgNo=router.currentRoute.params.imgNo
       var two_digit_id = ("0" + image_order).slice(-2);
       return state.server_url + '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.json'
+    },
+    image_no: state =>{
+      return state.image_order
     }
   },
   modules: {

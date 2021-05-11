@@ -73,20 +73,10 @@ export default {
   mounted() {
     this.loadImageID(function(self) {
 
-    self.$root.$on('newImage', () => {
-      self.loadNewImage()
-    })
-    
     self.image = self.$store.getters.getImage;
     self.image_box = self.$store.getters.getImageBoxes;
     self.getInitialPosition();
-    if (!self.$localmode) {
-      if (self.$store.getters.getImageBoxes.length === 0){
-        self.loadNewImage();
-      } else {
-        self.loadImage();
-      }
-    }
+    self.loadNewImage();
 
     self.$store.subscribeAction({after: (action) => {
       if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
@@ -96,6 +86,15 @@ export default {
     })
   },
 
+  watch:{
+    image_no: {
+      deep: true,
+      handler(){
+        this.loadNewImage();
+      }
+    }
+    
+  },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadImageID: function (callback) {
@@ -118,20 +117,6 @@ export default {
 
       }).catch(function(err) {
         alert('Please refresh this page.\nIf this error repeats, please contact us via hoonhan.d@kaist.ac.kr \n' + err);
-      });
-    },
-    loadImage: function() {
-      const self = this;
-      axios.get(self.$store.getters.json_url).then(function(res) {
-          var json = res.data;
-          var img_width = json.meta === undefined ? json.image_size.width:json.meta.image_size.width;
-          var img_height = json.meta === undefined ? json.image_size.height:json.meta.image_size.height;
-          self.setImageBoxes([json, self.width, self.width*img_height/img_width, false]);
-          self.original_box = json;
-
-      })
-      .catch(function(err) {
-        alert(err);
       });
     },
     loadNewImage: function() {
@@ -278,7 +263,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'image_no']),
     image_url() {
       return this.$store.getters.image_url;
     }

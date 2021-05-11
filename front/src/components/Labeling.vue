@@ -187,8 +187,6 @@ export default {
   }},
   mounted: function () {
     const self = this;
-    console.log(self)
-
     this.$store.subscribeAction((action) => {
       if (action.type === 'updateImageBoxes') {
           this.image_box = this.$store.getters.getImageBoxes
@@ -202,7 +200,7 @@ export default {
       }
     }).then(function(res){
       self.cats=res.data.cats;
-      self.subcats-res.data.subcats
+      self.subcats=res.data.subcats;
       })
     
   },
@@ -229,7 +227,7 @@ export default {
         this.addcat=false;
         console.log(this.addcat);
         var newcat=document.getElementById('newCat').value;
-        this.table.push(newcat);        
+        this.cats.push(newcat);        
       },
        addSubCategory(){
         this.addsubcat=false;
@@ -268,8 +266,9 @@ export default {
 
         this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
+        if(group.length>0){
         this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
-
+        }
       },
 
       clicked(label) {

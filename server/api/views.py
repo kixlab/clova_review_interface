@@ -128,11 +128,15 @@ def submit(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
         username = query_json['mturk_id']
+        doctype=query_json['doctype']
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
- 
+        
+        document=Document.objects.get(doctype=DocType.objects.get(doctype=doctype), doc_no=image_id)
         user = User.objects.get(username=username)
-        user.step_up()
+        Status.objects.filter(user=user, document=document).update(status=True)
+
+        print(annotation_data)
 
         for group in annotation_data:
             box_ids = group['boxes']

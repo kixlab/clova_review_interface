@@ -55,49 +55,43 @@ const actions = {
 
         commit('setImageRatio', ratio)
         
-        
-        const is_new = json[3];
-        if(is_new) {
-            console.log(json)
-            if(json[0].valid_line==undefined){
-                const validData = json[0]['boxes']
-                const processedData = validData.map(function(i) {
-                return {box_id: i.box_id,
+        if(json[0].valid_line==undefined){
+            const validData = json[0]['boxes']
+            const processedData = validData.map(function(i) {
+            return {box_id: i.box_id,
+                    text: i.text,
+                    x_pos: i.x[0]/ratio+padding_x, 
+                    y_pos: i.y[0]/ratio+padding_y, 
+                    x_len: (i.x[1]-i.x[0])/ratio, 
+                    y_len: (i.y[2]-i.y[0])/ratio, 
+                    selected: false, 
+                    annotated: false, 
+                    hover: false,
+                    quad: {x1: i.x[0], y1: i.y[0], x2: i.x[1], y2: i.y[2], y3: i.y[3]},
+                    label: ""}
+        })
+
+        commit('setCurrBox', processedData)
+        }
+        else{
+            const validData=json[0].valid_line.map(v => v.words).flat(1)
+            const processedData = validData.map(function(i, idx) {
+                return {box_id: idx,
                         text: i.text,
-                        x_pos: i.x[0]/ratio+padding_x, 
-                        y_pos: i.y[0]/ratio+padding_y, 
-                        x_len: (i.x[1]-i.x[0])/ratio, 
-                        y_len: (i.y[2]-i.y[0])/ratio, 
+                        x_pos: i.quad.x1/ratio+padding_x, 
+                        y_pos: i.quad.y1/ratio+padding_y, 
+                        x_len: (i.quad.x2-i.quad.x1)/ratio, 
+                        y_len: (i.quad.y3-i.quad.y2)/ratio, 
                         selected: false, 
                         annotated: false, 
                         hover: false,
-                        quad: {x1: i.x[0], y1: i.y[0], x2: i.x[1], y2: i.y[2], y3: i.y[3]},
+                        quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
                         label: ""}
             })
 
             commit('setCurrBox', processedData)
             }
-            else{
-                const validData=json[0].valid_line.map(v => v.words).flat(1)
-                const processedData = validData.map(function(i, idx) {
-                    return {box_id: idx,
-                            text: i.text,
-                            x_pos: i.quad.x1/ratio+padding_x, 
-                            y_pos: i.quad.y1/ratio+padding_y, 
-                            x_len: (i.quad.x2-i.quad.x1)/ratio, 
-                            y_len: (i.quad.y3-i.quad.y2)/ratio, 
-                            selected: false, 
-                            annotated: false, 
-                            hover: false,
-                            quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
-                            label: ""}
-                })
-    
-                commit('setCurrBox', processedData)
-                }
-            }
-            
-    
+
     },
 
     updateImageBoxes({ commit }, json) {
