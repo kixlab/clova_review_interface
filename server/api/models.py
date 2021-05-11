@@ -75,7 +75,7 @@ class DocType(models.Model):
 
 class Document(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
-    doc_no=models.IntegerField()
+    doc_no=models.IntegerField(default=999)
     def __str__(self):
         return self.doc_no
 
@@ -123,7 +123,7 @@ class Annotation(models.Model):
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
-    document=models.ForeignKey('Document', on_delete=models.CASCADE)
+    document=models.ForeignKey('Document', on_delete=models.CASCADE, default=Document.objects.all()[0])
     status=models.BooleanField(default=False)
     def __str__(self):
         return self.user.username+'-'+self.document.doctype.doctype+'-'+str(self.document.doc_no)+'-'+str(self.status)
