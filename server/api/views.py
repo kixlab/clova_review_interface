@@ -129,14 +129,13 @@ def getAnnotations(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document)
 
-        gids=list(annots.order_by().values('group_id').distinct())
-        print(gids)
+        gids=list(annots.order_by().values_list('group_id').distinct())
         annotations=[]
 
         for gid in gids:
-            boxes=annots.filter(group_id=gid)
+            boxes=annots.filter(group_id=gid[0])
             boxes_id=[anot.box_id for anot in boxes]
-            annotations.append({'group_id': gid, 'boxes_id': boxes_id, 'label':boxes[0].label})
+            annotations.append({'group_id': gid[0], 'boxes_id': boxes_id, 'label':boxes[0].label})
         
         response={
             'annotations':annotations
