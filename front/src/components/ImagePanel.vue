@@ -143,10 +143,8 @@ export default {
         }
       }).then(function(res){
         var annotations=res.data.annotations;
-        const imageBox = self.getImageBoxes();
         // construct group-based data 
         console.log(annotations);
-        console.log(imageBox);
 
         
       })
