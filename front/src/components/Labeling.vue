@@ -323,6 +323,7 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
+          console.log(annotations)
           setTimeout(
           self.loadAnnotatedBoxes(annotations),1000);
 
