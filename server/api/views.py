@@ -131,7 +131,12 @@ def submit(request):
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
         
+        print(doctypetext, image_id)
+
+
         doctype=DocType.objects.get(doctype=doctypetext)
+
+
         print("Hi", doctype, image_id)
 
 
