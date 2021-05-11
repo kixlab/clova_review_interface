@@ -145,6 +145,7 @@ export default {
         var annotations=res.data.annotations;
         // construct group-based data 
         console.log(annotations);
+        console.log(self.$store.state.image_order)
 
         
       })
