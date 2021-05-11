@@ -112,6 +112,7 @@ def getCats(request):
         subcats=[]
         for usercat in usercats:
             subcats.append(UserSubcat.objects.filter(usercat=usercat))
+        print(subcat)
         
         response = {
             'cats': [usercat.cat_text for usercat in usercats],
