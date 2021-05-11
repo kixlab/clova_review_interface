@@ -137,7 +137,7 @@ def submit(request):
 
         print("Hi", doctype, image_id)
 
-
+        print(Document.objects.filter(doctype=doctype))
         document=Document.objects.all()[0]
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
