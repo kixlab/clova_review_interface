@@ -8,7 +8,7 @@ const state = {
 }
 
 const getters = {
-    getImageURL: (state) => state.imgaeURL,
+    getImageURL: (state) => state.imageURL,
     getImage: (state) => state.imageFile,
     getImageBoxes: (state) => state.imageBoxes,
     getImageRatio: (state) => state.imageRatio,
@@ -29,11 +29,11 @@ const actions = {
         commit('setImages', response.data)
     },
     */
-
+/* 
     initializeImages({ commit }, name) {
         commit('setCurrImage', name.toString())
     },
-
+ */
     setImage({ commit },docType, id) {
         const imageFile = docType+'/'+docType+"_"+ id.toString() + ".png"
         commit('setCurrImage', imageFile)
@@ -58,6 +58,7 @@ const actions = {
         
         const is_new = json[3];
         if(is_new) {
+            console.log(json)
             if(json[0].valid_line==undefined){
                 const validData = json[0]['boxes']
                 const processedData = validData.map(function(i) {

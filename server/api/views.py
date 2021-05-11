@@ -15,9 +15,7 @@ def checkUser(request):
             user=User(username=username)
             user.save()
             # initialize status 
-            print(user)
             for document in Document.objects.all():
-                print(document)
                 Status(user=user, document=document, status=False).save()
             # initialize usercats
             for initcat in InitCat.objects.all():
@@ -102,6 +100,24 @@ def getImageID(request):
             'start_image_id': startno
         }
         return JsonResponse(response)
+
+@csrf_exempt
+def getCats(request):
+    if request.method == 'GET':
+        user=request.user
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        usercats=UserCat.objects.filter(user=user, doctype=doctype)
+        subcats=[]
+        for usercat in usercats:
+            subcats.append(UserSubcat.objects.filter(usercat=usercat))
+        
+        response = {
+            'cats': usercats,
+            'subcats': subcats
+        }
+        return JsonResponse(response)
+
 
 
 @csrf_exempt

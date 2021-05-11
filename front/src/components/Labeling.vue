@@ -19,7 +19,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="(category, index) in table" :key='index' @click="selectCategory(category)">
+                <v-list-item v-for="(category, index) in cats" :key='index' @click="selectCategory(category)">
                   <b>{{category}}</b>
                 </v-list-item>
                 <v-list-item v-if="isAdding">
@@ -39,7 +39,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="(item, index) in labelTable.filter(e=>e.label == category)" :key="index" @click="annotate(item)">
+                <v-list-item v-for="(item, index) in subcats.filter(e=>e.label == category)" :key="index" @click="annotate(item)">
                   <b>{{item.sublabel}} </b>: {{item.description}}
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
@@ -153,15 +153,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import axios from "axios";
+
 export default {
   name: 'Labeling',
   data() {
-    var categories=[]
-    var subcats=[]
-    switch(this.$route.params.docType){ 
-      case 'receipt':
-        categories=['menu', 'subtotal', 'total', 'payment']
-        subcats=[
+    return{
+      selection: [],
+      subcats: [
           { id: 1, label: 'menu', sublabel: 'id', description: 'ID of the menu'},
           { id: 2, label: 'menu', sublabel: 'name', description: 'Name of the menu'},
           { id: 3, label: 'menu', sublabel: 'unit price', description: 'Unit price of the menu'},
@@ -176,64 +175,35 @@ export default {
           { id: 12, label: 'payment', sublabel: 'cash payment', description: 'Price paid by cash'},
           { id: 13, label: 'payment', sublabel: 'credit card payment', description: 'Price paid by credit card'},
           { id: 14, label: 'payment', sublabel: 'change', description: 'Amount of change received'},
-      ]
-      break;
-      case 'resume':
-        categories=['personal info', 'employment', 'education', 'experience', 'publication', 'committee', 'awards']
-        subcats=[
-          { id: 1, label: 'personal info', sublabel: 'name', description: 'Name of the person'},
-          { id: 2, label: 'personal info', sublabel: 'office address', description: 'Address of the office'},
-          { id: 3, label: 'personal info', sublabel: 'office no', description: 'Phone number of the office'},
-          { id: 4, label: 'personal info', sublabel: 'job title', description: 'Title of the current job'},
-          { id: 5, label: 'personal info', sublabel: 'institution', description: 'Institution that the person works at'},
-          { id: 6, label: 'personal info', sublabel: 'birthplace', description: 'Birthplace of the person'},
-          { id: 7, label: 'personal info', sublabel: 'birthdate', description: 'Birthdate of the person'},
-          { id: 8, label: 'personal info', sublabel: 'research interest', description: 'Field that the person is working on or interested in'},
-          { id: 9, label: 'employment', sublabel: 'title', description: 'Title of the job'},
-          { id: 10, label: 'employment', sublabel: 'institution', description: 'Institution that the person worked at'},
-          { id: 11, label: 'employment', sublabel: 'location', description: 'Location of the institution'},
-          { id: 12, label: 'employment', sublabel: 'year', description: 'Dates of the experience'},
-          { id: 13, label: 'education', sublabel: 'degree', description: 'Degree that the person has'},
-          { id: 14, label: 'education', sublabel: 'institution', description: 'Institution or school that the person received the degree'},
-          { id: 15, label: 'education', sublabel: 'location', description: 'Location of the institution'},
-          { id: 16, label: 'education', sublabel: 'major', description: 'Major field of study for the degree'},
-          { id: 17, label: 'education', sublabel: 'graduation year', description: 'Year that the person received the degree'},
-          { id: 18, label: 'experience', sublabel: 'title', description: 'Title of the experience'},
-          { id: 19, label: 'experience', sublabel: 'institution', description: 'Title of the experience'},
-          { id: 20, label: 'experience', sublabel: 'location', description: 'Location of the experience'},
-          { id: 21, label: 'experience', sublabel: 'role description', description: 'Role description of the experience'},
-          { id: 22, label: 'experience', sublabel: 'year', description: 'Dates of the experience'},
-          { id: 23, label: 'publication', sublabel: 'title', description: 'Publication title'},
-          { id: 24, label: 'publication', sublabel: 'year', description: 'Publication year'},
-          { id: 25, label: 'publication', sublabel: 'venue', description: 'Journal or conference the paper was published'},
-          { id: 26, label: 'publication', sublabel: 'authors', description: 'Author list of the publication'},
-          { id: 27, label: 'committee', sublabel: 'title', description: 'Title of the committee that the person belongs to'},
-          { id: 28, label: 'committee', sublabel: 'organization', description: 'Organization of the committee'},
-          { id: 29, label: 'committee', sublabel: 'year', description: 'Dates that the person served in the committee'},
-          { id: 30, label: 'awards', sublabel: 'title', description: 'Title of the award'},
-          { id: 31, label: 'awards', sublabel: 'institution', description: 'Institution that gave the award'},
-          { id: 32, label: 'awards', sublabel: 'yaer', description: 'Dates that the person received the award'},
-      ]
-
-    }
-    return {
-      selection: [],
-      labelTable: subcats,
+      ]   ,
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
-      table: categories,
+      cats: ['menu', 'subtotal', 'total', 'payment'],
       category:'',
       subcategory:'',
       addcat: false,
       addsubcat: false,
-    }
-  },
+    
+  }},
   mounted: function () {
+    const self = this;
+    console.log(self)
+
     this.$store.subscribeAction((action) => {
       if (action.type === 'updateImageBoxes') {
           this.image_box = this.$store.getters.getImageBoxes
       }
     })
+
+    axios.get(self.$store.state.server_url + "/api/get-cats",{
+      params:{
+        doctype: self.$route.params.docType
+      }
+    }).then(function(res){
+      self.cats=res.data.cats;
+      self.subcats-res.data.subcats
+      })
+    
   },
 
   methods: {
@@ -264,7 +234,7 @@ export default {
         this.addsubcat=false;
         var newsubcat=document.getElementById('newSubCat').value;
         var newdesc=document.getElementById('newDesc').value;
-        this.labelTable.push({label: this.category, sublabel: newsubcat, description: newdesc});        
+        this.subcats.push({label: this.category, sublabel: newsubcat, description: newdesc});        
       },
       cancelAdd(){
         this.addcat=false;
@@ -273,8 +243,8 @@ export default {
       add() {
         this.$refs.form.validate()
         
-        var id = this.labelTable.length
-        this.labelTable.push({checked: false, id: id, label: this.label, description: this.description})
+        var id = this.subcats.length
+        this.subcats.push({checked: false, id: id, label: this.label, description: this.description})
         
         this.label = '';
         this.description = '';

@@ -9,6 +9,7 @@ urlpatterns = [
     path('consent-agreed/', views.recordconsentAgreed),
     path('instr-done/', views.recordInstrDone),
     path('get-doctypes/', views.getDocTypes),
+    path('get-cats/',views.getCats),
     path('get-image-id/', views.getImageID),
     path('submit/', views.submit),
 ]

@@ -30,12 +30,13 @@ export default {
       axios.get(self.$store.state.server_url + "/api/get-doctypes").then(function(res){
           self.doctypes=res.data.doctypes;
           console.log(res);
-      })  }
+      })  
+    }
       ,
   methods: {
     gotoDoc: function(doctype){
       const self = this;
-      self.$router.push('annotation/'+doctype);
+      self.$router.push('../annotation/'+doctype);
     },
     beforeCreate() {
       this.$helpers.isWrongAccess(this)
