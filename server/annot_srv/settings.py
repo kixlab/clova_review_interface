@@ -47,8 +47,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
-    'http://3.34.46.125',
-    'http://172.31.26.161'
+    'http://3.34.46.125:8080',
+    'http://3.34.46.125'
 )
 
 INSTALLED_APPS = [
