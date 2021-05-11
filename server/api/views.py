@@ -128,17 +128,10 @@ def submit(request):
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
-        print(annotation_data)
-        print(doctypetext, image_id)
-
 
         doctype=DocType.objects.get(doctype=doctypetext)
 
-
-        print("Hi", doctype, image_id)
-
-        print(Document.objects.filter(doctype=doctype))
-        document=Document.objects.all()[0]
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
 
