@@ -16,6 +16,7 @@ def checkUser(request):
             user.save()
             # initialize status 
             for document in Document.objects.all():
+                print(document)
                 Status(user=user, document=document, status=False).save()
             # initialize usercats
             for initcat in InitCat.objects.all():
