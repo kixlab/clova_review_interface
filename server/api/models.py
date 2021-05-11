@@ -84,7 +84,7 @@ class InitCat(models.Model):
     cat_no=models.IntegerField()
     cat_text=models.CharField(max_length=255)
     def __str__(self):
-        return self.doctpye.doctpye+"-"+str(self.cat_no)+'-'+str(self.cat_text)
+        return self.doctype.doctype+"-"+str(self.cat_no)+'-'+str(self.cat_text)
 
 
 class InitSubCat(models.Model):
@@ -102,7 +102,7 @@ class UserCat(models.Model):
     cat_no=models.IntegerField()
     cat_text=models.CharField(max_length=255)
     def __str__(self):
-        return self.user.username+'-'+self.doctpye.doctpye+"-"+str(self.cat_no)+'-'+str(self.cat_text)
+        return self.user.username+'-'+self.doctype.doctype+"-"+str(self.cat_no)+'-'+str(self.cat_text)
 
 class UserSubcat(models.Model):
     usercat=models.ForeignKey('UserCat', on_delete=models.CASCADE)
