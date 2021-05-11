@@ -38,16 +38,16 @@ def checkUser(request):
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'GET':
-        mturk_id = request.GET['mturk_id']
-        user = User.objects.get(mturk_id=mturk_id)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
         user.consentEnd()
         return HttpResponse('')
 
 @csrf_exempt
 def recordInstrDone(request):
     if request.method == 'GET':
-        mturk_id = request.GET['mturk_id']
-        user = User.objects.get(mturk_id=mturk_id)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
 
         if (user.instrEnded == False):
             valid_usrs = len(list(User.objects.filter(instrEnded = True)))
@@ -61,13 +61,13 @@ def recordLog(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
         print("Hi", query_json)
-        mturk_id = query_json['mturk_id']
+        username = query_json['mturk_id']
         behavior_type = query_json['type']
         box_ids = query_json['box_ids']
         image_id = query_json['image_id']
         label = query_json['label']
 
-        user = User.objects.get(mturk_id=mturk_id)
+        user = User.objects.get(username=username)
 
         Log.objects.create(
             user = user,
@@ -82,8 +82,8 @@ def recordLog(request):
 @csrf_exempt
 def getImageID(request):
     if request.method == 'GET':
-        mturk_id = request.GET['mturk_id']
-        user = User.objects.get(mturk_id=mturk_id)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
         
         response = {
             'consent_agreed': user.consentAgreed,
@@ -97,11 +97,11 @@ def getImageID(request):
 def submit(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        mturk_id = query_json['mturk_id']
+        username = query_json['mturk_id']
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
  
-        user = User.objects.get(mturk_id=mturk_id)
+        user = User.objects.get(username=username)
         user.step_up()
 
         for group in annotation_data:
