@@ -133,6 +133,18 @@ export default {
         alert(err);
       });
     },
+    loadAnnotatedBoxes: function(){
+      const self=this;
+      axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+        params:{
+          mturk_id: self.$store.state.mturk_id,
+          doctype: self.$route.params.docType,
+          image_id: self.$store.state.image_order
+        }
+      }).then(function(res){
+        console.log(res.data)
+      })
+    },
     newSize: function() {
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
       const width = cont_pos.right-cont_pos.left
