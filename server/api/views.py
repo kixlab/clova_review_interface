@@ -118,6 +118,27 @@ def getCats(request):
         }
         return JsonResponse(response)
 
+@csrf_exempt
+def getAnnotations(request):
+    if request.method=='GET':
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =request.GET['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        annots=Annotation.objects.filter(user=user, document=document)
+
+        annotations=[]
+
+        for annot in annots:
+            annotations.append({'group_id': annot.group_id, 'box_id': annot.box_id, 'label': annot.label})
+        response={
+            'annotations':annotations
+        }
+        return JsonResponse(response)
+
+
 
 
 @csrf_exempt

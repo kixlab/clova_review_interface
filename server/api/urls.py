@@ -11,5 +11,6 @@ urlpatterns = [
     path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
     path('get-image-id/', views.getImageID),
+    path('get-annotations/',views.getAnnotations),
     path('submit/', views.submit),
 ]

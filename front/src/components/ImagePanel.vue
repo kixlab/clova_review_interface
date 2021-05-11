@@ -91,6 +91,7 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
+        this.loadAnnotatedBoxes();
       }
     }
     

@@ -112,8 +112,7 @@ const actions = {
         else if (json[1] === "reset") {
             commit('resetAnnotationBox', [])
         }
-    }
-
+    },
 }
 
 
