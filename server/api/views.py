@@ -66,7 +66,6 @@ def getDocTypes(request):
 def recordLog(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        print("Hi", query_json)
         username = query_json['mturk_id']
         behavior_type = query_json['type']
         box_ids = query_json['box_ids']
@@ -133,7 +132,9 @@ def submit(request):
         annotation_data = query_json['annotationData']
         
         doctype=DocType.objects.get(doctype=doctypetext)
-        print(doctype, image_id)
+        print("Hi", doctype, image_id)
+
+
         document=Document.objects.get(doctype=doctype, doc_no=image_id)
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
