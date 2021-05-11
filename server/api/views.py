@@ -129,7 +129,7 @@ def getAnnotations(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document)
 
-        gids=list(annots.order_by().values_list('group_id').distinct())
+        gids=list(annots.order_by().values('group_id').distinct())
         print(gids)
         annotations=[]
 
