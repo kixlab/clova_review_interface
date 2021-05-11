@@ -210,7 +210,6 @@ export default {
       deep: true,
       handler(){
         this.loadAnnotatedBoxes();
-        
       }
 
     }
@@ -292,13 +291,16 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
+          console.log("Hiroo", annotations)
           for (var agroup in annotations){
+            console.log(agroup, "Hello")
             var group=[]
             for( var box in agroup.boxes_id){
               var currBox=this.image_box[box]
               currBox.annotated=true
               group.push(currBox)
             }
+            console.log("Hi", group)
             this.updateImageBoxes(this.image_box)
             this.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
           }

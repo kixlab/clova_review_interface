@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
-    ...mapGetters(['getImageBoxes']),
     loadImageID: function (callback) {
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
