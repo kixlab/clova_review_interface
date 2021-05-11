@@ -69,7 +69,7 @@ export default {
           self.$router.push('after-done')
         }
         self.$store.commit('set_step', res.data.step)
-        self.$store.commit('set_image_count', res.data.next_img)
+        self.$store.commit('set_image_count', self.$store.state.image_order +1)
 
         self.$root.$emit('newImage');
         self.updateAnnotatedBoxes([[], "reset"])
