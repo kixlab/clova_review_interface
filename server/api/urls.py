@@ -8,6 +8,7 @@ urlpatterns = [
     path('check-user/', views.checkUser),
     path('consent-agreed/', views.recordconsentAgreed),
     path('instr-done/', views.recordInstrDone),
+    path('get-doctypes/', views.getDocTypes),
     path('get-image-id/', views.getImageID),
     path('submit/', views.submit),
 ]

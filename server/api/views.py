@@ -55,6 +55,12 @@ def recordInstrDone(request):
 
         return HttpResponse('')
 
+@csrf_exempt
+def getDocTypes(request):
+    if request.method == 'GET':
+        doctypes=[doctype.doctype for doctype in DocType.objects.all()]
+        return JsonResponse({'doctypes':doctypes})
+
 
 @csrf_exempt
 def recordLog(request):

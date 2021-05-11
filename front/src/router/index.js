@@ -6,6 +6,7 @@ import Instruction from '../views/Instruction.vue'
 import Annotation from '../views/Annotation.vue'
 import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
+import DocTypeList from '../views/DocTypeList.vue'
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,11 @@ Vue.use(VueRouter)
     path: '/instruction',
     name: 'Instruction',
     component: Instruction
+  },
+  {
+    path: '/doctypelist',
+    name: 'DocTypeList',
+    component: DocTypeList
   },
   {
     path: '/after-done',
