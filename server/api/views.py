@@ -111,12 +111,13 @@ def getCats(request):
         usercats=UserCat.objects.filter(user=user, doctype=doctype)
         subcats=[]
         for usercat in usercats:
-            subcats.append(UserSubcat.objects.filter(usercat=usercat))
+            for subcat in UserSubcat.objects.filter(usercat=usercat):
+                print(subcat)
+                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description})
         print(subcats)
-        
         response = {
             'cats': [usercat.cat_text for usercat in usercats],
-            'subcats': [{'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description} for subcat in subcats]
+            'subcats': subcats
         }
         return JsonResponse(response)
 
