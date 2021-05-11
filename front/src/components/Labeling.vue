@@ -278,21 +278,14 @@ export default {
             var agroup=annotations[gno]
             var group=[]
             for( var box in agroup.boxes_id){
-              console.log(self.image_box[box])
-              var currBox=self.image_box[box]
+              var currBox=self.image_box[agroup.boxed_id[box]]
               currBox.annotated=true
               group.push(currBox)
             }
             console.log("Hi", group)
             self.updateImageBoxes(self.image_box)
             self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
-          }
-
-          // construct group-based data 
-          console.log(annotations);
-          console.log(self.$store.state.image_order)
-
-          
+          }          
         },
 
       clicked(label) {
