@@ -123,7 +123,7 @@ class Annotation(models.Model):
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
-    document=models.ForeignKey('Document', on_delete=models.CASCADE, default=Document.objects.all()[0])
+    document=models.ForeignKey('Document', on_delete=models.CASCADE, blank=True)
     status=models.BooleanField(default=False)
     def __str__(self):
         return self.user.username+'-'+self.document.doctype.doctype+'-'+str(self.document.doc_no)+'-'+str(self.status)
