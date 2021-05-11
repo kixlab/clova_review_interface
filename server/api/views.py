@@ -104,7 +104,8 @@ def getImageID(request):
 @csrf_exempt
 def getCats(request):
     if request.method == 'GET':
-        user=request.user
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         usercats=UserCat.objects.filter(user=user, doctype=doctype)
