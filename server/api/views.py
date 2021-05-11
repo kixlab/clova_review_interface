@@ -10,9 +10,9 @@ import json
 @csrf_exempt
 def checkUser(request):
     if request.method == 'GET':
-        mturk_id = request.GET['mturk_id']
-        if(len(User.objects.filter(mturk_id=mturk_id))==0):
-            user=User(mturk_id=mturk_id)
+        username = request.GET['mturk_id']
+        if(len(User.objects.filter(username=username))==0):
+            user=User(username=username)
             user.save()
             # initialize status 
             for doctype in DocType.objects.all():
@@ -25,12 +25,12 @@ def checkUser(request):
                 usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_no=initsubcat.initcat.cat_no)
                 UserSubcat(usercat=usercat,subcat_no=initsubcat.subcat_no, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
         else: 
-            user=User.objects.get(mturk_id=mturk_id)
-        user, created = User.objects.get_or_create(mturk_id=mturk_id)
+            user=User.objects.get(username=username)
+        user, created = User.objects.get_or_create(username=username)
         task_done = len(list(User.objects.filter(instrEnded = True))) > 15
         response = {
             'consent_agreed': user.consentAgreed,
-            'step': user.step,
+            'step': 1,
             'task_done': task_done
         }
         return JsonResponse(response)

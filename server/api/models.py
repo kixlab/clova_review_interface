@@ -8,7 +8,7 @@ from django.core.validators import validate_comma_separated_integer_list
 
 # Create your models here.
 class User(models.Model):
-    mturk_id = models.TextField()
+    username= models.TextField()
     
     consentAgreed = models.BooleanField(default=False)
     instrEnded = models.BooleanField(default=False)
@@ -95,12 +95,16 @@ class UserCat(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     cat_no=models.IntegerField()
     cat_text=models.CharField(max_length=255)
+    def __str__(self):
+        return self.user.username+'-'+self.doctpye.doctpye+"-"+str(self.cat_no)+'-'+str(self.cat_text)
 
 class UserSubcat(models.Model):
     usercat=models.ForeignKey('UserCat', on_delete=models.CASCADE)
     subcat_no=models.IntegerField()
     subcat_text=models.CharField(max_length=255)
     subcat_description=models.CharField(max_length=255)
+    def __str__(self):
+        return self.user.username+'-'+str(self.subcat_no)+'-'+str(self.subcat_text)
 
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
@@ -108,6 +112,8 @@ class Annotation(models.Model):
     box_id=models.IntegerField(default=1)
     status=models.BooleanField(default=False)
     label=models.ForeignKey('UserSubcat', on_delete=models.SET_NULL, blank=True, null=True)
+    def __str__(self):
+        return self.user.username+'-'+str(self.doc_no)+'-'+str(self.box_id)+'-'+self.label
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
