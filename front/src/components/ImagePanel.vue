@@ -91,13 +91,13 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
-        this.loadAnnotatedBoxes();
       }
     }
     
   },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
+    ...mapGetters(['getImageBoxes']),
     loadImageID: function (callback) {
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
@@ -132,23 +132,6 @@ export default {
       .catch(function(err) {
         alert(err);
       });
-    },
-    loadAnnotatedBoxes: function(){
-      const self=this;
-      axios.get(self.$store.state.server_url+'/api/get-annotations/',{
-        params:{
-          mturk_id: self.$store.state.mturk_id,
-          doctype: self.$route.params.docType,
-          image_id: self.$store.state.image_order
-        }
-      }).then(function(res){
-        var annotations=res.data.annotations;
-        // construct group-based data 
-        console.log(annotations);
-        console.log(self.$store.state.image_order)
-
-        
-      })
     },
     newSize: function() {
       const cont_pos = this.$refs.img_container.getBoundingClientRect()

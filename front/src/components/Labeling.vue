@@ -205,6 +205,18 @@ export default {
     
   },
 
+  watch:{
+    image_no:{
+      deep: true,
+      handler(){
+        this.loadAnnotatedBoxes();
+        
+      }
+
+    }
+  },
+
+
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
       ...mapGetters(['getImageBoxes']),
@@ -269,6 +281,34 @@ export default {
         if(group.length>0){
         this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
         }
+      },
+
+      loadAnnotatedBoxes: function(){
+        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+          params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order
+          }
+        }).then(function(res){
+          var annotations=res.data.annotations;
+          for (var agroup in annotations){
+            var group=[]
+            for( var box in agroup.boxes_id){
+              var currBox=this.image_box[box]
+              currBox.annotated=true
+              group.push(currBox)
+            }
+            this.updateImageBoxes(this.image_box)
+            this.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
+          }
+
+          // construct group-based data 
+          console.log(annotations);
+          console.log(self.$store.state.image_order)
+
+          
+        })
       },
 
       clicked(label) {
