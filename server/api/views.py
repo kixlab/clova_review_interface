@@ -15,6 +15,7 @@ def checkUser(request):
             user=User(username=username)
             user.save()
             # initialize status 
+            print(user)
             for document in Document.objects.all():
                 print(document)
                 Status(user=user, document=document, status=False).save()
