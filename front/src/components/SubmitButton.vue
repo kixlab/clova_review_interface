@@ -69,6 +69,7 @@ export default {
           self.$router.push('after-done')
         }
         self.$store.commit('set_step', res.data.step)
+        console.log(self.$store.state.image_order)
         self.$store.commit('set_image_count', self.$store.state.image_order +1)
 
         self.$root.$emit('newImage');
