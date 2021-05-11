@@ -118,7 +118,7 @@ class Annotation(models.Model):
     group_id=models.IntegerField(default=1)
     box_id=models.IntegerField(default=1)
     status=models.BooleanField(default=False)
-    label=models.ForeignKey('UserSubcat', on_delete=models.SET_NULL, blank=True, null=True)
+    label=models.CharField(max_length=255)
     def __str__(self):
         return self.user.username+'-'+str(self.doc_no)+'-'+str(self.box_id)+'-'+self.label
 
