@@ -160,6 +160,8 @@ def submit(request):
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
 
+        #delete old labels --> this to be changed to record all the logs later
+        Annotation.objects.filter(user=user, document=document).delete()
 
         for group in annotation_data:
             box_ids = group['boxes']

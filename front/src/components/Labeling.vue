@@ -204,17 +204,6 @@ export default {
       })
     
   },
-
-  watch:{
-    image_no:{
-      deep: true,
-      handler(){
-        this.loadAnnotatedBoxes();
-      }
-
-    }
-  },
-
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
       ...mapGetters(['getImageBoxes']),
@@ -281,27 +270,22 @@ export default {
         }
       },
 
-      loadAnnotatedBoxes: function(){
-        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
-          params:{
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order
-          }
-        }).then(function(res){
-          var annotations=res.data.annotations;
+      loadAnnotatedBoxes(annotations){
+        const self = this;
+          self.updateAnnotatedBoxes([[], "reset"])
           console.log("Hiroo", annotations)
-          for (var agroup in annotations){
-            console.log(agroup, "Hello")
+          for (var gno in annotations){
+            var agroup=annotations[gno]
             var group=[]
             for( var box in agroup.boxes_id){
-              var currBox=this.image_box[box]
+              console.log(self.image_box[box])
+              var currBox=self.image_box[box]
               currBox.annotated=true
               group.push(currBox)
             }
             console.log("Hi", group)
-            this.updateImageBoxes(this.image_box)
-            this.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
+            self.updateImageBoxes(self.image_box)
+            self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
           }
 
           // construct group-based data 
@@ -309,8 +293,7 @@ export default {
           console.log(self.$store.state.image_order)
 
           
-        })
-      },
+        },
 
       clicked(label) {
         console.log("Clicked", label)
@@ -335,6 +318,23 @@ export default {
       return (this.addsubcat)
     }
   },
+  watch:{
+    image_no:{
+      deep: true,
+      handler(){
+        const self=this;
+        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+          params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order
+          }
+        }).then(function(res){
+          var annotations=res.data.annotations;
+          self.loadAnnotatedBoxes(annotations);
+
+    })
+  }}},
 }
 </script>
 <style scoped>

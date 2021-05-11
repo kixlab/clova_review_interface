@@ -104,6 +104,7 @@ const actions = {
 
     updateAnnotatedBoxes({ commit }, json) {
         if (json[1] === "add") {
+            console.log(json);
             commit('addAnnotatedBox', json[0])
         }
         else if (json[1] === "remove") {
