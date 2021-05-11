@@ -324,7 +324,7 @@ export default {
         }).then(function(res){
           var annotations=res.data.annotations;
           setTimeout(
-          self.loadAnnotatedBoxes(annotations),500);
+          self.loadAnnotatedBoxes(annotations),1000);
 
     })
   }}},

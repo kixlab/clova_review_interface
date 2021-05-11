@@ -14,7 +14,7 @@ export default new Vuex.Store({
   state: {
     mturk_id: null,
     server_url: 'http://3.34.46.125:8000',
-    image_order: 1
+    image_order: 0
   },
   mutations: {
     set_image_count (state, cnt) {
