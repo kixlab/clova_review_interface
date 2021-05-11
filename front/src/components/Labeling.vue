@@ -273,7 +273,6 @@ export default {
       loadAnnotatedBoxes(annotations){
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
-          console.log("Hiroo", annotations)
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
@@ -284,7 +283,6 @@ export default {
               currBox.annotated=true
               group.push(currBox)
             }
-            console.log("Hi", group)
             self.updateImageBoxes(self.image_box)
             self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
           }          
