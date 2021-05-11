@@ -114,8 +114,8 @@ def getCats(request):
             subcats.append(UserSubcat.objects.filter(usercat=usercat))
         
         response = {
-            'cats': usercats,
-            'subcats': subcats
+            'cats': [usercat.cat_text for usercat in usercats],
+            'subcats': [{'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description} for subcat in subcats]
         }
         return JsonResponse(response)
 
