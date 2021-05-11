@@ -77,7 +77,7 @@ class Document(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     doc_no=models.IntegerField(default=999)
     def __str__(self):
-        return self.doctype+"-"+str(self.doc_no)
+        return self.doctype.doctype+"-"+str(self.doc_no)
 
 class InitCat(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
