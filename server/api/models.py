@@ -83,12 +83,18 @@ class InitCat(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     cat_no=models.IntegerField()
     cat_text=models.CharField(max_length=255)
+    def __str__(self):
+        return self.doctpye.doctpye+"-"+str(self.cat_no)+'-'+str(self.cat_text)
+
 
 class InitSubCat(models.Model):
     initcat=models.ForeignKey('InitCat', on_delete=models.CASCADE)
     subcat_no=models.IntegerField()
     subcat_text=models.CharField(max_length=255)
     subcat_description=models.CharField(max_length=255)
+    def __str__(self):
+        return str(self.subcat_no)+'-'+str(self.subcat_text)
+
 
 class UserCat(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
@@ -104,7 +110,7 @@ class UserSubcat(models.Model):
     subcat_text=models.CharField(max_length=255)
     subcat_description=models.CharField(max_length=255)
     def __str__(self):
-        return self.user.username+'-'+str(self.subcat_no)+'-'+str(self.subcat_text)
+        return self.usercat.user.username+'-'+str(self.subcat_no)+'-'+str(self.subcat_text)
 
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
@@ -120,6 +126,6 @@ class Status(models.Model):
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     start=models.IntegerField(default=1)
     def __str__(self):
-        return self.user.username+'-'+self.doctype+'-'+str(self.start)
+        return self.user.username+'-'+self.doctype.doctype+'-'+str(self.start)
 
 
