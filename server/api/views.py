@@ -133,6 +133,7 @@ def submit(request):
         annotation_data = query_json['annotationData']
         
         doctype=DocType.objects.get(doctype=doctypetext)
+        print(doctype, image_id)
         document=Document.objects.get(doctype=doctype, doc_no=image_id)
         user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
