@@ -144,6 +144,10 @@ def submit(request):
             label = group['label']
             group_id = group['group_id']
 
+            for box_id in box_ids:
+                Annotation(user=user, document=document, group_id=group_id, box_id=box_id,
+                status=True, label=label).save()
+
             Label.objects.create(
                 user = user,
                 imageID = image_id,
@@ -157,6 +161,7 @@ def submit(request):
             imageID = image_id,
             behavior = 'SU'
         )
+
         yetdocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
         if(len(yetdocs)>0):
             startno=yetdocs[0].document.doc_no

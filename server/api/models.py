@@ -114,7 +114,8 @@ class UserSubcat(models.Model):
 
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
-    doc_no=models.IntegerField(default=1)
+    document=models.IntegerField(default=1)
+    group_id=models.IntegerField(default=1)
     box_id=models.IntegerField(default=1)
     status=models.BooleanField(default=False)
     label=models.ForeignKey('UserSubcat', on_delete=models.SET_NULL, blank=True, null=True)
