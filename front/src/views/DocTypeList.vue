@@ -1,7 +1,6 @@
 <template>
   <v-row justify="center" align-content="center" align="center" class="instr">
     <v-col cols="8">
-      HI
       <v-list >
           <v-list-item-group 
             mendatory 
@@ -26,13 +25,14 @@ export default {
   data: () => ({
     doctypes: []
   }),
-  methods: {
-    getDocTyps: function () {
-      const self = this;
+  mounted(){
+    const self = this;
       axios.get(self.$store.state.server_url + "/api/get-doctypes").then(function(res){
-          self.topics=res.data.topics;
-      })
-    },
+          self.doctypes=res.data.doctypes;
+          console.log(res);
+      })  }
+      ,
+  methods: {
     gotoDoc: function(doctype){
       const self = this;
       self.$router.push('annotation/'+doctype);

@@ -15,8 +15,8 @@ def checkUser(request):
             user=User(username=username)
             user.save()
             # initialize status 
-            for doctype in DocType.objects.all():
-                Status(user=user, doctype=DocType.objects.get(doctype=doctype), start=1).save()
+            for document in Document.objects.all():
+                Status(user=user, document=document, status=False).save()
             # initialize usercats
             for initcat in InitCat.objects.all():
                 UserCat(user=user, doctype=initcat.doctype, cat_no=initcat.cat_no, cat_text=initcat.cat_text).save()
@@ -89,12 +89,15 @@ def recordLog(request):
 def getImageID(request):
     if request.method == 'GET':
         username = request.GET['mturk_id']
+        doctypetext=request.GET['doctype']
         user = User.objects.get(username=username)
-        
+        doctype=DocType.objects.get(doctype=doctypetext)
+        #get least unannotated document
+        startdoc=Status.objects.filter(user=user, document__doctype=doctype, status=False)[0]
+        startno=startdoc.document.doc_no
         response = {
             'consent_agreed': user.consentAgreed,
-            'start_image_id': user.start_image_id,
-            'step': user.step,
+            'start_image_id': startno
         }
         return JsonResponse(response)
 
