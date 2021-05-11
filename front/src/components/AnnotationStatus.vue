@@ -90,8 +90,6 @@ export default {
       this.$store.subscribeAction({after: (action) => {
         if (action.type === 'updateImageBoxes') {
           this.image_box = this.$store.getters.getImageBoxes;
-          console.log("Hi");
-          this.reset();
         }
         if (action.type === 'updateAnnotatedBoxes') {
           this.annotated_box = this.$store.getters.getAnnotatedBoxes;
