@@ -85,9 +85,7 @@ export default {
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.$helpers.server_get(self, "/api/check-user", 
         function(self, res){
-          if(res.data.task_done) {
-            alert("Thank you for your interest, but no more tasks are left now.\n We ask for your kind understanding.")
-          } else if (res.data.consent_agreed === false){
+          if (res.data.consent_agreed === false){
             self.$router.push('/informed-consent')
           } else if (res.data.step < 20) {
             self.$router.push('/instruction')

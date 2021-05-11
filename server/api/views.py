@@ -27,11 +27,9 @@ def checkUser(request):
         else: 
             user=User.objects.get(username=username)
         user, created = User.objects.get_or_create(username=username)
-        task_done = len(list(User.objects.filter(instrEnded = True))) > 15
         response = {
             'consent_agreed': user.consentAgreed,
-            'step': 1,
-            'task_done': task_done
+            'step': 1
         }
         return JsonResponse(response)
 
