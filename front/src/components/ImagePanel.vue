@@ -90,6 +90,7 @@ export default {
     image_no: {
       deep: true,
       handler(){
+        console.log('imgnno updated')
         this.loadNewImage();
       }
     }
@@ -121,6 +122,7 @@ export default {
     },
     loadNewImage: function() {
       const self = this;
+      console.log('getnewimg from',self.$store.getters.json_url )
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:json.meta.image_size.width;
