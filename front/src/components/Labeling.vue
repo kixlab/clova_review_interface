@@ -271,18 +271,24 @@ export default {
       },
 
       loadAnnotatedBoxes(annotations){
+        //console.log("0. Annotations that came in", annotations)
+        //console.log("and the currernt imageboxes", this.$store.getters.getImageBoxes)
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
+          var currImageBox = this.$store.getters.getImageBoxes
+          //console.log("prev")
+          //console.log(currImageBox)
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id
             for(var id in ids){
-              var currBox=self.image_box[ids[id]]
+              var currBox=currImageBox[ids[id]]
               currBox.annotated=true
               group.push(currBox)
             }
-            self.updateImageBoxes(self.image_box)
+            //console.log(currImageBox)
+            self.updateImageBoxes(currImageBox)
             self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
           }          
         },
@@ -323,7 +329,7 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
-          console.log(annotations)
+          console.log("ANNOTATIONS", annotations)
           setTimeout(
           self.loadAnnotatedBoxes(annotations),1000);
 

@@ -40,6 +40,7 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
+        console.log("1. setImageBoxes called, before processed", json)
         const img_w = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
         const img_h = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
         var ratio = 1
@@ -89,6 +90,7 @@ const actions = {
                         label: ""}
             })
 
+            console.log("2. setImageBoxes called, processed", processedData)
             commit('setCurrBox', processedData)
             }
 
@@ -104,7 +106,7 @@ const actions = {
 
     updateAnnotatedBoxes({ commit }, json) {
         if (json[1] === "add") {
-            console.log(json);
+            console.log("Updateannotatedboxes", json);
             commit('addAnnotatedBox', json[0])
         }
         else if (json[1] === "remove") {
@@ -124,6 +126,7 @@ const mutations = {
         //console.log("New FILE:", state.imageFile)
     },
     setCurrBox: (state, imageBoxes) => {
+        console.log("--- IMAGEBOXES JUST CHANGED ---")
         state.imageBoxes = imageBoxes
         //console.log("New JSON:", state.imageBoxes)
     },
@@ -142,10 +145,11 @@ const mutations = {
     },
     addAnnotatedBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.push(annotatedBoxes)
-        // console.log("ANNOTATED:", state.annotatedBoxes)
+        //console.log("ANNOTATED:", state.annotatedBoxes)
     },
     removeAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.splice(state.annotatedBoxes.indexOf(annotatedBoxes), 1)
+        //console.log("REMOVED:", state.annotatedBoxes)
     },
     resetAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes = annotatedBoxes

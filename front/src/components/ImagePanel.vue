@@ -83,6 +83,13 @@ export default {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})
+    /*
+    self.$store.subscribeAction({after: (action) => {
+      if (action.type === 'setImageBoxes') {
+        self.loadNewImage();
+      }
+    }})
+    */
     })
   },
 
@@ -124,6 +131,8 @@ export default {
       const self = this;
       console.log('getnewimg from',self.$store.getters.json_url )
       axios.get(self.$store.getters.json_url).then(function(res) {
+          ///console.log("** new JSON", res.data)
+
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:json.meta.image_size.width;
           var img_height = json.meta === undefined ? json.image_size.height:json.meta.image_size.height;
