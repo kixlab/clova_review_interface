@@ -203,7 +203,6 @@ export default {
       self.subcats=res.data.subcats;
       })
     this.getAnnotations();
-    
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
@@ -267,7 +266,8 @@ export default {
         this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
         if(group.length>0){
-        this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
+          this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
+          console.log(group)
         }
       },
 
