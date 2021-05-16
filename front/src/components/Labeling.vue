@@ -202,7 +202,7 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       })
-    getAnnotations();
+    this.getAnnotations();
     
   },
   methods: {
