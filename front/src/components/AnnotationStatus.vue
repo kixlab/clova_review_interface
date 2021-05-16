@@ -75,6 +75,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import axios from "axios";
+
 
 export default {
     name: "LabeledBoxes",
@@ -120,6 +122,7 @@ export default {
     },
 
     remove(group) {
+      const self = this;
       axios.post(self.$store.state.server_url + "/api/remove-annotation/", {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
@@ -128,19 +131,19 @@ export default {
       }).then(function (res) {
         console.log(res)
         for (var i in this.image_box) {
-        var temp = this.image_box[i]
-        for (var box in group.boxes) {
-          var removedBox = group.boxes[box]
-          if (temp.x_pos === removedBox.x_pos && temp.y_pos === removedBox.y_pos) {
-            temp.annotated = false;
-            temp.label = '';
+          var temp = this.image_box[i]
+          for (var box in group.boxes) {
+            var removedBox = group.boxes[box]
+            if (temp.x_pos === removedBox.x_pos && temp.y_pos === removedBox.y_pos) {
+              temp.annotated = false;
+              temp.label = '';
+            }
           }
         }
-      }
 
-      this.$helpers.server_log(this, 'RA', group.boxes.map((i) => {return i.box_id}))
-      this.updateImageBoxes(this.image_box)
-      this.updateAnnotatedBoxes([group, "remove"])
+      self.$helpers.server_log(self, 'RA', group.boxes.map((i) => {return i.box_id}))
+      self.updateImageBoxes(self.image_box)
+      self.updateAnnotatedBoxes([group, "remove"])
       });
     },
 
