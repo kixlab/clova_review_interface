@@ -202,6 +202,7 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       })
+    getAnnotations();
     
   },
   methods: {
@@ -292,6 +293,21 @@ export default {
             self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
           }          
         },
+      getAnnotations(){
+        const self=this;
+                console.log('GET ANNOTATIONS')
+                axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+                  params:{
+                    mturk_id: self.$store.state.mturk_id,
+                    doctype: self.$route.params.docType,
+                    image_id: self.$store.state.image_order
+                  }
+                }).then(function(res){
+                  console.log(res)
+                  var annotations=res.data.annotations;
+                  console.log("ANNOTATIONS", annotations)
+                  self.loadAnnotatedBoxes(annotations);
+      })},
 
       clicked(label) {
         console.log("Clicked", label)
