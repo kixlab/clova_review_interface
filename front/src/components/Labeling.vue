@@ -287,7 +287,7 @@ export default {
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
-            var ids=agroup.boxes_id.split(/[|]|,/);
+            var ids=agroup.boxes_id.toString();
             console.log(ids)
             for(var id in ids){
               console.log(ids[id])
