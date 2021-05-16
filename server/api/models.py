@@ -117,7 +117,7 @@ class UserSubcat(models.Model):
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
-    boxes_id=models.TextField(validators=[validate_comma_separated_integer_list])
+    boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
     is_alive=models.BooleanField(default=False)
     label=models.CharField(max_length=255)
     def __str__(self):
