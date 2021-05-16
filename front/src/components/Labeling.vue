@@ -290,7 +290,7 @@ export default {
             var ids=agroup.boxes_id
             console.log(ids)
             for(var id in ids){
-              console.log(id)
+              console.log(ids[id])
               var currBox=currImageBox[id]
               console.log(currBox)
               currBox.annotated=true
