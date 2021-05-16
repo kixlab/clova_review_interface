@@ -146,8 +146,8 @@ export default {
       this.width = width
       this.height = height
 
-      const img_w = this.original_box.meta === undefined ? this.original_box.image_size.width : this.original_box.meta.image_size.width;
-      const img_h = this.original_box.meta === undefined ? this.original_box.image_size.height : this.original_box.meta.image_size.height;
+      const img_w = this.original_box.meta === undefined ? this.original_box.image_size.width : (this.origina._box.meta.image_size === undefined? this.original_box.meta.imageSize.width:this.original_box.meta.image_size.width);
+      const img_h = this.original_box.meta === undefined ? this.original_box.image_size.height :(this.origina._box.meta.image_size === undefined? this.original_box.meta.imageSize.height:this.original_box.meta.image_size.height)
       var ratio = 1
       var padding_x = 0
       var padding_y = 0
