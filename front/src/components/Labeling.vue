@@ -202,8 +202,18 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       })
-    this.getAnnotations();
-    console.log("MOUNTED, GOT ANNOTATIONS")
+    axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+      params:{
+        mturk_id: self.$store.state.mturk_id,
+        doctype: self.$route.params.docType,
+        image_id: self.$store.state.image_order
+      }
+    }).then(function(res){
+      var annotations=res.data.annotations;
+      console.log("WATCHED, GOT ANNOTATIONS")
+
+      setTimeout(
+      self.loadAnnotatedBoxes(annotations),1000);})
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
@@ -300,20 +310,6 @@ export default {
             self.updateAnnotatedBoxes([{label: agroup.label, boxes: group, annotpk: agroup.group_id}, "add"])
           }          
         },
-      getAnnotations(){
-        const self=this;
-        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
-          params:{
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order
-          }
-        }).then(function(res){
-          var annotations=res.data.annotations;
-          setTimeout(
-          self.loadAnnotatedBoxes(annotations),1000);
-        })},
-
       clicked(label) {
         console.log("Clicked", label)
       }
