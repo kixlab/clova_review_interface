@@ -294,7 +294,9 @@ export default {
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id
+            console.log(ids)
             for(var id in ids){
+              console.log(id)
               var currBox=currImageBox[ids[id]]
               currBox.annotated=true
               group.push(currBox)
@@ -306,19 +308,19 @@ export default {
         },
       getAnnotations(){
         const self=this;
-                console.log('GET ANNOTATIONS')
-                axios.get(self.$store.state.server_url+'/api/get-annotations/',{
-                  params:{
-                    mturk_id: self.$store.state.mturk_id,
-                    doctype: self.$route.params.docType,
-                    image_id: self.$store.state.image_order
-                  }
-                }).then(function(res){
-                  console.log(res)
-                  var annotations=res.data.annotations;
-                  console.log("ANNOTATIONS", annotations)
-                  self.loadAnnotatedBoxes(annotations);
-      })},
+        console.log('GET ANNOTATIONS')
+        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+          params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order
+          }
+        }).then(function(res){
+          console.log(res)
+          var annotations=res.data.annotations;
+          console.log("ANNOTATIONS", annotations)
+          self.loadAnnotatedBoxes(annotations);
+        })},
 
       clicked(label) {
         console.log("Clicked", label)
