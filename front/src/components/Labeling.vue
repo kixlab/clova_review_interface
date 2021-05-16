@@ -294,7 +294,7 @@ export default {
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id
-            console.log(ids)
+            console.log(currImageBox);
             for(var id in ids){
               console.log(id)
               var currBox=currImageBox[ids[id]]
