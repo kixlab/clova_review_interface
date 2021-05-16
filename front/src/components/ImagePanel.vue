@@ -130,6 +130,7 @@ export default {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
+          console.log(json)
           var img_width = json.meta === undefined ? json.image_size.width:json.meta.image_size.width;
           var img_height = json.meta === undefined ? json.image_size.height:json.meta.image_size.height;
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
