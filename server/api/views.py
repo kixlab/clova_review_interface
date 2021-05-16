@@ -152,7 +152,7 @@ def saveAnnotation(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         boxes = query_json['boxes_id']
         label = query_json['label']
-        newAnnot=Annotation(user=user, document=document, boxes = boxes, label=label, is_alive=True)
+        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, label=label, is_alive=True)
         newAnnot.save()
         response={
             'annot_pk': newAnnot.pk
