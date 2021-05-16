@@ -203,6 +203,7 @@ export default {
       self.subcats=res.data.subcats;
       })
     this.getAnnotations();
+    console.log("MOUNTED, GOT ANNOTATIONS")
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
@@ -349,6 +350,8 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
+          console.log("WATCHED, GOT ANNOTATIONS")
+
           setTimeout(
           self.loadAnnotatedBoxes(annotations),1000);
 
