@@ -159,7 +159,7 @@ def saveAnnotation(request):
         }
         return JsonResponse(response)
 
-def removeAnnotation(request):
+def deleteAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
         username=query_json['mturk_id']
