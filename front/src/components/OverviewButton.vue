@@ -25,7 +25,7 @@
           <v-list-item v-for="(row, index) in options" :key='index'>
               <v-card class="pa-2" style="align-self:baseline;" height='inherit' v-for="(number, subindex) in row" :key='subindex' v-on:click="goTo(number);" @click="dialog = false">
                   #{{number}}
-                  <v-img max-width="150" max-height="300" :src="getThumbnail(number)"></v-img>
+                  <img max-width="150" max-height="300" v-bind:src="getThumbnail(number)">
               </v-card>
               </v-list-item>
       </ul>
