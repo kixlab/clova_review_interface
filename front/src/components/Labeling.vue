@@ -291,7 +291,7 @@ export default {
             for(var id in ids){
               console.log(ids)
               console.log(ids[id])
-              box_id=parseInt(ids[id])
+              var box_id=parseInt(ids[id])
               console.log(id, currImageBox)
               var currBox=currImageBox[box_id]
               console.log(currBox)
