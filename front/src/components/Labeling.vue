@@ -15,7 +15,7 @@
             Category
             <v-list >
               <v-list-item-group
-                mendatory
+                v-model='category'
                 active-class="border"
                 color="indigo"
               >
