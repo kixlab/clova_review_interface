@@ -202,6 +202,8 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       })
+    
+    setTimeout(
     axios.get(self.$store.state.server_url+'/api/get-annotations/',{
       params:{
         mturk_id: self.$store.state.mturk_id,
@@ -211,9 +213,7 @@ export default {
     }).then(function(res){
       var annotations=res.data.annotations;
       console.log("WATCHED, GOT ANNOTATIONS")
-
-      setTimeout(
-      self.loadAnnotatedBoxes(annotations),1000);})
+      self.loadAnnotatedBoxes(annotations);}),1000);
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
