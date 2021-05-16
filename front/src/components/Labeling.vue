@@ -287,11 +287,10 @@ export default {
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
-            console.log(agroup)
-            var ids=agroup.boxes_id.split();
-            console.log(ids)
+            var ids=agroup.boxes_idex.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
               console.log(ids[id])
+              id=parseInt(id)
               var currBox=currImageBox[id]
               console.log(currBox)
               currBox.annotated=true
