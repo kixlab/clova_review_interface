@@ -290,7 +290,7 @@ export default {
           });
         }
 
-        self.category='';
+        self.category=''
       },
 
       loadAnnotatedBoxes(annotations){
@@ -303,11 +303,10 @@ export default {
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
               var box_id=parseInt(ids[id])
-              console.log(currBox)
-              var currBox=currImageBox.find(item => {
-                console.log(item.id)
-                return item.id==box_id}
-              )
+              var currBox=currImageBox[box_id]
+              if(currBox.id!=box_id){
+                currBox=currImageBox[box_id-1];
+              }
               currBox.annotated=true
               group.push(currBox)
             }
