@@ -252,6 +252,8 @@ export default {
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
         var label = item.label + "." + item.sublabel
+        const self = this;
+
 
         for (var box in imageBox) {
             if (imageBox[box].selected === true) {
