@@ -137,7 +137,7 @@ export default {
           self.original_box = json;
       })
       .catch(function(err) {
-        alert(err);
+        alert("Hi",err);
       });
     },
     newSize: function() {
