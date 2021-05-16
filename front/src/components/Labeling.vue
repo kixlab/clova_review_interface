@@ -289,12 +289,8 @@ export default {
             var group=[]
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
-              console.log(ids)
-              console.log(ids[id])
               var box_id=parseInt(ids[id])
-              console.log(id, currImageBox)
               var currBox=currImageBox[box_id]
-              console.log(currBox)
               currBox.annotated=true
               group.push(currBox)
             }
