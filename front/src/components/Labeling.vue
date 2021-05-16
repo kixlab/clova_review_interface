@@ -15,7 +15,7 @@
             Category
             <v-list >
               <v-list-item-group
-                v-model='category'
+                v-model='sel_category'
                 active-class="border"
                 color="indigo"
               >
@@ -183,7 +183,7 @@ export default {
       subcategory:'',
       addcat: false,
       addsubcat: false,
-    
+      sel_category: null,    
   }},
   mounted: function () {
     const self = this;
@@ -290,7 +290,8 @@ export default {
           });
         }
 
-        self.category=''
+        self.category='';
+        self.sel_category=null;
       },
 
       loadAnnotatedBoxes(annotations){
