@@ -72,7 +72,7 @@ const actions = {
                         selected: false, 
                         annotated: false, 
                         hover: false,
-                        quad: {x1: i.boundingBox[0][0], y1: i.boundingBox[0][1], x2: i.boundingBox[1][0], y2: i.boundingBox[2][1], y3: i.boundingBox[3][1]},
+                        quad: {x1: i.boundingBox[0][0], y1: i.boundingBox[0][1], x2: i.boundingBox[1][0], y2: i.boundingBox[3][1], y3: i.boundingBox[2][1]},
                         label: ""
                     }
                 }else{
