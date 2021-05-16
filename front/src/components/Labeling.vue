@@ -291,6 +291,7 @@ export default {
             for(var id in ids){
               console.log(ids[id])
               id=parseInt(id)
+              console.log(id, currImageBox)
               var currBox=currImageBox[id]
               console.log(currBox)
               currBox.annotated=true
