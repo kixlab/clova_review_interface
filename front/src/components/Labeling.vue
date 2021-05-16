@@ -289,6 +289,8 @@ export default {
             self.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
         }
+
+        self.category='';
       },
 
       loadAnnotatedBoxes(annotations){
