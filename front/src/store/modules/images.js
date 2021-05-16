@@ -40,7 +40,6 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        console.log("1. setImageBoxes called, before processed", json)
         const img_w = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
         const img_h = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
         var ratio = 1
@@ -90,7 +89,6 @@ const actions = {
                         label: ""}
             })
 
-            console.log("2. setImageBoxes called, processed", processedData)
             commit('setCurrBox', processedData)
             }
 
@@ -101,12 +99,10 @@ const actions = {
 
         commit('setCurrBox', json)
         commit('setSelectedBox', selected)
-        //console.log('BOX_STATUS:', json)
     },
 
     updateAnnotatedBoxes({ commit }, json) {
         if (json[1] === "add") {
-            console.log("Updateannotatedboxes", json);
             commit('addAnnotatedBox', json[0])
         }
         else if (json[1] === "remove") {
@@ -123,7 +119,6 @@ const actions = {
 const mutations = {
     setCurrImage: (state, imageFile) => {
         (state.imageFile = imageFile)
-        //console.log("New FILE:", state.imageFile)
     },
     setCurrBox: (state, imageBoxes) => {
         console.log("--- IMAGEBOXES JUST CHANGED ---")

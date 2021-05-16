@@ -129,7 +129,6 @@ export default {
         image_id: self.$store.state.image_order,
         annot_pk: group.annotpk
       }).then(function (res) {
-        console.log(res)
         for (var i in self.image_box) {
           var temp = self.image_box[i]
           for (var box in group.boxes) {
@@ -140,7 +139,6 @@ export default {
             }
           }
         }
-        console.log(self)
         self.$helpers.server_log(self, 'RA', group.boxes.map((i) => {return i.box_id}))
         self.updateImageBoxes(self.image_box)
         self.updateAnnotatedBoxes([group, "remove"])

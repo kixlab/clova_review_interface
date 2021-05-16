@@ -224,7 +224,6 @@ export default {
 
       addCategory(){
         this.addcat=false;
-        console.log(this.addcat);
         var newcat=document.getElementById('newCat').value;
         this.cats.push(newcat);        
       },
@@ -276,27 +275,20 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             label:label
           }).then(function (res) {
-            console.log(res)
             self.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
         }
       },
 
       loadAnnotatedBoxes(annotations){
-        //console.log("0. Annotations that came in", annotations)
-        //console.log("and the currernt imageboxes", this.$store.getters.getImageBoxes)
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
           var currImageBox = this.$store.getters.getImageBoxes
-          //console.log("prev")
-          //console.log(currImageBox)
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id
-            console.log(currImageBox);
             for(var id in ids){
-              console.log(id)
               var currBox=currImageBox[id]
               currBox.annotated=true
               group.push(currBox)
@@ -308,7 +300,6 @@ export default {
         },
       getAnnotations(){
         const self=this;
-        console.log('GET ANNOTATIONS')
         axios.get(self.$store.state.server_url+'/api/get-annotations/',{
           params:{
             mturk_id: self.$store.state.mturk_id,
@@ -316,9 +307,7 @@ export default {
             image_id: self.$store.state.image_order
           }
         }).then(function(res){
-          console.log(res)
           var annotations=res.data.annotations;
-          console.log("ANNOTATIONS", annotations)
           self.loadAnnotatedBoxes(annotations);
         })},
 
@@ -358,9 +347,7 @@ export default {
             image_id: self.$store.state.image_order
           }
         }).then(function(res){
-          console.log(res)
           var annotations=res.data.annotations;
-          console.log("ANNOTATIONS", annotations)
           setTimeout(
           self.loadAnnotatedBoxes(annotations),1000);
 
