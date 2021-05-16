@@ -297,7 +297,7 @@ export default {
             }
             //console.log(currImageBox)
             self.updateImageBoxes(currImageBox)
-            self.updateAnnotatedBoxes([{label: agroup.label, boxes: group}, "add"])
+            self.updateAnnotatedBoxes([{label: agroup.label, boxes: group, annotpk: agroup.group_id}, "add"])
           }          
         },
       getAnnotations(){
