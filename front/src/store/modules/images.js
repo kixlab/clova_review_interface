@@ -1,3 +1,5 @@
+import { MAX_SAFE_INTEGER } from "core-js/core/number"
+
 const state = {
     imageURL: '',
     imageFile: "logo.png",
@@ -81,7 +83,7 @@ const actions = {
                         x_pos: i.x[0]/ratio+padding_x, 
                         y_pos: i.y[0]/ratio+padding_y, 
                         x_len: (i.x[1]-i.x[0])/ratio, 
-                        y_len: (i.y[2]-i.y[0])/ratio, 
+                        y_len: Math.max((i.y[2]-i.y[0])/ratio, 0),
                         selected: false, 
                         annotated: false, 
                         hover: false,
