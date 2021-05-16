@@ -120,7 +120,14 @@ export default {
     },
 
     remove(group) {
-      for (var i in this.image_box) {
+      axios.post(self.$store.state.server_url + "/api/remove-annotation/", {
+        mturk_id: self.$store.state.mturk_id,
+        doctype: self.$route.params.docType,
+        image_id: self.$store.state.image_order,
+        annot_pk: group.annot_pk
+      }).then(function (res) {
+        console.log(res)
+        for (var i in this.image_box) {
         var temp = this.image_box[i]
         for (var box in group.boxes) {
           var removedBox = group.boxes[box]
@@ -134,6 +141,7 @@ export default {
       this.$helpers.server_log(this, 'RA', group.boxes.map((i) => {return i.box_id}))
       this.updateImageBoxes(this.image_box)
       this.updateAnnotatedBoxes([group, "remove"])
+      });
     },
 
     reset() {

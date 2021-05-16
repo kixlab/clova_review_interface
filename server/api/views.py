@@ -159,6 +159,24 @@ def saveAnnotation(request):
         }
         return JsonResponse(response)
 
+def removeAnnotation(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =query_json['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        annot_pk = query_json['annot_pk']
+        thisAnnot=Annotation.objects.get(user=user, pk=annot_pk)
+        thisAnnot.is_alive=False
+        thisAnnot.save()
+        response={
+            'annot_pk': annot_pk
+        }
+        return JsonResponse(response)
+
 
 @csrf_exempt
 def submit(request):
