@@ -305,6 +305,7 @@ export default {
               var box_id=parseInt(ids[id])
               var currBox=currImageBox[box_id]
               if(currBox.id!=undefined){
+                console.log("Hi")
                 currBox=currImageBox[box_id-1];
               }
               currBox.annotated=true
