@@ -121,7 +121,6 @@ const mutations = {
         (state.imageFile = imageFile)
     },
     setCurrBox: (state, imageBoxes) => {
-        console.log("--- IMAGEBOXES JUST CHANGED ---")
         state.imageBoxes = imageBoxes
         //console.log("New JSON:", state.imageBoxes)
     },

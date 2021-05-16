@@ -288,8 +288,11 @@ export default {
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id
+            console.log(ids)
             for(var id in ids){
+              console.log(id)
               var currBox=currImageBox[id]
+              console.log(currBox)
               currBox.annotated=true
               group.push(currBox)
             }
