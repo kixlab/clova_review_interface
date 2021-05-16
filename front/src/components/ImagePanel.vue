@@ -132,7 +132,9 @@ export default {
           var json = res.data;
           console.log(json)
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
+          console.log('width ok')
           var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
+          console.log('height ok')
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
           self.original_box = json;
       })
