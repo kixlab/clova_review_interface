@@ -40,8 +40,8 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        const img_w = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
-        const img_h = json[0].meta === undefined ? json[0].image_size.width : json[0].meta.image_size.width
+        const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].image_size === undefined? json[0].imageSize.width:json[0].meta.image_size.width)
+        const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].image_size === undefined? json[0].imageSize.height:json[0].meta.image_size.height)
         var ratio = 1
         var padding_x = 0
         var padding_y = 0
