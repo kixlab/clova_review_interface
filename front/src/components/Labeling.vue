@@ -303,6 +303,7 @@ export default {
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
               var box_id=parseInt(ids[id])
+              console.log(currBox)
               var currBox=currImageBox.find(item => {
                 console.log(item.id)
                 return item.id==box_id}
