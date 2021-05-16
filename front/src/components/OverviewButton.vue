@@ -23,7 +23,7 @@
       </v-card-subtitle>
       <ul>
           <v-list-item v-for="(row, index) in options" :key='index'>
-              <v-card class="pa-2" style="align-self:baseline;" height='inherit' v-for="(number, subindex) in row" :key='subindex' v-on:click="goTo(number);" @click="dialog = false">
+              <v-card class="pa-2" style="align-self:baseline; width:100%" height='inherit' v-for="(number, subindex) in row" :key='subindex' v-on:click="goTo(number);" @click="dialog = false">
                   #{{number}}
                   <img style='width:100%' v-bind:src="getThumbnail(number)">
               </v-card>
