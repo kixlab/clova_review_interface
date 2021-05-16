@@ -304,9 +304,7 @@ export default {
             for(var id in ids){
               var box_id=parseInt(ids[id])
               var currBox=currImageBox[box_id]
-              if(currBox.id!=box_id){
-                console.log("Hi")
-                console.log(currBox)
+              if(currBox.box_id!=box_id){
                 currBox=currImageBox[box_id-1];
               }
               currBox.annotated=true
