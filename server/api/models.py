@@ -121,7 +121,7 @@ class Annotation(models.Model):
     is_alive=models.BooleanField(default=False)
     label=models.CharField(max_length=255)
     def __str__(self):
-        return self.user.username+'-'+str(self.doc_no)+'-'+str(self.box_id)+'-'+self.label
+        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.label
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
