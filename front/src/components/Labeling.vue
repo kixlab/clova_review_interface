@@ -321,6 +321,7 @@ export default {
       deep: true,
       handler(){
         const self=this;
+        console.log('GET ANNOTATIONS')
         axios.get(self.$store.state.server_url+'/api/get-annotations/',{
           params:{
             mturk_id: self.$store.state.mturk_id,
@@ -328,6 +329,7 @@ export default {
             image_id: self.$store.state.image_order
           }
         }).then(function(res){
+          console.log(res)
           var annotations=res.data.annotations;
           console.log("ANNOTATIONS", annotations)
           setTimeout(
