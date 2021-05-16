@@ -1,5 +1,3 @@
-import { MAX_SAFE_INTEGER } from "core-js/core/number"
-
 const state = {
     imageURL: '',
     imageFile: "logo.png",
