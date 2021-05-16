@@ -127,7 +127,7 @@ export default {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.image_order,
-        annot_pk: group.annot_pk
+        annot_pk: group.annotpk
       }).then(function (res) {
         console.log(res)
         for (var i in this.image_box) {
