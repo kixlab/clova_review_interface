@@ -159,6 +159,7 @@ def saveAnnotation(request):
         }
         return JsonResponse(response)
 
+@csrf_exempt
 def deleteAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
