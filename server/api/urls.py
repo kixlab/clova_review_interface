@@ -13,6 +13,6 @@ urlpatterns = [
     path('get-image-id/', views.getImageID),
     path('get-annotations/',views.getAnnotations),
     path('save-annotation/', views.saveAnnotation),
-    path('selete-annotation/', views.deleteAnnotation),
+    path('delete-annotation/', views.deleteAnnotation),
     path('submit/', views.submit),
 ]
