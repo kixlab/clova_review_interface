@@ -310,7 +310,8 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
-          self.loadAnnotatedBoxes(annotations);
+          setTimeout(
+          self.loadAnnotatedBoxes(annotations),1000);
         })},
 
       clicked(label) {
