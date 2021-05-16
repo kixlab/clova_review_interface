@@ -126,6 +126,7 @@ def getAnnotations(request):
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
+        print(annots)
 
         annotations=[]
         for annot in annots: 
