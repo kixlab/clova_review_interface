@@ -139,7 +139,7 @@ export default {
           self.original_box = json;
       })
       .catch(function(err) {
-        alert("Hi",err);
+        console.log(err);
       });
     },
     newSize: function() {
