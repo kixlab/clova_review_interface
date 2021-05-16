@@ -3,6 +3,8 @@ from django.utils import timezone
 
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import validate_comma_separated_integer_list
+from django.core.validators import int_list_validator
+
 
 
 
@@ -115,7 +117,7 @@ class UserSubcat(models.Model):
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
-    box_id=models.IntegerField(default=1)
+    boxes_id=models.CharField(validators=[int_list_validator], max_length=500)   
     is_alive=models.BooleanField(default=False)
     label=models.CharField(max_length=255)
     def __str__(self):
