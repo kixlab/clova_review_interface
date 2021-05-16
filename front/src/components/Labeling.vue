@@ -288,10 +288,12 @@ export default {
           }).then(function (res) {
             self.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
+        }else{
+          window.alert("Please select boxes to annotate.")
         }
-
         self.category='';
         self.sel_category=null;
+        self.subcategory='';
       },
 
       loadAnnotatedBoxes(annotations){
