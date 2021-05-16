@@ -271,7 +271,7 @@ export default {
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order,
             boxes_id: group.map((i) => {return i.box_id}),
-            label=label
+            label:label
           }).then(function (res) {
             console.log(res)
             this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
