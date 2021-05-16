@@ -289,6 +289,7 @@ export default {
             var group=[]
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
+              console.log(ids)
               console.log(ids[id])
               id=parseInt(id)
               console.log(id, currImageBox)
