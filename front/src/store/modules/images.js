@@ -60,17 +60,35 @@ const actions = {
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
             console.log(validData)
             const processedData = validData.map(function(i) {
-            return {box_id: i.box_id,
-                    text: i.text,
-                    x_pos: i.x[0]/ratio+padding_x, 
-                    y_pos: i.y[0]/ratio+padding_y, 
-                    x_len: (i.x[1]-i.x[0])/ratio, 
-                    y_len: (i.y[2]-i.y[0])/ratio, 
-                    selected: false, 
-                    annotated: false, 
-                    hover: false,
-                    quad: {x1: i.x[0], y1: i.y[0], x2: i.x[1], y2: i.y[2], y3: i.y[3]},
-                    label: ""}
+                if(i.box_id==undefined){
+                    return {
+                        box_id: i.id, 
+                        text:i.text, 
+                        x_pos: i.boundingBox[0][0]/ratio + padding_x, 
+                        y_pos: i.boundingBox[0][1]/ratio + padding_y,
+                        x_len: (i.boundingBox[1][0]-i.boundingBox[0][0])/ratio, 
+                        y_len: (i.boundingBox[2][1]-i.boundingBox[0][1])/ratio, 
+                        selected: false, 
+                        annotated: false, 
+                        hover: false,
+                        quad: {x1: i.boundingBox[0][0], y1: i.boundingBox[0][1], x2: i.boundingBox[1][0], y2: i.boundingBox[2][1], y3: i.boundingBox[3][1]},
+                        label: ""
+                    }
+                }else{
+                    return {
+                        box_id: i.box_id,
+                        text: i.text,
+                        x_pos: i.x[0]/ratio+padding_x, 
+                        y_pos: i.y[0]/ratio+padding_y, 
+                        x_len: (i.x[1]-i.x[0])/ratio, 
+                        y_len: (i.y[2]-i.y[0])/ratio, 
+                        selected: false, 
+                        annotated: false, 
+                        hover: false,
+                        quad: {x1: i.x[0], y1: i.y[0], x2: i.x[1], y2: i.y[2], y3: i.y[3]},
+                        label: ""}
+                }
+            
         })
 
         commit('setCurrBox', processedData)
