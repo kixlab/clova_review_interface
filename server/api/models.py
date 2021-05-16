@@ -115,9 +115,8 @@ class UserSubcat(models.Model):
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
-    group_id=models.IntegerField(default=1)
     box_id=models.IntegerField(default=1)
-    status=models.BooleanField(default=False)
+    is_alive=models.BooleanField(default=False)
     label=models.CharField(max_length=255)
     def __str__(self):
         return self.user.username+'-'+str(self.doc_no)+'-'+str(self.box_id)+'-'+self.label

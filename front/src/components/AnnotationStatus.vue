@@ -48,7 +48,7 @@
               
             
           <div v-for="group in annotated_box" :key="group.id">
-            <v-btn-toggle dense style="padding:5px" class="flex-wrap">
+            <v-btn-toggle dense style="padding:5px" class="flex-wrap" value="group.annotpk">
               <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;"> 
                 {{group.label}} 
               </v-btn>

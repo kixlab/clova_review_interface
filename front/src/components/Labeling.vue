@@ -266,8 +266,16 @@ export default {
         this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
         if(group.length>0){
-          this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group}, "add"])
-          console.log(group)
+          axios.post(self.$store.state.server_url + "/api/save-annotation/", {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order,
+            boxes_id: group.map((i) => {return i.box_id}),
+            label=label
+          }).then(function (res) {
+            console.log(res)
+            this.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
+          });
         }
       },
 

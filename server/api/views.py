@@ -140,7 +140,24 @@ def getAnnotations(request):
         }
         return JsonResponse(response)
 
-
+@csrf_exempt
+def saveAnnotation(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =query_json['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        boxes = query_json['boxes_id']
+        label = query_json['label']
+        newAnnot=Annotation(user=user, document=document, boxes = boxes, label=label, is_alive=True)
+        newAnnot.save()
+        response={
+            'annot_pk': newAnnot.pk
+        }
+        return JsonResponse(response)
 
 
 @csrf_exempt
