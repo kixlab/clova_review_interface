@@ -29,7 +29,7 @@ export default {
     const self = this;
       axios.get(self.$store.state.server_url + "/api/get-doctypes").then(function(res){
           self.doctypes=res.data.doctypes;
-          console.log(res);
+          //console.log(res);
       })  
     }
       ,
