@@ -152,7 +152,10 @@ export default {
             image_id: self.$store.state.image_order,
             status: false
           }).then(function () {
-            self.$store.commit('update_a_status',self.$store.state.image_order, false);
+            self.$store.commit('update_a_status',{
+              'idx':self.$store.state.image_order,
+              'val':false
+            });
           });
         }
 
