@@ -52,7 +52,7 @@ import OverviewButton from '@/components/OverviewButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
-import axiox from 'axios'
+import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -72,7 +72,7 @@ export default {
   },
   mounted(){
     const self=this;
-    axois.get(self.$store.state.server_url+'/api/get-status/', {
+    axios.get(self.$store.state.server_url+'/api/get-status/', {
       params: {
           mturk_id: self.$store.state.mturk_id,
           doctype: self.$route.params.docType
