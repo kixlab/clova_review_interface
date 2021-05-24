@@ -1,5 +1,6 @@
 <template>
- <v-table>
+ <v-simple-table>
+   <template v-slot:default>
    <tbody>
     <tr>
       <td
@@ -8,8 +9,9 @@
       >#{{doc.no}}
       </td>
     </tr>
+    </template>
    </tbody>
- </v-table>
+ </v-simple-table>
 </template>
 
 
