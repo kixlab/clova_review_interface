@@ -31,6 +31,7 @@ export default {
     status:{
       deep: true,
       handler(){
+        console.log("Hi")
         this.$forceUpdate();
   }}},
 };
