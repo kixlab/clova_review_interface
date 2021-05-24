@@ -318,6 +318,7 @@ export default {
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
               var box_id=parseInt(ids[id])
+              console.log(box_id, currImageBox[box_id])
               var currBox=currImageBox[box_id]
               if(currBox.box_id!=box_id){
                 currBox=currImageBox[box_id-1];
