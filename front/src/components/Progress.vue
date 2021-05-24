@@ -27,6 +27,7 @@ export default {
     status: {
       deep: true,
       handler(){
+        console.log("watched")
         this.stats=this.$store.state.annot_status
       }
     }
