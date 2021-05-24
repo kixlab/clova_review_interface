@@ -14,7 +14,11 @@ export default new Vuex.Store({
   state: {
     mturk_id: null,
     server_url: 'http://3.34.46.125:8000',
-    image_order: 0
+    image_order: 0,
+    annot_status: new Array(20).fill({'status': true})
+  },
+  created() {
+    this.$store.dispatch('getStatus');
   },
   mutations: {
     set_image_count (state, cnt) {
@@ -28,9 +32,23 @@ export default new Vuex.Store({
     },
     set_step (state, step){
       state.step = step
+    },
+    update_status(state, status){
+      state.annot_status=status
     }
   },
   actions: {
+    getStatus({commit}){
+      const self=this;
+      axios.get(state.server_url + "/api/get-status",{
+        params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+          }
+        }).then(function(res){
+          commit('UPDATE_STATUS', res.data.status);
+          })    
+    }
   },
   getters: {
     image_url: state => {

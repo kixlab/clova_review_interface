@@ -21,20 +21,8 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      stats: new Array(20).fill({'status': true}),
+      stats: this.$store.state.annot_status
     };
-  },
-
-  mounted: function() {
-    const self = this;
-    axios.get(self.$store.state.server_url + "/api/get-status",{
-    params:{
-        mturk_id: self.$store.state.mturk_id,
-        doctype: self.$route.params.docType
-      }
-    }).then(function(res){
-      self.stats=res.data.status;
-      })
   },
 };
 </script>
