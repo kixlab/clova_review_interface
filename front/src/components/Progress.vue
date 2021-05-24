@@ -5,8 +5,8 @@
     <tr>
       <td
         v-for="doc in docs"
-        :key="doc.no"
-      >#{{doc.no}}
+        :key="doc.index"
+      >#{{doc.index}}
       </td>
     </tr>
    </tbody>
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      docs: new Array(20).fill({'no': 1, 'status': true}),
+      docs: new Array(20).fill({'status': true}),
     };
   },
 
