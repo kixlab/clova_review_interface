@@ -3,7 +3,7 @@
    <tbody>
     <tr>
       <td v-for="(status, index) in stats" :key='index'
-          v-bind:class='status? done:yet'>
+          v-bind:class='{done:status}'>
           #{{index+1}}
         </td>
     </tr>
@@ -47,12 +47,9 @@ export default {
 td{
   margin: auto;
   border: 1px solid grey;
+  background-color: rgba(180, 180, 180, 0.548);
 }
 .done{
-  background-color: rgba(79, 192, 79, 0.548);
-}
-
-.yet{
-  background-color: rgba(192, 79, 79, 0.548);
+  background-color: rgba(79, 192, 79, 0.548) !important;
 }
 </style>
