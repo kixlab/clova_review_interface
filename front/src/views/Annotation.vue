@@ -78,20 +78,9 @@ export default {
           doctype: self.$route.params.docType
         }
       }).then(function (res) {
-        console.log(res.data)
+        console.log(res.data);
 
     })
-
-    self.$store.commit('update_status', )
-      self.$helpers.server_get(self, "/api/check-user", 
-        function(self, res){
-          if (res.data.consent_agreed === false){
-            self.$router.push('/informed-consent')
-          } else if (res.data.step < 20) {
-            self.$router.push('/instruction')
-          } else {
-            self.$router.push('/after-done')
-          }
   }
 }
 </script>
