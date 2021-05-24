@@ -23,12 +23,12 @@ export default {
       stats: this.$store.state.annot_status
     };
   },
-  computed: {
-    stats() {
-      this.$forceUpadte();
-      console.log('updated')
-    }
-  }
+  watch:{
+    status:{
+      deep: true,
+      handler(){
+        this.$forceUpdate();
+  }}},
 };
 </script>
 
