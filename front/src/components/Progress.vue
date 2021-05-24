@@ -9,8 +9,8 @@
       >#{{doc.no}}
       </td>
     </tr>
-    </template>
    </tbody>
+    </template>
  </v-simple-table>
 </template>
 
