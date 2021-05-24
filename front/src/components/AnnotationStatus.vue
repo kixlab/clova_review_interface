@@ -152,6 +152,7 @@ export default {
             image_id: self.$store.state.image_order,
             status: false
           }).then(function () {
+            console.log('set status false')
             self.$store.commit('update_a_status',{
               'idx':self.$store.state.image_order,
               'val':false
