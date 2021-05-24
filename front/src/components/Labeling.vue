@@ -322,6 +322,7 @@ export default {
               var currBox=currImageBox[box_id]
               if(currBox.box_id!=box_id){
                 currBox=currImageBox[box_id-1];
+                console.log('adjusted');
               }
               currBox.annotated=true
               group.push(currBox)
