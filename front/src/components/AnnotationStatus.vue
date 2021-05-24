@@ -152,7 +152,8 @@ export default {
             image_id: self.$store.state.image_order,
             status: false
           }).then(function () {
-            console.log("Doc status updated as FALSE")
+            console.log("Hirooo");
+            self.$parent.updateStatus();
           });
         }
 
