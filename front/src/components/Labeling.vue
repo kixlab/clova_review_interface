@@ -318,7 +318,7 @@ export default {
             for(var id in ids){
               var box_id=parseInt(ids[id])
               var currBox=currImageBox[box_id]
-              if((currBox.box_id!=box_id)||(currBox==undefined)){
+              if((currBox==undefined)||(currBox.box_id!=box_id)){
                 currBox=currImageBox[box_id-1];
               }
               currBox.annotated=true
