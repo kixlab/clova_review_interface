@@ -62,7 +62,6 @@ export default {
     OverviewButton,
     Labeling,
     BoxSelectionStatus
-    Progress,
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
