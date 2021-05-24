@@ -311,6 +311,7 @@ export default {
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
           var currImageBox = self.$store.getters.getImageBoxes
+          console.log(currImageBox);
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
