@@ -23,6 +23,10 @@ export default {
       stats: this.$store.state.annot_status
     };
   },
+  computed:{
+    ...mapGetters(['status']),
+
+  },
   watch:{
     status:{
       deep: true,
