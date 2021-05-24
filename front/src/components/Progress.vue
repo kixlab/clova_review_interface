@@ -3,11 +3,9 @@
    <template v-slot:default>
    <tbody>
     <tr>
-      <td
-        v-for="doc in docs"
-        :key="doc.index"
-      >#{{doc.index}}
-      </td>
+      <td v-for="(doc, index) in docs" :key='index'>
+          #{{index+1}}
+        </td>
     </tr>
    </tbody>
     </template>
