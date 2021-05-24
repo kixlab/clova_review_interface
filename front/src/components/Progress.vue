@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      doc_status: new Array(20).fill(0)
+      documents1: new Array(10).fill(0),
+      documents2: new Array(10).fill(0)
     };
   },
 
@@ -42,7 +43,6 @@ export default {
       }
     }).then(function(res){
       console.log(res)
-      self.doc_status=res.data.status;
       })
   },
 };
