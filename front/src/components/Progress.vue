@@ -20,20 +20,18 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
+      stats: this.$store.state.annot_status
     };
   },
   watch:{
     status: {
       deep: true,
       handler(){
-        this.stats=this.$store.state.annot_status;
+        this.stats=this.$store.state.annot_status
       }
     }
     
   },
-  computed: {
-    ...mapGetters(['status'])
-}
 };
 </script>
 
