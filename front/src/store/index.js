@@ -18,7 +18,7 @@ export default new Vuex.Store({
     image_order: 0,
     annot_status: new Array(20).fill({'status': true})
   },
-  created() {
+  mounted() {
     this.$store.dispatch('getStatus');
     console.log(this.state);
   },
