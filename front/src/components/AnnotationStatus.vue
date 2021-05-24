@@ -145,6 +145,8 @@ export default {
         self.updateAnnotatedBoxes([group, "remove"])
       });
 
+      
+      console.log(this.$store.getters.getIfAllBoxesAnnotated, "status");
       if(!this.$store.getters.getIfAllBoxesAnnotated){
           axios.post(self.$store.state.server_url + "/api/update-status/", {
             mturk_id: self.$store.state.mturk_id,
