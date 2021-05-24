@@ -47,6 +47,7 @@ export default new Vuex.Store({
             doctype: self.$route.params.docType
           }
         }).then(function(res){
+          console.log(res.data.status);
           commit('UPDATE_STATUS', res.data.status);
           })    
     }
