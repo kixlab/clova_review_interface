@@ -3,7 +3,7 @@
    <tbody>
     <tr>
       <td v-for="(status, index) in stats" :key='index'
-          v-bind:class='{done:status}'>
+          v-bind:class='{done:(status==true)}'>
           #{{index+1}}
         </td>
     </tr>
@@ -33,7 +33,7 @@ export default {
         doctype: self.$route.params.docType
       }
     }).then(function(res){
-      console.log(res)
+      stats=res.data.status;
       })
   },
 };
