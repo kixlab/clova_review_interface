@@ -20,19 +20,13 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      stats: this.$store.state.annot_status
     };
   },
-  watch:{
-    status: {
-      deep: true,
-      handler(){
-        console.log("watched")
-        this.stats=this.$store.state.annot_status
-      }
+  computed: {
+    stats() {
+      return this.$store.state.annot_status
     }
-    
-  },
+  }
 };
 </script>
 
