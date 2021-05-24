@@ -301,12 +301,10 @@ export default {
             image_id: self.$store.state.image_order,
             status: true
           }).then(function () {
-            console.log(self.$store.state);
             self.$store.commit('update_a_status',{
               'idx':self.$store.state.image_order,
               'val':true
               });
-            console.log(self.$store.state);
           });
         }
 
