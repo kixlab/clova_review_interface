@@ -244,8 +244,10 @@ def updateStatus(request):
 
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         user = User.objects.get(username=username)
-        print(status)
-        print(status==True)
+        if(status):
+            Status.objects.filter(user=user, document=document).update(status=True)
+        else:
+            Status.objects.filter(user=user, document=document).update(status=False)
         return HttpResponse('')
 
 
