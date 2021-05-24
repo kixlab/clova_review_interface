@@ -18,11 +18,6 @@ export default new Vuex.Store({
     image_order: 0,
     annot_status: new Array(20).fill({'status': true})
   },
-  mounted() {
-    this.$store.dispatch('getStatus');
-    console.log("Hi")
-    console.log(this.state);
-  },
   mutations: {
     set_image_count (state, cnt) {
       state.image_order = cnt;

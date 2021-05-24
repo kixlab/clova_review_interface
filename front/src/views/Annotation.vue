@@ -67,6 +67,13 @@ export default {
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
-  }
+
+  },
+  mounted() {
+    this.$store.dispatch('getStatus');
+    console.log("Hi")
+    console.log(this.state);
+  },
+
 }
 </script>
