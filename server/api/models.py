@@ -128,6 +128,6 @@ class Status(models.Model):
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     status=models.BooleanField(default=False)
     def __str__(self):
-        return self.user.username+'-'+self.document+'-'+str(self.status)
+        return self.user.username+'-'+str(self.document)+'-'+str(self.status)
 
 
