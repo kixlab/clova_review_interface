@@ -15,5 +15,6 @@ urlpatterns = [
     path('save-annotation/', views.saveAnnotation),
     path('delete-annotation/', views.deleteAnnotation),
     path('update-status/', views.updateStatus),
+    path('get-status/', views.getStatus),
     path('submit/', views.submit),
 ]

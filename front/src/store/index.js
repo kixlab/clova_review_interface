@@ -49,7 +49,7 @@ export default new Vuex.Store({
     },
     image_no: state =>{
       return state.image_order
-    }
+    },
   },
   modules: {
     images,

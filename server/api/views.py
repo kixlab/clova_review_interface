@@ -252,3 +252,18 @@ def updateStatus(request):
 
 
 
+@csrf_exempt
+def getStatus(request):
+    if request.method=='GET':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        documents=Document.objects.filter(doctype=doctype)
+        status=[doc.status for doc in documents]
+
+        return JsonResponse({'status': status})
+
+
+

@@ -48,10 +48,12 @@ import InstructionButton from '@/components/InstructionButton.vue'
 import OverviewButton from '@/components/OverviewButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
+import Progress from '@/components/Progress.vue'
 
 export default {
   name: 'Home',
   components: {
+    Progress,
     ImagePanel,
     AnnotationStatus,
     SubmitButton,
