@@ -38,6 +38,7 @@ export default new Vuex.Store({
       console.log(payload.idx, payload.val);
       console.log(state.annot_status[payload.idx]);
       state.annot_status[payload.idx]=payload.val
+      console.log(state.annot_status[payload.idx]);
     }
   },
   getters: {
