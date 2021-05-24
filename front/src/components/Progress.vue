@@ -3,14 +3,7 @@
    <tbody>
     <tr>
       <td
-        v-for="doc in documents1"
-        :key="doc.no"
-      >#{{doc.no}}
-      </td>
-    </tr>
-    <tr>
-      <td
-        v-for="doc in documents2"
+        v-for="doc in docs"
         :key="doc.no"
       >#{{doc.no}}
       </td>
@@ -29,8 +22,7 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      documents1: new Array(10).fill(0),
-      documents2: new Array(10).fill(0)
+      docs: new Array(20).fill({'no': 1, 'status': true}),
     };
   },
 
