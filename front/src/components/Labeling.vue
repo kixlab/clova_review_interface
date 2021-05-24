@@ -311,18 +311,15 @@ export default {
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
           var currImageBox = self.$store.getters.getImageBoxes
-          console.log(currImageBox);
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
             var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
             for(var id in ids){
               var box_id=parseInt(ids[id])
-              console.log(box_id, currImageBox[box_id])
               var currBox=currImageBox[box_id]
-              if(currBox.box_id!=box_id){
+              if((currBox.box_id!=box_id)||(currBox==undefined)){
                 currBox=currImageBox[box_id-1];
-                console.log('adjusted');
               }
               currBox.annotated=true
               group.push(currBox)
