@@ -310,7 +310,7 @@ export default {
       loadAnnotatedBoxes(annotations){
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
-          var currImageBox = this.$store.getters.getImageBoxes
+          var currImageBox = self.$store.getters.getImageBoxes
           for (var gno in annotations){
             var agroup=annotations[gno]
             var group=[]
