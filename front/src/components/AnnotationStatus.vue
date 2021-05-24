@@ -152,9 +152,7 @@ export default {
             image_id: self.$store.state.image_order,
             status: false
           }).then(function () {
-            console.log("Hirooo");
-            console.log(self.$parent.$options)
-            self.$parent.$options.methods.updateStatus();
+            self.$store.commit('update_a_status',self.$store.state.image_order, false);
           });
         }
 

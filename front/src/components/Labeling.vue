@@ -301,7 +301,7 @@ export default {
             image_id: self.$store.state.image_order,
             status: true
           }).then(function () {
-            self.$parent.$options.methods.updateStatus();
+            self.$store.commit('update_a_status',self.$store.state.image_order, true);
           });
         }
 
