@@ -26,6 +26,7 @@ export default {
     stats () {
       console.log('stats reloading');
       console.log(this.$store.state.annot_status);
+      console.log('stats reloaded');
         return this.$store.state.annot_status
     }      
 }

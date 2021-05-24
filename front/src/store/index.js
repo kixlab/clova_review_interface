@@ -34,7 +34,6 @@ export default new Vuex.Store({
       state.annot_status=status
     },
     update_a_status(state, payload){
-      console.log(state, payload);
       state.annot_status[payload.idx]=payload.val
     }
   },
