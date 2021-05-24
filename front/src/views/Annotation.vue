@@ -16,6 +16,7 @@
 
     <v-main>
       <v-container fluid fill-height>
+        <progress/>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
         <v-col cols="5">
@@ -49,6 +50,7 @@ import OverviewButton from '@/components/OverviewButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
+import Progress from '../components/Progress.vue'
 
 export default {
   name: 'Home',
@@ -60,7 +62,8 @@ export default {
     InstructionButton,
     OverviewButton,
     Labeling,
-    BoxSelectionStatus,
+    BoxSelectionStatus
+    Progress,
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
