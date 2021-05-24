@@ -153,7 +153,7 @@ export default {
             status: false
           }).then(function () {
             console.log("Hirooo");
-            self.$parent.updateStatus();
+            self.$parent.$options.methods.updateStatus();
           });
         }
 
