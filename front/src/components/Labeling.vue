@@ -293,6 +293,18 @@ export default {
         self.category='';
         self.sel_category=null;
         self.subcategory='';
+
+        if(this.$store.getters.getIfAllBoxesAnnotated){
+          axios.post(self.$store.state.server_url + "/api/update-status/", {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order,
+            status: true
+          }).then(function () {
+            console.log("Doc status updated as TRUE")
+          });
+        }
+
       },
 
       loadAnnotatedBoxes(annotations){

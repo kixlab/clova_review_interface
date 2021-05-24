@@ -144,6 +144,18 @@ export default {
         self.updateImageBoxes(self.image_box)
         self.updateAnnotatedBoxes([group, "remove"])
       });
+
+      if(!this.$store.getters.getIfAllBoxesAnnotated){
+          axios.post(self.$store.state.server_url + "/api/update-status/", {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order,
+            status: false
+          }).then(function () {
+            console.log("Doc status updated as FALSE")
+          });
+        }
+
     },
 
     reset() {

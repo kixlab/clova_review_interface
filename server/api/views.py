@@ -230,3 +230,23 @@ def submit(request):
             'step': len(donedocs)
         }
         return JsonResponse(response)
+
+
+@csrf_exempt
+def updateStatus(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        image_id = query_json['image_id']
+        status= query_json['status']
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        user = User.objects.get(username=username)
+        print(status)
+        print(status==True)
+        return HttpResponse('')
+
+
+
