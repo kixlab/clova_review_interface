@@ -16,14 +16,7 @@ export default new Vuex.Store({
     mturk_id: null,
     server_url: 'http://3.34.46.125:8000',
     image_order: 0,
-    annot_status: axios.get(state.server_url + "/api/get-status",{
-                  params:{
-                      mturk_id: state.mturk_id,
-                      doctype: self.$route.params.docType
-                    }
-                  }).then(function(res){
-                    return res.data.status
-                    })  
+    annot_status: new Array(20).fill(false) 
   },
   mutations: {
     set_image_count (state, cnt) {

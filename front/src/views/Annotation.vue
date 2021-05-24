@@ -52,6 +52,7 @@ import OverviewButton from '@/components/OverviewButton.vue'
 import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
+import axiox from 'axios'
 
 export default {
   name: 'Home',
@@ -69,5 +70,28 @@ export default {
     this.$helpers.isWrongAccess(this)
 
   },
+  mounted(){
+    const self=this;
+    axois.get(self.$store.state.server_url+'/api/get-status/', {
+      params: {
+          mturk_id: self.$store.state.mturk_id,
+          doctype: self.$route.params.docType
+        }
+      }).then(function (res) {
+        console.log(res.data)
+
+    })
+
+    self.$store.commit('update_status', )
+      self.$helpers.server_get(self, "/api/check-user", 
+        function(self, res){
+          if (res.data.consent_agreed === false){
+            self.$router.push('/informed-consent')
+          } else if (res.data.step < 20) {
+            self.$router.push('/instruction')
+          } else {
+            self.$router.push('/after-done')
+          }
+  }
 }
 </script>
