@@ -17,7 +17,7 @@
     <v-main>
       <v-container fluid fill-height>
         <v-row>
-          <progress/>
+          <Progress/>
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
