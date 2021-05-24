@@ -24,6 +24,8 @@ export default {
   },
   computed: {
     stats () {
+      console.log('stats reloading');
+      console.log(this.$store.state.annot_status);
         return this.$store.state.annot_status
     }      
 }
