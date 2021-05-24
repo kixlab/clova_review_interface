@@ -2,7 +2,8 @@
  <table class='center'>
    <tbody>
     <tr>
-      <td v-for="(doc, index) in docs" :key='index'>
+      <td v-for="(status, index) in stats" :key='index'
+          v-bind:class='status? done:yet'>
           #{{index+1}}
         </td>
     </tr>
@@ -20,7 +21,7 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      docs: new Array(20).fill({'status': true}),
+      stats: new Array(20).fill({'status': true}),
     };
   },
 
@@ -41,5 +42,17 @@ export default {
 <style scoped>
 .center{
   margin:auto;
+  min-width: 80% !important;
+}
+td{
+  margin: auto;
+  border: 1px solid grey;
+}
+.done{
+  background-color: rgba(79, 192, 79, 0.548);
+}
+
+.yet{
+  background-color: rgba(192, 79, 79, 0.548);
 }
 </style>
