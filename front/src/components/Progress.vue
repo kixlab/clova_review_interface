@@ -45,15 +45,5 @@ export default {
       self.doc_status=res.data.status;
       })
   },
-
-  watch:{
-    image_no: {
-      deep: true,
-      handler(){
-        this.loadNewImage();
-      }
-    }
-    
-  },
 };
 </script>
