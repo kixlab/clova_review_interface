@@ -259,9 +259,9 @@ def getStatus(request):
         user = User.objects.get(username=username)
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
-        
+
         documents=Document.objects.filter(doctype=doctype)
-        status=[doc.status for doc in documents]
+        status=[stat.status for stat in Status.objects.filter(document=document, user=user) for document in documents]
 
         return JsonResponse({'status': status})
 
