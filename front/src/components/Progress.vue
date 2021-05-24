@@ -1,6 +1,5 @@
 <template>
- <v-simple-table class='center'>
-   <template v-slot:default>
+ <table class='center'>
    <tbody>
     <tr>
       <td v-for="(doc, index) in docs" :key='index'>
@@ -8,8 +7,7 @@
         </td>
     </tr>
    </tbody>
-    </template>
- </v-simple-table>
+ </table>
 </template>
 
 
