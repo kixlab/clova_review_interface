@@ -302,6 +302,7 @@ export default {
             status: true
           }).then(function () {
             self.$store.commit('update_a_status',self.$store.state.image_order, true);
+            console.log(self.$store.state);
           });
         }
 

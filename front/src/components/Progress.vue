@@ -22,7 +22,7 @@ export default {
       image_order: this.$store.state.image_order,
       stats: this.$store.state.annot_status
     };
-  },
+  }
 };
 </script>
 
