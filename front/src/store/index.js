@@ -38,9 +38,9 @@ export default new Vuex.Store({
   actions: {
     getStatus({commit}){
       const self=this;
-      axios.get(self.$state.server_url + "/api/get-status",{
+      axios.get(state.server_url + "/api/get-status",{
         params:{
-            mturk_id: self.$state.mturk_id,
+            mturk_id: state.mturk_id,
             doctype: self.$route.params.docType
           }
         }).then(function(res){
