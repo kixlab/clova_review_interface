@@ -33,7 +33,7 @@ export default {
         doctype: self.$route.params.docType
       }
     }).then(function(res){
-      stats=res.data.status;
+      self.stats=res.data.status;
       })
   },
 };
