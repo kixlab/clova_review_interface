@@ -20,7 +20,6 @@ export default {
   data() {
     return {
       image_order: this.$store.state.image_order,
-      status: this.$store.state.annot_status
     };
   },
   watch:{
