@@ -70,17 +70,21 @@ export default {
     this.$helpers.isWrongAccess(this)
 
   },
+  methods:{
+    updateStatus(){
+      const self=this;
+      axios.get(self.$store.state.server_url+'/api/get-status/', {
+        params: {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+          }
+        }).then(function (res) {
+          self.$store.commit('update_status',res.data.status);
+      })
+    }
+  },
   mounted(){
-    const self=this;
-    axios.get(self.$store.state.server_url+'/api/get-status/', {
-      params: {
-          mturk_id: self.$store.state.mturk_id,
-          doctype: self.$route.params.docType
-        }
-      }).then(function (res) {
-        self.$store.commit('update_status',res.data.status);
-
-    })
+    this.updateStatus();
   }
 }
 </script>

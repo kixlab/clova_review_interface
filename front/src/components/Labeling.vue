@@ -301,7 +301,7 @@ export default {
             image_id: self.$store.state.image_order,
             status: true
           }).then(function () {
-            console.log("Doc status updated as TRUE")
+            self.$parent.updateStatus();
           });
         }
 
