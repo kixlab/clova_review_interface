@@ -4,6 +4,7 @@ import createPersistedState from "vuex-persistedstate";
 import router from '../router'
 import images from './modules/images'
 import workers from './modules/workers'
+import axios from "axois"
 
 Vue.use(Vuex)
 
@@ -42,7 +43,7 @@ export default new Vuex.Store({
       const self=this;
       axios.get(state.server_url + "/api/get-status",{
         params:{
-            mturk_id: self.$store.state.mturk_id,
+            mturk_id: state.mturk_id,
             doctype: self.$route.params.docType
           }
         }).then(function(res){
