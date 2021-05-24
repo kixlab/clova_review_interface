@@ -78,7 +78,7 @@ export default {
           doctype: self.$route.params.docType
         }
       }).then(function (res) {
-        console.log(res.data);
+        self.$store.commit('update_status',res.data.status);
 
     })
   }
