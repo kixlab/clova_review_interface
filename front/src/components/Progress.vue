@@ -26,7 +26,7 @@ export default {
     status: {
       deep: true,
       handler(){
-        this.status=this.$store.state.annot_status;
+        this.stats=this.$store.state.annot_status;
       }
     }
     
