@@ -34,11 +34,7 @@ export default new Vuex.Store({
       state.annot_status=status
     },
     update_a_status(state, payload){
-      console.log('updateing stat', payload)
-      console.log(payload.idx, payload.val);
-      console.log(state.annot_status[payload.idx]);
       state.annot_status[payload.idx]=payload.val
-      console.log(state.annot_status[payload.idx]);
     }
   },
   getters: {
@@ -59,6 +55,9 @@ export default new Vuex.Store({
     image_no: state =>{
       return state.image_order
     },
+    status: state=>{
+      return state.annot_status
+    }
   },
   modules: {
     images,

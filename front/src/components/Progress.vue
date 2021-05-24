@@ -13,22 +13,25 @@
 
 
 <script>
-//import {mapActions, mapGetters} from 'vuex';
-
 export default {
   name: "Progress",
   data() {
     return {
       image_order: this.$store.state.image_order,
+      status: this.$store.state.annot_status
     };
   },
+  watch:{
+    status: {
+      deep: true,
+      handler(){
+        this.status=this.$store.state.annot_status;
+      }
+    }
+    
+  },
   computed: {
-    stats () {
-      console.log('stats reloading');
-      console.log(this.$store.state.annot_status);
-      console.log('stats reloaded');
-        return this.$store.state.annot_status
-    }      
+    ...mapGetters(['status'])
 }
 };
 </script>
