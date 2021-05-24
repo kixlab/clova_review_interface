@@ -4,7 +4,6 @@ import createPersistedState from "vuex-persistedstate";
 import router from '../router'
 import images from './modules/images'
 import workers from './modules/workers'
-import axios from "axios"
 
 Vue.use(Vuex)
 
