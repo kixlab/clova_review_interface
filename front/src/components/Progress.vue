@@ -1,5 +1,5 @@
 <template>
- <v-simple-table>
+ <v-simple-table class='center'>
    <template v-slot:default>
    <tbody>
     <tr>
@@ -39,3 +39,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.center{
+  margin:auto;
+}
+</style>
