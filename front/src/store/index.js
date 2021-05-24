@@ -20,6 +20,7 @@ export default new Vuex.Store({
   },
   created() {
     this.$store.dispatch('getStatus');
+    console.log(this.state);
   },
   mutations: {
     set_image_count (state, cnt) {
