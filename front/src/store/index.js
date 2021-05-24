@@ -20,6 +20,7 @@ export default new Vuex.Store({
   },
   mounted() {
     this.$store.dispatch('getStatus');
+    console.log("Hi")
     console.log(this.state);
   },
   mutations: {

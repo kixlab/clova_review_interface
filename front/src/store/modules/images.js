@@ -59,7 +59,7 @@ const actions = {
         
         if(json[0].valid_line==undefined){
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
-            console.log(validData)
+            //console.log(validData)
             const processedData = validData.map(function(i) {
                 if(i.box_id==undefined){
                     return {
