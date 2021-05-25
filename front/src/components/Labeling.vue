@@ -303,7 +303,7 @@ export default {
           }).then(function () {
             self.setAStatus({
               'idx':self.$store.state.image_order,
-              'val':false
+              'val':true
             });
           });
         }
