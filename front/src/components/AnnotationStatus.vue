@@ -145,22 +145,19 @@ export default {
         self.updateAnnotatedBoxes([group, "remove"])
       });
 
-      console.log(self.image_box);
-      console.log(this.$store.getters.getIfAllBoxesAnnotated, "status");
-      if(!this.$store.getters.getIfAllBoxesAnnotated){
-          axios.post(self.$store.state.server_url + "/api/update-status/", {
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order,
-            status: false
-          }).then(function () {
-            console.log('set status false')
-            self.$store.commit('update_a_status',{
-              'idx':self.$store.state.image_order,
-              'val':false
-            });
-          });
-        }
+      axios.post(self.$store.state.server_url + "/api/update-status/", {
+        mturk_id: self.$store.state.mturk_id,
+        doctype: self.$route.params.docType,
+        image_id: self.$store.state.image_order,
+        status: false
+      }).then(function () {
+        console.log('set status false')
+        self.$store.commit('update_a_status',{
+          'idx':self.$store.state.image_order,
+          'val':false
+        });
+      });
+  
 
     },
 
