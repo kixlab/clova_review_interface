@@ -3,7 +3,7 @@
    <tbody>
     <tr>
       <td v-for="(status, index) in stats" :key='index'
-          v-bind:class='{done:(status==true)}'>
+          v-bind:class='{done:(status==true), yet:(status==false)}'>
           #{{index+1}}
         </td>
     </tr>
