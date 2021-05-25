@@ -80,7 +80,6 @@ export default {
           }
         }).then(function (res) {
           self.$store.commit('update_status',res.data.status);
-          console.log(res.data.status);
       })
     }
   },
