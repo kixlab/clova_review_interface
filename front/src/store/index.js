@@ -34,7 +34,9 @@ export default new Vuex.Store({
       state.annot_status=status
     },
     update_a_status(state, payload){
+      console.log('before', state.annot_status)
       state.annot_status[payload.idx]=payload.val
+      console.log('after', state.annot_status)
     }
   },
   getters: {
