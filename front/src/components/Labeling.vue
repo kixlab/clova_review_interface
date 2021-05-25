@@ -215,7 +215,7 @@ export default {
       self.loadAnnotatedBoxes(annotations);})},1000);
   },
   methods: {
-      ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
+      ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus']),
       ...mapGetters(['getImageBoxes']),
 
       selectCategory(selectedCategory){
@@ -301,10 +301,10 @@ export default {
             image_id: self.$store.state.image_order,
             status: true
           }).then(function () {
-            self.$store.commit('update_a_status',{
+            self.setAStatus({
               'idx':self.$store.state.image_order,
-              'val':true
-              });
+              'val':false
+            });
           });
         }
 

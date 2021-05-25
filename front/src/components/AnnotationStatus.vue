@@ -103,7 +103,7 @@ export default {
 
 
   methods: {
-    ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes']),
+    ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setStatus', 'setAStatus']),
     ...mapGetters(['getImageBoxes']),
 
     highlight(item) { item.hover = true },
@@ -152,7 +152,7 @@ export default {
         status: false
       }).then(function () {
         console.log('set status false')
-        self.$store.commit('update_a_status',{
+        self.setAStatus({
           'idx':self.$store.state.image_order,
           'val':false
         });
