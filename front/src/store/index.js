@@ -61,9 +61,11 @@ export default new Vuex.Store({
   },
   actions:{
     setStatus({commit}, status){
+      console.log('setStatus called with', status)
       commit('update_status', status)
     },
     setAStatus({commit}, payload){
+      console.log('setAStatus called with', payload)
       commit('update_a_status', payload)
     }
   },
