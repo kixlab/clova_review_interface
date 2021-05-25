@@ -27,6 +27,8 @@ export default {
     this.$store.subscribeAction((action) => {
         if (action.type === 'setStatus' || action.type==='setAStatus') {
             this.stats = this.$store.state.annot_status
+            console.log('stats updated')
+            console.log(this.stats)
         }
     })
 
