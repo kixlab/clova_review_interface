@@ -23,17 +23,14 @@ export default {
       stats: this.$store.state.annot_status
     };
   },
-  computed:{
-    ...mapGetters(['status']),
+  mounted() {
+    this.$store.subscribeAction((action) => {
+        if (action.type === 'setStatus' || action.type==='setAStatus') {
+            this.stats = this.$store.state.annot_status
+        }
+    })
 
-  },
-  watch:{
-    status:{
-      deep: true,
-      handler(){
-        console.log("Hi")
-        this.$forceUpdate();
-  }}},
+  }
 };
 </script>
 

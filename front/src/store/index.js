@@ -59,6 +59,14 @@ export default new Vuex.Store({
       return state.annot_status
     }
   },
+  actions:{
+    setStatus({commit}, status){
+      commit('update_status', status)
+    },
+    setAStatus({commit}, payload){
+      commit('update_a_status', payload)
+    }
+  },
   modules: {
     images,
     workers,
