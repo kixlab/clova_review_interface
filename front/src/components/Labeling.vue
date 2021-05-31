@@ -21,7 +21,7 @@
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
                   <b>{{category.cat}}</b> 
-                  <v-btn x-small class='rev-btn'>
+                  <v-btn v-if="category.usermade" x-small class='rev-btn'>
                     <v-icon
                       x-small
                       color='indigo'
@@ -251,7 +251,7 @@ export default {
             image_id: self.$store.state.image_order,
             cat: newcat
           }).then(function (res) {
-            self.cats.push({cat: newcat, pk:res.data.newcat_pk});
+            self.cats.push({cat: newcat, pk:res.data.newcat_pk,usermade:true, rev:false});
           });                
       },
        addSubCategory(){
@@ -269,7 +269,7 @@ export default {
             subcat: newsubcat,
             description: newdesc
           }).then(function (res) {
-            self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
+            self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk, usermade:true, rev:false});        
           });
       },
       resetAddState(){
@@ -455,7 +455,10 @@ export default {
 
 .rev-btn{
   margin: 0 !important;
-
+  padding: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
 }
 
 th {
