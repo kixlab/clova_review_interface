@@ -20,7 +20,15 @@
                 color="indigo"
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
-                  <b>{{category.cat}}</b>
+                  <b>{{category.cat}}</b> 
+                  <v-btn x-small outlined color='indigo'>
+                    <v-icon
+                      large
+                      color="green darken-2"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </v-btn>
                 </v-list-item>
                 <v-list-item v-if="isAdding">
                   <v-text-field label="new category" id='newCat'></v-text-field>
@@ -243,7 +251,6 @@ export default {
             image_id: self.$store.state.image_order,
             cat: newcat
           }).then(function (res) {
-            console.log('cat added', res.data)
             self.cats.push({cat: newcat, pk:res.data.newcat_pk});
           });                
       },
@@ -262,9 +269,42 @@ export default {
             subcat: newsubcat,
             description: newdesc
           }).then(function (res) {
-            console.log('newsub added', res.data)
             self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
           });
+      },
+      resetAddState(){
+        for (cat in this.cats){
+          cat.rev=false;
+        }
+      },
+      cancelCatRev(cat_pk){
+        for (cat in this.cats){
+          if(cat.pk=cat_pk){
+            cat.rev=false;
+          }
+        }
+
+      },
+      initCatRev(cat_pk){
+        for (cat in this.cats){
+          if(cat.pk=cat_pk){
+            cat.rev=true;
+          }
+        }
+      },
+      cancelSubRev(subcat_pk){
+        for (subcat in this.subcats){
+          if(subcat.pk=subcat_pk){
+            subcat.rev=false;
+          }
+        }
+      },
+      initSubRev(){
+        for (subcat in this.subcats){
+          if(subcat.pk=subcat_pk){
+            subcat.rev=true;
+          }
+        }
       },
       cancelAdd(){
         this.addcat=false;
