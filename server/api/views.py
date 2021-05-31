@@ -111,7 +111,7 @@ def getCats(request):
         for usercat in usercats:
             cats.append({'cat': usercat.cat_text, 'pk': usercat.pk, 'usermade': (usercat.made_at!=9999), 'rev':False})
             for subcat in UserSubcat.objects.filter(usercat=usercat):
-                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False})
+                subcats.append({'cat': subcat.usercat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False})
         response = {
             'cats': cats,
             'subcats': subcats
@@ -312,7 +312,37 @@ def addSubcat(request):
         }
         return JsonResponse(response)
 
+@csrf_exempt
+def reviseCat(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        cat_pk= query_json['cat_pk']
+        revcat=query_json['revcat']
 
+        doctype=DocType.objects.get(doctype=doctypetext)
+        user = User.objects.get(username=username)
+
+        UserCat.objects.get(user=user, doctype=doctype, pk=int(cat_pk)).update(cat_text=revcat)
+        return HttpResponse('')
+
+
+@csrf_exempt
+def reviseSubcat(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        subcat_pk= query_json['subcat_pk']
+        revsubcat=query_json['revsubcat']
+        revdesc=query_json['revdesc']
+
+        doctype=DocType.objects.get(doctype=doctypetext)
+        user = User.objects.get(username=username)
+
+        UserSubcat.objects.get(user=user, doctype=doctype, pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
+        return HttpResponse('')
 
 
 

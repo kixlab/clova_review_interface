@@ -54,16 +54,25 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="item in subcats.filter(e=>e.label == category.cat)" :key="item.pk" @click="annotate(item)">
-                  <b>{{item.sublabel}} </b>: {{item.description}}
-                  <v-btn v-if="item.usermade" x-small class='rev-btn'>
-                    <v-icon
-                      x-small
-                      color='indigo'
-                    >
-                      mdi-pencil
-                    </v-icon>
-                  </v-btn>
+                <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk" @click="annotate(subcat)">
+                  <span v-if="!subcat.rev">
+                    <b>{{subcat.subcat}}</b> 
+                    <v-btn v-if="item.usermade" x-small class='rev-btn' v-on:click.stop="initSubRev(subcat.pk)">
+                      <v-icon
+                        x-small
+                        color='indigo'
+                      >
+                        mdi-pencil
+                      </v-icon>
+                    </v-btn>
+                  </span>
+                  <span v-if="subcat.rev" class='rev-div'>
+                    <v-text-field :placeholder="subcat.subcat" :id='"revsubcat_"+subcat.pk'></v-text-field>
+                    :
+                    <v-text-field :placeholder="subcat.description" :id='"revdesc_"+subat.pk'></v-text-field>
+                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revSubcat(subcat.pk)">V</v-btn>
+                    <v-btn x-small outlined color="red" v-on:click.stop="cancelSubRev(subcat.pk)">X</v-btn>
+                  </span>
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
                   <v-text-field label="new subcategory" id='newSubCat'></v-text-field>
@@ -336,10 +345,31 @@ export default {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 cat_pk: cat_pk,
-                newcat: revcat
+                revcat: revcat
               }).then(function () {
                 cat.cat=revcat;
                 cat.rev=false;
+            });
+          }
+        }
+      },
+      revSubcat(subcat_pk){
+        var revsubcat=document.getElementById('revsubcat_'+String(subcat_pk)).value;
+        var revdesc=document.getElementById('revdesc_'+String(subcat_pk)).value;
+        const self=this;
+        for (var idx in this.subcats){
+          var subcat=this.subcats[idx]
+          if(subcat.pk==subcat_pk){
+            axios.post(self.$store.state.server_url + "/api/revise-subcat/", {
+                mturk_id: self.$store.state.mturk_id,
+                doctype: self.$route.params.docType,
+                subcat_pk: subcat_pk,
+                revsubcat: revsubcat,
+                revdesc: revdesc
+              }).then(function () {
+                subcat.sublabel=revsubcat;
+                subcat.description=revdesc;
+                subcat.rev=false;
             });
           }
         }

@@ -12,6 +12,8 @@ urlpatterns = [
     path('get-cats/',views.getCats),
     path('add-cat/', views.addCat),
     path('add-subcat/', views.addSubcat),
+    path('revise-cat/', views.reviseCat),
+    path('revise-subcat/', views.reviseSubcat),
     path('get-image-id/', views.getImageID),
     path('get-annotations/',views.getAnnotations),
     path('save-annotation/', views.saveAnnotation),
