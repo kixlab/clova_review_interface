@@ -371,6 +371,7 @@ export default {
                 subcat.subcat=revsubcat;
                 subcat.description=revdesc;
                 subcat.rev=false;
+                console.log(subcat.rev);
             });
           }
         }
