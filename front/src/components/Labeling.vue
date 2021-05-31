@@ -32,7 +32,7 @@
                     </v-btn>
                   </span>
                   <span v-if="category.rev" class='rev-div'>
-                    <v-text-field :placeholder="category.cat" :id="'revcat_'+category.pk"></v-text-field>
+                    <v-text-field :value="category.cat" :id="'revcat_'+category.pk"></v-text-field>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revCat(category.pk)">V</v-btn>
                     <v-btn x-small outlined color="red" v-on:click.stop="cancelCatRev(category.pk)">X</v-btn>
                   </span>
@@ -67,9 +67,9 @@
                     </v-btn>
                   </span>
                   <span v-if="subcat.rev" class='rev-div'>
-                    <v-text-field :placeholder="subcat.subcat" :id='"revsubcat_"+subcat.pk'></v-text-field>
+                    <v-text-field :value="subcat.subcat" :id='"revsubcat_"+subcat.pk'></v-text-field>
                     :
-                    <v-text-field :placeholder="subcat.description" :id='"revdesc_"+subcat.pk'></v-text-field>
+                    <v-text-field :value="subcat.description" :id='"revdesc_"+subcat.pk'></v-text-field>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revSubcat(subcat.pk)">V</v-btn>
                     <v-btn x-small outlined color="red" v-on:click.stop="cancelSubRev(subcat.pk)">X</v-btn>
                   </span>
