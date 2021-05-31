@@ -2,8 +2,12 @@
  <table class='center'>
    <tbody>
     <tr>
-      <td v-for="(status, index) in comp_stats" :key='index'
-          v-bind:class='{done:(status==true), yet:(status==false)}' v-on:click="goTo(index);">
+      <td v-for="(status, index) in stats" :key='index'
+          :v-if="status" class='done' v-on:click="goTo(index);">
+          #{{index+1}}
+        </td>
+      <td v-for="(status, index) in stats" :key='index'
+          :v-if="!status" class='yet' v-on:click="goTo(index);">
           #{{index+1}}
         </td>
     </tr>
@@ -39,11 +43,6 @@ export default {
         this.$store.commit('set_image_count', imgNo);
         this.image_box = this.$store.getters.getImageBoxes;
       },
-  },
-  computed:{
-    comp_stats(){
-      return this.$store.state.annot_status
-    }
   }
 };
 </script>
