@@ -368,10 +368,11 @@ export default {
                 revdesc: revdesc
               }).then(function () {
                 console.log('subcat revised')
-                self.subcats[idx].rev=false;
-                self.subcats[idx].subcat=revsubcat;
-                self.subcats[idx].description=revdesc;
-                console.log(subcat.rev);
+                console.log(subcat);
+                subcat.rev=false;
+                subcat.subcat=revsubcat;
+                subcat.description=revdesc;
+                console.log(subcat);
             });
           }
         }
