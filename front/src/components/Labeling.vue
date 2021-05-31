@@ -21,7 +21,7 @@
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
                   <b>{{category.cat}}</b> 
-                  <v-btn x-small color='transparent'>
+                  <v-btn x-small class='rev-btn'>
                     <v-icon
                       x-small
                       color='indigo'
@@ -451,6 +451,11 @@ export default {
 }
 .btn {
   margin-left: 1rem;
+}
+
+.rev-btn{
+  margin: 0 !important;
+
 }
 
 th {
