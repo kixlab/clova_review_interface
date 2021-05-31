@@ -49,6 +49,14 @@
               >
                 <v-list-item v-for="item in subcats.filter(e=>e.label == category.cat)" :key="item.pk" @click="annotate(item)">
                   <b>{{item.sublabel}} </b>: {{item.description}}
+                  <v-btn v-if="item.usermade" x-small class='rev-btn'>
+                    <v-icon
+                      x-small
+                      color='indigo'
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </v-btn>
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
                   <v-text-field label="new subcategory" id='newSubCat'></v-text-field>
