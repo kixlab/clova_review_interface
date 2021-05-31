@@ -20,15 +20,22 @@
                 color="indigo"
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
-                  <b>{{category.cat}}</b> 
-                  <v-btn v-if="category.usermade" x-small class='rev-btn'>
-                    <v-icon
-                      x-small
-                      color='indigo'
-                    >
-                      mdi-pencil
-                    </v-icon>
-                  </v-btn>
+                  <span v-if="!category.rev">
+                    <b>{{category.cat}}</b> 
+                    <v-btn v-if="category.usermade" x-small class='rev-btn' v-on:click.stop="initCatRev(category.pk)">
+                      <v-icon
+                        x-small
+                        color='indigo'
+                      >
+                        mdi-pencil
+                      </v-icon>
+                    </v-btn>
+                  </span>
+                  <span v-if="category.rev">
+                    <v-text-field aria-placeholder='category.cat' id='newCat'></v-text-field>
+                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revCat(category.pk)">V</v-btn>
+                    <v-btn x-small outlined color="red" v-on:click.stop="cancelCatRev(category.pk)">X</v-btn>
+                  </span>
                 </v-list-item>
                 <v-list-item v-if="isAdding">
                   <v-text-field label="new category" id='newCat'></v-text-field>
@@ -314,10 +321,14 @@ export default {
           }
         }
       },
+      revCat(cat_pk){
+        console.log("Hi", cat_pk);
+
+      },
+
       cancelAdd(){
         this.addcat=false;
       },
-
       add() {
         this.$refs.form.validate()
         
@@ -467,6 +478,8 @@ export default {
   outline: 0 !important;
   box-shadow: none !important;
   background-color: transparent !important;
+  right: 0 !important;
+  position: absolute;
 }
 
 th {
