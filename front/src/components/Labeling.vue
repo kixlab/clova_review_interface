@@ -273,12 +273,12 @@ export default {
           });
       },
       resetAddState(){
-        for (cat in this.cats){
+        for (var cat in this.cats){
           cat.rev=false;
         }
       },
       cancelCatRev(cat_pk){
-        for (cat in this.cats){
+        for (var cat in this.cats){
           if(cat.pk=cat_pk){
             cat.rev=false;
           }
@@ -286,21 +286,21 @@ export default {
 
       },
       initCatRev(cat_pk){
-        for (cat in this.cats){
+        for (var cat in this.cats){
           if(cat.pk=cat_pk){
             cat.rev=true;
           }
         }
       },
       cancelSubRev(subcat_pk){
-        for (subcat in this.subcats){
+        for (var subcat in this.subcats){
           if(subcat.pk=subcat_pk){
             subcat.rev=false;
           }
         }
       },
       initSubRev(){
-        for (subcat in this.subcats){
+        for (var subcat in this.subcats){
           if(subcat.pk=subcat_pk){
             subcat.rev=true;
           }
