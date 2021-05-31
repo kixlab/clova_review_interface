@@ -42,7 +42,7 @@ export default {
   },
   computed:{
     comp_stats(){
-      return this.stats
+      return this.$store.state.annot_status
     }
   }
 };
