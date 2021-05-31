@@ -235,6 +235,8 @@ export default {
       addCategory(){
         this.addcat=false;
         var newcat=document.getElementById('newCat').value;
+        const self = this;
+
         axios.post(self.$store.state.server_url + "/api/add-cat/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
@@ -242,7 +244,7 @@ export default {
             cat: newcat
           }).then(function (res) {
             console.log('cat added', res.data)
-            this.cats.push({cat: newcat, pk:res.data.newcat_pk});
+            self.cats.push({cat: newcat, pk:res.data.newcat_pk});
           });                
       },
        addSubCategory(){
@@ -250,6 +252,8 @@ export default {
         var newsubcat=document.getElementById('newSubCat').value;
         var newdesc=document.getElementById('newDesc').value;
         var cat=this.category;
+        const self = this;
+
         axios.post(self.$store.state.server_url + "/api/add-subcat/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
@@ -258,7 +262,7 @@ export default {
             subcat: newsubcat,
             description: newdesc
           }).then(function (res) {
-            this.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
+            self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
           });
       },
       cancelAdd(){
