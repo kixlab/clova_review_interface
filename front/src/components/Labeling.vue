@@ -327,10 +327,15 @@ export default {
         }
       },
       revCat(cat_pk){
-        console.log("Hi", cat_pk);
-
+        var revcat=document.getElementById('revcat_'+String(cat_pk)).value;
+        for (var idx in this.cats){
+          var cat=this.cats[idx]
+          if(cat.pk==cat_pk){
+            cat.cat=revcat;
+            cat.rev=false;
+          }
+        }
       },
-
       cancelAdd(){
         this.addcat=false;
       },
