@@ -152,6 +152,8 @@ export default {
         status: false
       }).then(function () {
         console.log('set status false')
+        console.log('idx', self.$store.state.image_order)
+        console.log(self.$store.state.annot_status)
         self.setAStatus({
           'idx':self.$store.state.image_order,
           'val':false
