@@ -19,11 +19,11 @@ def checkUser(request):
                 Status(user=user, document=document, status=False).save()
             # initialize usercats
             for initcat in InitCat.objects.all():
-                UserCat(user=user, doctype=initcat.doctype, cat_no=initcat.cat_no, cat_text=initcat.cat_text).save()
+                UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text).save()
             # initialize usersubcats 
             for initsubcat in InitSubCat.objects.all():
                 usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_no=initsubcat.initcat.cat_no)
-                UserSubcat(usercat=usercat,subcat_no=initsubcat.subcat_no, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
+                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
         else: 
             user=User.objects.get(username=username)
         user, created = User.objects.get_or_create(username=username)
