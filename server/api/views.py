@@ -301,7 +301,9 @@ def addSubcat(request):
 
         doctype=DocType.objects.get(doctype=doctypetext)
         user = User.objects.get(username=username)
+        print(cat)
         cat = UserCat.objects.get(user=user, doctype=doctype, cat_text=cat)
+
 
         newSubcat=UserSubcat(usercat=cat, subcat_text=subcat, subcat_description=desc, made_at=int(image_id))
         newSubcat.save()
