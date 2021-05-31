@@ -301,6 +301,7 @@ export default {
 
       },
       initCatRev(cat_pk){
+        console.llg(this.cats)
         for (var cat in this.cats){
           if(cat.pk==cat_pk){
             cat.rev=true;
