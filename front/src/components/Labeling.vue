@@ -288,12 +288,14 @@ export default {
           });
       },
       resetAddState(){
-        for (var cat in this.cats){
+        for (var idx in this.cats){
+          var cat=this.cats[idx]
           cat.rev=false;
         }
       },
       cancelCatRev(cat_pk){
-        for (var cat in this.cats){
+        for (var idx in this.cats){
+          var cat=this.cats[idx]
           if(cat.pk==cat_pk){
             cat.rev=false;
           }
@@ -304,21 +306,22 @@ export default {
         console.log(this.cats)
         for (var idx in this.cats){
           var cat=this.cats[idx]
-          console.log(cat)
           if(cat.pk==cat_pk){
             cat.rev=true;
           }
         }
       },
       cancelSubRev(subcat_pk){
-        for (var subcat in this.subcats){
+        for (var idx in this.subcats){
+          var subcat=this.subcats[idx]
           if(subcat.pk==subcat_pk){
             subcat.rev=false;
           }
         }
       },
       initSubRev(subcat_pk){
-        for (var subcat in this.subcats){
+        for (var idx in this.subcats){
+          var subcat=this.subcats[idx]
           if(subcat.pk==subcat_pk){
             subcat.rev=true;
           }
