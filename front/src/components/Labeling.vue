@@ -391,7 +391,7 @@ export default {
         if(!revstat){
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
-        var label = item.label + "." + item.sublabel
+        var label = item.cat + "." + item.subcat
         const self = this;
 
 
@@ -416,7 +416,7 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             label:label
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{label: item.label + " - " + item.sublabel, boxes: group, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{label: item.cat + " - " + item.subcat, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
