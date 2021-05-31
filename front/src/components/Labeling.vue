@@ -299,7 +299,7 @@ export default {
           }
         }
       },
-      initSubRev(){
+      initSubRev(subcat_pk){
         for (var subcat in this.subcats){
           if(subcat.pk==subcat_pk){
             subcat.rev=true;
