@@ -302,8 +302,8 @@ export default {
       },
       initCatRev(cat_pk){
         console.log(this.cats)
-        for (var cat in this.cats){
-          console.log(cat)
+        for (var idx in this.cats){
+          var cat=this.cats[idx]
           if(cat.pk==cat_pk){
             cat.rev=true;
           }
