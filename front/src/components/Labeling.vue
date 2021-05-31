@@ -32,7 +32,7 @@
                     </v-btn>
                   </span>
                   <span v-if="category.rev">
-                    <v-text-field aria-placeholder='category.cat' id='newCat'></v-text-field>
+                    <v-text-field placeholder=category.cat id='newCat'></v-text-field>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revCat(category.pk)">V</v-btn>
                     <v-btn x-small outlined color="red" v-on:click.stop="cancelCatRev(category.pk)">X</v-btn>
                   </span>
@@ -303,7 +303,6 @@ export default {
 
       },
       initCatRev(cat_pk){
-        console.log(this.cats)
         for (var idx in this.cats){
           var cat=this.cats[idx]
           if(cat.pk==cat_pk){
