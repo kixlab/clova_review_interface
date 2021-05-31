@@ -29,6 +29,7 @@ export default {
             this.stats = this.$store.state.annot_status
             console.log('stats updated')
             console.log(this.stats)
+            
         }
     })
 
@@ -44,6 +45,8 @@ export default {
 td{
   margin: auto;
   border: 1px solid grey;
+}
+.yet{
   background-color: rgba(180, 180, 180, 0.548);
 }
 .done{

@@ -107,11 +107,13 @@ def getCats(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         usercats=UserCat.objects.filter(user=user, doctype=doctype)
         subcats=[]
+        cats=[]
         for usercat in usercats:
+            cats.append({'cat': usercat.cat_text, 'cat_pk': usercat.pk})
             for subcat in UserSubcat.objects.filter(usercat=usercat):
-                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description})
+                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk})
         response = {
-            'cats': [usercat.cat_text for usercat in usercats],
+            'cats': cats,
             'subcats': subcats
         }
         return JsonResponse(response)
@@ -267,6 +269,48 @@ def getStatus(request):
             status.append(thisStat.status)
 
         return JsonResponse({'status': status})
+
+@csrf_exempt
+def addCat(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        image_id = query_json['image_id']
+        cat= query_json['cat']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        user = User.objects.get(username=username)
+        newCat=UserCat(user=user, doctype=doctype, cat_text=cat, made_at=int(image_id))
+        newCat.save()
+        response = {
+            'newcat_pk': newCat.pk,
+        }
+        return JsonResponse(response)
+
+
+@csrf_exempt
+def addSubat(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctypetext=query_json['doctype']
+        image_id = query_json['image_id']
+        cat= query_json['cat']
+        subcat=query_json['subcat']
+        desc=query_json['description']
+
+        doctype=DocType.objects.get(doctype=doctypetext)
+        user = User.objects.get(username=username)
+        cat = UserCat.objects.get(user=user, doctype=doctype, cat_text=cat)
+
+        newSubcat=UserSubcat(usercat=cat, subcat_text=subcat, subcat_description=desc, made_at=int(image_id))
+        newSubcat.save()
+        response = {
+            'newsubcat_pk': newSubcat.pk,
+        }
+        return JsonResponse(response)
+
+
 
 
 

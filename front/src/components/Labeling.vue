@@ -19,8 +19,8 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="(category, index) in cats" :key='index' @click="selectCategory(category)">
-                  <b>{{category}}</b>
+                <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
+                  <b>{{category.cat}}</b>
                 </v-list-item>
                 <v-list-item v-if="isAdding">
                   <v-text-field label="new category" id='newCat'></v-text-field>
@@ -39,7 +39,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="(item, index) in subcats.filter(e=>e.label == category)" :key="index" @click="annotate(item)">
+                <v-list-item v-for="item in subcats.filter(e=>e.label == category)" :key="item.pk" @click="annotate(item)">
                   <b>{{item.sublabel}} </b>: {{item.description}}
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
@@ -235,13 +235,30 @@ export default {
       addCategory(){
         this.addcat=false;
         var newcat=document.getElementById('newCat').value;
-        this.cats.push(newcat);        
+        axios.post(self.$store.state.server_url + "/api/add-cat/", {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order,
+            cat: newcat
+          }).then(function (res) {
+            this.cats.push({cat: newcat, pk:res.data.newcat_pk});
+          });                
       },
        addSubCategory(){
         this.addsubcat=false;
         var newsubcat=document.getElementById('newSubCat').value;
         var newdesc=document.getElementById('newDesc').value;
-        this.subcats.push({label: this.category, sublabel: newsubcat, description: newdesc});        
+        var cat=this.category;
+        axios.post(self.$store.state.server_url + "/api/add-subcat/", {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            image_id: self.$store.state.image_order,
+            cat: cat,
+            subcat: newsubcat,
+            description: newdesc
+          }).then(function (res) {
+            this.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
+          });
       },
       cancelAdd(){
         this.addcat=false;

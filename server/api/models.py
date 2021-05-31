@@ -101,16 +101,16 @@ class InitSubCat(models.Model):
 class UserCat(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
-    cat_no=models.IntegerField()
     cat_text=models.CharField(max_length=255)
+    made_at=models.IntegerField(null=True, default=9999)
     def __str__(self):
         return self.user.username+'-'+self.doctype.doctype+"-"+str(self.cat_no)+'-'+str(self.cat_text)
 
 class UserSubcat(models.Model):
     usercat=models.ForeignKey('UserCat', on_delete=models.CASCADE)
-    subcat_no=models.IntegerField()
     subcat_text=models.CharField(max_length=255)
     subcat_description=models.CharField(max_length=255)
+    made_at=models.IntegerField(null=True, default=9999)
     def __str__(self):
         return self.usercat.user.username+'-'+str(self.subcat_no)+'-'+str(self.subcat_text)
 
