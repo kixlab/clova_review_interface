@@ -22,7 +22,7 @@ def checkUser(request):
                 UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text).save()
             # initialize usersubcats 
             for initsubcat in InitSubCat.objects.all():
-                usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype)
+                usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
                 UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
         else: 
             user=User.objects.get(username=username)
