@@ -52,7 +52,7 @@ td{
   margin: auto;
   border: 1px solid grey;
   width: 5%!important;
-  cursor:grabbing;
+  cursor:pointer !important;
 }
 .yet{
   background-color: rgba(180, 180, 180, 0.548);
