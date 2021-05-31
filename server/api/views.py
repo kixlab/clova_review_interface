@@ -341,7 +341,7 @@ def reviseSubcat(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         user = User.objects.get(username=username)
 
-        UserSubcat.objects.filter(user=user, doctype=doctype, pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
+        UserSubcat.objects.filter(user=user, pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
         return HttpResponse('')
 
 
