@@ -306,8 +306,6 @@ export default {
           var cat=this.cats[idx]
           console.log(cat)
           if(cat.pk==cat_pk){
-            console.log(cat.pk)
-            console.log(cat_pk)
             cat.rev=true;
           }
         }
