@@ -251,7 +251,7 @@ export default {
         this.addsubcat=false;
         var newsubcat=document.getElementById('newSubCat').value;
         var newdesc=document.getElementById('newDesc').value;
-        var cat=this.category;
+        var cat=this.category.cat;
         const self = this;
 
         axios.post(self.$store.state.server_url + "/api/add-subcat/", {
