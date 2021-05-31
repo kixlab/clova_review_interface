@@ -84,7 +84,13 @@ export default {
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.$helpers.server_get(self, "/api/check-user", 
-        self.$router.push('/doctypelist'))
+        function(self, res){
+          if (res.data.consent_agreed === false){
+            self.$router.push('/informed-consent')
+          } else {
+            self.$router.push('/doctypelist')
+          }
+      })
     }
   },
   mounted() {
