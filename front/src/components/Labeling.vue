@@ -56,7 +56,7 @@
               >
                 <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk" @click="annotate(subcat)">
                   <span v-if="!subcat.rev">
-                    <b>{{subcat.subcat}}</b> 
+                    <b>{{subcat.subcat}}</b>: {{subcat.description}} 
                     <v-btn v-if="subcat.usermade" x-small class='rev-btn' v-on:click.stop="initSubRev(subcat.pk)">
                       <v-icon
                         x-small
