@@ -332,6 +332,7 @@ export default {
           var subcat=this.subcats[idx]
           if(subcat.pk==subcat_pk){
             subcat.rev=true;
+            console.log('initsubrev', subcat)
           }
         }
       },
