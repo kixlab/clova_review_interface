@@ -289,7 +289,7 @@ def addCat(request):
 
 
 @csrf_exempt
-def addSubat(request):
+def addSubcat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
         username = query_json['mturk_id']
