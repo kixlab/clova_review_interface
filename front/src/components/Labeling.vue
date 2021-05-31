@@ -21,7 +21,7 @@
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
                   <b>{{category.cat}}</b> 
-                  <v-btn x-small outlined color='indigo'>
+                  <v-btn x-small color='indigo'>
                     <v-icon
                       x-small
                     >
