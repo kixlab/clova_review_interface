@@ -111,7 +111,7 @@ def getCats(request):
         for usercat in usercats:
             cats.append({'cat': usercat.cat_text, 'cat_pk': usercat.pk, 'usermade': (usercat.made_at!=9999), 'rev':False})
             for subcat in UserSubcat.objects.filter(usercat=usercat):
-                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (usercat.made_at!=9999),'rev':False})
+                subcats.append({'label': subcat.usercat.cat_text, 'sublabel':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False})
         response = {
             'cats': cats,
             'subcats': subcats
