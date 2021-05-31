@@ -23,8 +23,7 @@
                   <b>{{category.cat}}</b> 
                   <v-btn x-small outlined color='indigo'>
                     <v-icon
-                      large
-                      color="green darken-2"
+                      x-small
                     >
                       mdi-pencil
                     </v-icon>
