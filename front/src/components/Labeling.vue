@@ -279,7 +279,7 @@ export default {
       },
       cancelCatRev(cat_pk){
         for (var cat in this.cats){
-          if(cat.pk=cat_pk){
+          if(cat.pk==cat_pk){
             cat.rev=false;
           }
         }
@@ -287,21 +287,21 @@ export default {
       },
       initCatRev(cat_pk){
         for (var cat in this.cats){
-          if(cat.pk=cat_pk){
+          if(cat.pk==cat_pk){
             cat.rev=true;
           }
         }
       },
       cancelSubRev(subcat_pk){
         for (var subcat in this.subcats){
-          if(subcat.pk=subcat_pk){
+          if(subcat.pk==subcat_pk){
             subcat.rev=false;
           }
         }
       },
       initSubRev(){
         for (var subcat in this.subcats){
-          if(subcat.pk=subcat_pk){
+          if(subcat.pk==subcat_pk){
             subcat.rev=true;
           }
         }
