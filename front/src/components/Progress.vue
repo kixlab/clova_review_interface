@@ -3,7 +3,7 @@
    <tbody>
     <tr>
       <td v-for="(status, index) in stats" :key='index'
-          v-bind:class='{done:(status==true), yet:(status==false)}'>
+          v-bind:class='{done:(status==true), yet:(status==false)}' v-on:click="goTo(index);">
           #{{index+1}}
         </td>
     </tr>
@@ -33,6 +33,12 @@ export default {
         }
     })
 
+  },
+  methods:{
+      goTo: function(imgNo){
+        this.$store.commit('set_image_count', imgNo);
+        this.image_box = this.$store.getters.getImageBoxes;
+      },
   }
 };
 </script>
@@ -45,6 +51,7 @@ export default {
 td{
   margin: auto;
   border: 1px solid grey;
+  width: 5%!important;
 }
 .yet{
   background-color: rgba(180, 180, 180, 0.548);
