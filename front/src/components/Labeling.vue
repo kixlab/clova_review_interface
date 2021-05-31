@@ -21,9 +21,10 @@
               >
                 <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
                   <b>{{category.cat}}</b> 
-                  <v-btn x-small color='indigo'>
+                  <v-btn x-small color='transparent'>
                     <v-icon
                       x-small
+                      color='indigo'
                     >
                       mdi-pencil
                     </v-icon>
