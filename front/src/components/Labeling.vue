@@ -54,7 +54,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk" @click="annotate(subcat)">
+                <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk" @click="annotate(subcat, subcat.rev)">
                   <span v-if="!subcat.rev">
                     <b>{{subcat.subcat}}</b>: {{subcat.description}} 
                     <v-btn v-if="subcat.usermade" x-small class='rev-btn' v-on:click.stop="initSubRev(subcat.pk)">
@@ -387,7 +387,8 @@ export default {
         this.description = '';
       },
 
-      annotate(item) {
+      annotate(item, revstat) {
+        if(!revstat){
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
         var label = item.label + "." + item.sublabel
@@ -437,7 +438,7 @@ export default {
             });
           });
         }
-
+        }
       },
 
       loadAnnotatedBoxes(annotations){
