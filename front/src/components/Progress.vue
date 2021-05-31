@@ -2,9 +2,9 @@
  <table class='center'>
    <tbody>
     <tr>
-      <td v-for="(status, index) in stats" :key='index' v-on:click="goTo(index);">
-          <span v-if="status" class='done'> #{{index+1}}</span>
-          <span v-if="!status" class='yet'> #{{index+1}}</span>
+      <td v-for="(status, index) in stats" :key='index'
+          v-bind:class='{done:(status==true), yet:(status==false)}' v-on:click="goTo(index);">
+          #{{index+1}}
         </td>
     </tr>
    </tbody>
