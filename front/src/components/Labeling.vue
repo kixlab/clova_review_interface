@@ -367,7 +367,8 @@ export default {
                 revsubcat: revsubcat,
                 revdesc: revdesc
               }).then(function () {
-                subcat.sublabel=revsubcat;
+                console.log('subcat revised')
+                subcat.subcat=revsubcat;
                 subcat.description=revdesc;
                 subcat.rev=false;
             });
