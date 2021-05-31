@@ -39,7 +39,7 @@
                 active-class="border"
                 color="indigo"
               >
-                <v-list-item v-for="item in subcats.filter(e=>e.label == category)" :key="item.pk" @click="annotate(item)">
+                <v-list-item v-for="item in subcats.filter(e=>e.label == category.cat)" :key="item.pk" @click="annotate(item)">
                   <b>{{item.sublabel}} </b>: {{item.description}}
                 </v-list-item>
                 <v-list-item v-if="isAddingSub">
