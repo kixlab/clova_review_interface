@@ -233,6 +233,7 @@ export default {
     }).then(function(res){
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
+      self.category=self.cats[0];
       })
     
     setTimeout( function(){
