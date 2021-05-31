@@ -32,7 +32,7 @@
                     </v-btn>
                   </span>
                   <span v-if="category.rev">
-                    <v-text-field :placeholder="category.cat" id='newCat'></v-text-field>
+                    <v-text-field :placeholder="category.cat" :id="'revcat_'+category.pk"></v-text-field>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="revCat(category.pk)">V</v-btn>
                     <v-btn x-small outlined color="red" v-on:click.stop="cancelCatRev(category.pk)">X</v-btn>
                   </span>
