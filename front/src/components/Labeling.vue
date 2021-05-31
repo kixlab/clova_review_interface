@@ -262,6 +262,7 @@ export default {
             subcat: newsubcat,
             description: newdesc
           }).then(function (res) {
+            console.log('newsub added', res.data)
             self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk});        
           });
       },
