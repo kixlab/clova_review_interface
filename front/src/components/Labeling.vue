@@ -331,8 +331,15 @@ export default {
         for (var idx in this.cats){
           var cat=this.cats[idx]
           if(cat.pk==cat_pk){
-            cat.cat=revcat;
-            cat.rev=false;
+            axios.post(self.$store.state.server_url + "/api/revise-cat/", {
+                mturk_id: self.$store.state.mturk_id,
+                doctype: self.$route.params.docType,
+                cat_pk: cat_pk,
+                newcat: revcat
+              }).then(function () {
+                cat.cat=revcat;
+                cat.rev=false;
+            });
           }
         }
       },
