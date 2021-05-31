@@ -23,7 +23,7 @@
       </v-card-subtitle>
       <ul>
           <v-list-item v-for="(row, index) in options" :key='index'>
-              <v-card class="pa-2" style="align-self:baseline; width:80%" height='inherit' v-for="(number, subindex) in row" :key='subindex' v-on:click="goTo(number);" @click="dialog = false">
+              <v-card class="pa-2 imgno" style="align-self:baseline; width:80%" height='inherit' v-for="(number, subindex) in row" :key='subindex' v-on:click="goTo(number);" @click="dialog = false">
                   #{{number+1}}
                   <img style='width:100%' v-bind:src="getThumbnail(number)">
               </v-card>
@@ -103,5 +103,8 @@ export default {
 }
 .bold-text {
   font-weight: bold;
+}
+.imgno{
+  width: 5% !important;
 }
 </style>
