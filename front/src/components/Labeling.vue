@@ -241,6 +241,7 @@ export default {
             image_id: self.$store.state.image_order,
             cat: newcat
           }).then(function (res) {
+            console.log('cat added', res.data)
             this.cats.push({cat: newcat, pk:res.data.newcat_pk});
           });                
       },
