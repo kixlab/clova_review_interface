@@ -328,6 +328,7 @@ export default {
       },
       revCat(cat_pk){
         var revcat=document.getElementById('revcat_'+String(cat_pk)).value;
+        const self=this;
         for (var idx in this.cats){
           var cat=this.cats[idx]
           if(cat.pk==cat_pk){
