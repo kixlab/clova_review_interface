@@ -361,22 +361,18 @@ export default {
         for (var idx in this.subcats){
           var subcat=this.subcats[idx]
           if(subcat.pk==subcat_pk){
-            axios.post(self.$store.state.server_url + "/api/revise-subcat/", {
-                mturk_id: self.$store.state.mturk_id,
-                doctype: self.$route.params.docType,
-                subcat_pk: subcat_pk,
-                revsubcat: revsubcat,
-                revdesc: revdesc
-              }).then(function () {
-                console.log('subcat revised')
-                console.log(subcat);
-                subcat.rev=false;
                 subcat.subcat=revsubcat;
                 subcat.description=revdesc;
-                console.log(subcat);
-            });
+                subcat.rev=false;
           }
         }
+        axios.post(self.$store.state.server_url + "/api/revise-subcat/", {
+          mturk_id: self.$store.state.mturk_id,
+          doctype: self.$route.params.docType,
+          subcat_pk: subcat_pk,
+          revsubcat: revsubcat,
+          revdesc: revdesc
+        });
       },
       cancelAdd(){
         this.addcat=false;
