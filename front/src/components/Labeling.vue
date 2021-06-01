@@ -294,7 +294,7 @@ export default {
             subcat: newsubcat,
             description: newdesc
           }).then(function (res) {
-            self.subcats.push({label: cat, sublabel: newsubcat, description: newdesc, pk:res.data.newsubcat_pk, usermade:true, rev:false});        
+            self.subcats.push({cat: cat, subcat: newsubcat, description: newdesc, pk:res.data.newsubcat_pk, usermade:true, rev:false});        
           });
       },
       resetAddState(){
