@@ -67,3 +67,20 @@ event,registration,2,date,Deadline of registration
 event,registration,3,fee,Registration fee
 event,submission,1,type,Type of submission
 event,submission,2,date,Deadline of submission
+email,email_id,1,email_id,id of the email
+email,account_name,1,account_name,name of the email account
+email,sender,1,sender,sender of the email
+email,date,1,date_sent,date the email was sent
+email,date,2,date_primary,primary date of the email
+email,date,3,date_modified,last modified date of the email
+email,date,4,date_touched,last touched date of the email
+email,receiver,1,receiver_to,the people who received the email
+email,receiver,2,receiver_cc,the people who were cc'ed to the email
+email,receiver,3,receiver_bcc,the people who were bcc'ed to the email
+email,contents,1,subject,subject (title) of the email
+email,contents,2,bodytext,body of the email
+email,contents,3,attachment,attachment added to the email
+email,signature,1,name,name in the signature
+email,signature,2,title,job title in the signature
+email,signature,3,institution,institution affiliation in the signature
+email,signature,4,contact,contact in the signature
