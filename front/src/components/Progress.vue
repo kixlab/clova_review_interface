@@ -1,37 +1,52 @@
 <template>
- <table class='center'>
+<div class='center'>
+ <table >
    <tbody>
     <tr>
-      <td v-for="(status, index) in stats" :key='index'
-          v-bind:class='{done:(status==true), yet:(status==false)}' v-on:click="goTo(index);">
+      <template v-for="(status, index) in stats" > 
+        <template v-if="status === true">
+          <td class="done" v-on:click="goTo(index);" :key='index'>
           #{{index+1}}
-        </td>
+          </td>
+        </template>
+        <template v-else-if="status === false">
+          <td class="yet" v-on:click="goTo(index);" :key='index'>
+          #{{index+1}}
+          </td>
+        </template>
+        
+      </template>
+      
     </tr>
    </tbody>
  </table>
+ <div>
+  {{stats}}
+ </div>
+</div>
 </template>
 
 
 <script>
-//import {mapGetters } from 'vuex'
+//import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: "Progress",
   data() {
     return {
-      image_order: this.$store.state.image_order,
-      stats: this.$store.state.annot_status
+      stats: this.$store.getters.status,
+      image_box: this.$store.getters.getImageBoxes
     };
   },
   mounted() {
-    this.$store.subscribeAction((action) => {
-        if (action.type === 'setStatus' || action.type==='setAStatus') {
-            this.stats = this.$store.state.annot_status
+    this.$store.subscribeAction({after: (action) => {
+        if (action.type ==='setAStatus' || action.type === 'setImageBoxes') {
+            this.stats = this.$store.getters.status;
             console.log('stats updated')
-            console.log(this.stats)
+            console.log("***", this.stats)
             
         }
-    })
+    }})
 
   },
   methods:{

@@ -11,6 +11,7 @@ import json
 def checkUser(request):
     if request.method == 'GET':
         username = request.GET['mturk_id']
+        print(User.objects)
         if(len(User.objects.filter(username=username))==0):
             user=User(username=username)
             user.save()

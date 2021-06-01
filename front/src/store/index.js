@@ -33,9 +33,9 @@ export default new Vuex.Store({
     update_status(state, status){
       state.annot_status=status
     },
-    update_a_status(state, payload){
+    update_a_status(state, new_status){
       console.log('before', state.annot_status)
-      state.annot_status[payload.idx]=payload.val
+      state.annot_status = new_status
       console.log('after', state.annot_status)
     }
   },
@@ -67,8 +67,11 @@ export default new Vuex.Store({
       commit('update_status', status)
     },
     setAStatus({commit}, payload){
+      var new_status = this.state.annot_status
+      new_status[payload.idx] = payload.val
       console.log('setAStatus called with', payload)
-      commit('update_a_status', payload)
+      
+      commit('update_a_status', new_status)
     }
   },
   modules: {

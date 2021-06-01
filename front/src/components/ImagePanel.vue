@@ -240,9 +240,13 @@ export default {
         var y1 = boxes[box].y_pos;
         var y2 = boxes[box].y_pos + boxes[box].y_len;
 
-        if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
+        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
+        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
+        if ((start[0] <= x1 || start[0] <= x2) && (end[0] >= x1 || end[0] >= x2) && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
+
           if (this.image_box[box].annotated === false) {
-            this.image_box[box].selected = !this.image_box[box].selected;
+            //this.image_box[box].selected = !this.image_box[box].selected;
+            this.image_box[box].selected = true;
             if (this.image_box[box].selected === true) {
               selected_box.push(this.image_box[box].box_id)
             } else {

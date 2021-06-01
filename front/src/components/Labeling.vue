@@ -436,6 +436,7 @@ export default {
               'idx':self.$store.state.image_order,
               'val':true
             });
+            //console.log('### setAStatus called - annotate')
           });
         }
         }
