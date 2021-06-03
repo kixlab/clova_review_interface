@@ -20,10 +20,10 @@
     </tr>
    </tbody>
  </table>
- <div>
+<!--  <div>
   {{stats}}
  </div>
-</div>
+ --></div>
 </template>
 
 
