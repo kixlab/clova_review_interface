@@ -343,8 +343,17 @@ export default {
         for (var idx in this.cats){
           var cat=this.cats[idx]
           if(cat.pk==cat_pk){
+            var oldcat=cat.cat
                 cat.cat=revcat;
                 cat.rev=false;
+                //self.subcats.push({cat: cat, subcat: newsubcat, description: newdesc, pk:res.data.newsubcat_pk, usermade:true, rev:false});
+                for (var subidx in this.subcats){
+                  var subcat=this.subcats[subidx]
+                  if(subcat.cat==oldcat){
+                    subcat.cat=revcat;
+                  }
+                }        
+
           }
         }
         axios.post(self.$store.state.server_url + "/api/revise-cat/", {
