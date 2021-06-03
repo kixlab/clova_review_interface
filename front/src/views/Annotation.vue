@@ -65,7 +65,6 @@ export default {
   //  OverviewButton,
     Labeling,
     BoxSelectionStatus,
-    SubmitButton
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
