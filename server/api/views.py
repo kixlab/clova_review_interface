@@ -133,7 +133,7 @@ def getAnnotations(request):
 
         annotations=[]
         for annot in annots: 
-            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'label': annot.label})
+            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat': annot.label.subcat_text, 'subcatpk': annot.label.pk})
         
         response={
             'annotations':annotations
