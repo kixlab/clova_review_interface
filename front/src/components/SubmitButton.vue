@@ -26,7 +26,7 @@ export default {
   name: "SubmitButton",
   methods: {
     onSubmit: function() {
-      this.$router.push('after-done')
+      this.$router.push('../after-done')
  }
   },
 
