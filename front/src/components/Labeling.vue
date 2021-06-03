@@ -414,9 +414,9 @@ export default {
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order,
             boxes_id: group.map((i) => {return i.box_id}),
-            label:label
+            labelpk:label.pk
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{label: item.cat + " - " + item.subcat, boxes: group, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{label: item.cat + " - " + item.subcat, boxes: group, annotpk: res.data.annot_pk, labelpk:label.pk}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
