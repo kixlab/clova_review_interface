@@ -116,7 +116,7 @@ def getCats(request):
         for usercat in usercats:
             cats.append({'cat': usercat.cat_text, 'pk': usercat.pk, 'usermade': (usercat.made_at!=9999), 'rev':False})
             for subcat in UserSubcat.objects.filter(usercat=usercat):
-                subcats.append({'cat': subcat.usercat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False})
+                subcats.append({'cat': subcat.usercat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False, 'catpk':subcat.usercat.pk})
         response = {
             'cats': cats,
             'subcats': subcats
@@ -137,7 +137,7 @@ def getAnnotations(request):
 
         annotations=[]
         for annot in annots: 
-            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat': annot.label.subcat_text, 'subcatpk': annot.label.pk})
+            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat': annot.label.subcat_text, 'subcatpk': annot.label.pk, 'catpk':annot.label.usercat.pk})
         
         response={
             'annotations':annotations

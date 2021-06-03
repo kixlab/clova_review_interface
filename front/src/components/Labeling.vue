@@ -352,8 +352,7 @@ export default {
                   if(subcat.cat==oldcat){
                     subcat.cat=revcat;
                   }
-                }        
-
+            }        
           }
         }
         axios.post(self.$store.state.server_url + "/api/revise-cat/", {
@@ -402,6 +401,7 @@ export default {
         var group = []
         var label = item.cat + "." + item.subcat
         var labelpk=item.pk
+        var catpk=item.catpk
         const self = this;
 
 
@@ -426,7 +426,7 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             labelpk:labelpk
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, labelpk: item.pk, boxes: group, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, labelpk: item.pk, catpk:catpk, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
@@ -471,7 +471,7 @@ export default {
             }
             //console.log(currImageBox)
             self.updateImageBoxes(currImageBox)
-            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, labelpk: agroup.subcatpk, boxes: group, annotpk: agroup.group_id}, "add"])
+            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, labelpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, annotpk: agroup.group_id}, "add"])
           }          
         },
       clicked(label) {
