@@ -129,7 +129,7 @@ export default {
         image_id: self.$store.state.image_order,
         annot_pk: group.annotpk
       }).then(function (res) {
-        console.log("Annotation deleted", res.data.annot_pk)
+//        console.log("Annotation deleted", res.data.annot_pk)
         for (var i in self.image_box) {
           var temp = self.image_box[i]
           for (var box in group.boxes) {
@@ -151,7 +151,7 @@ export default {
         image_id: self.$store.state.image_order,
         status: false
       }).then(function () {
-        console.log('set status false')
+        //console.log('set status false')
         //console.log('idx', self.$store.state.image_order)
         //console.log(self.$store.state.annot_status)
         self.setAStatus({

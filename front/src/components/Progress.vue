@@ -42,8 +42,8 @@ export default {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setAStatus' || action.type === 'setImageBoxes') {
             this.stats = this.$store.getters.status;
-            console.log('stats updated')
-            console.log("***", this.stats)
+          //  console.log('stats updated')
+          //  console.log("***", this.stats)
             
         }
     }})

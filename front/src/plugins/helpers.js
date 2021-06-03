@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     server_get(self, url, fn) {
-      console.log(self)
+      //console.log(self)
         axios.get(self.$store.state.server_url + url, {
           params: {
             mturk_id: self.$store.state.mturk_id
