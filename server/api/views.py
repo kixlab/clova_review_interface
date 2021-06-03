@@ -91,7 +91,11 @@ def getImageID(request):
         user = User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
         #get least unannotated document
-        startdoc=Status.objects.filter(user=user, document__doctype=doctype, status=False)[0]
+        undonedocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
+        if(len(undonedocs)==0):
+            startdoc=Status.objects.filter(user=user, document__doctype=doctype, status=True).last()
+        else:
+            startdoc=undonedocs[0]
         startno=startdoc.document.doc_no
         response = {
             'consent_agreed': user.consentAgreed,
