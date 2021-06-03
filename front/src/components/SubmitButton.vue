@@ -28,6 +28,7 @@ export default {
   methods: {
     onSubmit: function() {
       console.log('submitted')
+  }
   },
 
   computed: {
