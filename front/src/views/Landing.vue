@@ -29,7 +29,7 @@
     </ol>
     <br><br>
 
-    <h4> Contact : <a>hoonhan.d@kaist.ac.kr</a> </h4>
+    <h4> Contact : <a>jeongeonpark1@gmail.com</a> </h4>
     <h4>Fill in the blank with your MTurk ID and click the button below to proceed to the next step.</h4>
     <v-form
       ref="form"

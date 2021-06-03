@@ -119,11 +119,11 @@ export default {
           alert('You already finished the task!\n');
           self.$router.push('after-done')
         }
-        self.$store.commit('set_step', res.data.step)
+        //self.$store.commit('set_step', res.data.step)
         callback(self);
 
       }).catch(function(err) {
-        alert('Please refresh this page.\nIf this error repeats, please contact us via hoonhan.d@kaist.ac.kr \n' + err);
+        alert('Please refresh this page.\nIf this error repeats, please contact us via jeongeonpark1@gmail.com \n' + err);
       });
     },
     loadNewImage: function() {

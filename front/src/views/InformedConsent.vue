@@ -16,8 +16,9 @@
       6. The final decision regarding whether or not to participate in the clinical research is to be made by you. You can always decide not to participate in the tasks and can withdraw your participation anytime. Even if you refuse to participate in this research, you will not be disadvantaged at all.<br><br>
 
       7. Contact Information<br>
+      <!-- 
       If you have any questions or wish to express any discomfort related to this research, please feel free to contact the researcher below. <br><br>
-      <b>&lt;Name of researcher: Donghoon Han, Contact: <a>hoonhan.d@kaist.ac.kr</a>&gt; <br><br></b>
+      <b>&lt;Name of researcher: Donghoon Han, Contact: <a>hoonhan.d@kaist.ac.kr</a>&gt; <br><br></b> -->
 
       <v-divider/>
       <h4>I have read this Informed Consent and received a response to each and every question. I hereby confirm that I would like to voluntarily participate in the research.<br><br></h4>
