@@ -128,7 +128,7 @@ export default {
         doctype: self.$route.params.docType,
         image_id: self.$store.state.image_order,
         annot_pk: group.annotpk
-      }).then(function (res) {
+      }).then(function () {
 //        console.log("Annotation deleted", res.data.annot_pk)
         for (var i in self.image_box) {
           var temp = self.image_box[i]
