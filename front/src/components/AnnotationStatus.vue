@@ -50,7 +50,7 @@
           <div v-for="group in annotated_box" :key="group.id" :id="'annot_'+group.annotpk">
             <v-btn-toggle dense style="padding:5px" class="flex-wrap" >
               <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;"> 
-                {{group.label}} 
+                {{group.cat}}-{{group.subcat}} 
               </v-btn>
               
               <div v-for="box in group.boxes" :key="box.id">
