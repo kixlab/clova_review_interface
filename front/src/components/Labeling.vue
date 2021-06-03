@@ -426,7 +426,7 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             labelpk:labelpk
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{label: item.cat + " - " + item.subcat, boxes: group, annotpk: res.data.annot_pk, labelpk:label.pk}, "add"])            
+            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, labelpk: item.pk, boxes: group, annotpk: res.data.annot_pk}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
