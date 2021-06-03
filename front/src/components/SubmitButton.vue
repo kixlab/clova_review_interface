@@ -25,6 +25,11 @@
 
 export default {
   name: "SubmitButton",
+  methods: {
+    onSubmit: function() {
+      console.log('submitted')
+  },
+
   computed: {
     disabled() {
       return !this.$store.getters.getIfAllImagesAnnotated
