@@ -392,6 +392,7 @@ export default {
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
         var label = item.cat + "." + item.subcat
+        var labelpk=item.pk
         const self = this;
 
 
@@ -409,13 +410,12 @@ export default {
         this.updateImageBoxes(this.image_box)
 
         if(group.length>0){
-          console.log(label.pk)
           axios.post(self.$store.state.server_url + "/api/save-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order,
             boxes_id: group.map((i) => {return i.box_id}),
-            labelpk:label.pk
+            labelpk:labelpk
           }).then(function (res) {
             self.updateAnnotatedBoxes([{label: item.cat + " - " + item.subcat, boxes: group, annotpk: res.data.annot_pk, labelpk:label.pk}, "add"])            
           });
