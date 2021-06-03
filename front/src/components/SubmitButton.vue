@@ -4,7 +4,6 @@
       <div v-on="on">
       <v-btn
         class="ma-2"
-        :loading="loading"
         :disabled="disabled"
         color="error"
         @click="onSubmit"
