@@ -10,6 +10,7 @@
       <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 20 images)</v-toolbar-title>
       <v-spacer/>
       <instruction-button/>
+      <submit-button/>
     </v-app-bar>
 
     <v-main>
@@ -51,6 +52,7 @@ import Labeling from '@/components/Labeling.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
 import axios from 'axios'
+import SubmitButton from '../components/SubmitButton.vue'
 
 export default {
   name: 'Home',
@@ -58,11 +60,12 @@ export default {
     Progress,
     ImagePanel,
     AnnotationStatus,
-  //  SubmitButton,
+    SubmitButton,
     InstructionButton,
   //  OverviewButton,
     Labeling,
     BoxSelectionStatus
+    SubmitButton
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
