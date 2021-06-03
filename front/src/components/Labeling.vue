@@ -462,7 +462,7 @@ export default {
             }
             //console.log(currImageBox)
             self.updateImageBoxes(currImageBox)
-            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, labelpk: subcatpk, boxes: group, annotpk: agroup.group_id}, "add"])
+            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, labelpk: agroup.subcatpk, boxes: group, annotpk: agroup.group_id}, "add"])
           }          
         },
       clicked(label) {
