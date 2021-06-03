@@ -59,7 +59,11 @@ export default new Vuex.Store({
     },
     status: state=>{
       return state.annot_status
-    }
+    },
+    getIfAllImagesAnnotated: function (state) {
+      return state.annot_status.every(status => status === true)
+  }
+
   },
   actions:{
     setStatus({commit}, status){

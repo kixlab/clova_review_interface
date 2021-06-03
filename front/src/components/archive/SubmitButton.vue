@@ -11,11 +11,11 @@
         v-bind="attrs"
         v-on="on"
       >
-        Submit
+        Next
       </v-btn>
       </div>
     </template>
-    Annotate all the images to submit!
+    Annotate all the boxes to submit!
   </v-tooltip>
 </template>
 
@@ -83,7 +83,7 @@ export default {
 
   computed: {
     disabled() {
-      return !this.$store.getters.getIfAllImagesAnnotated
+      return !this.$store.getters.getIfAllBoxesAnnotated
     }
   }
 }
