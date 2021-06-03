@@ -45,7 +45,7 @@
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
 import AnnotationStatus from '@/components/AnnotationStatus.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
+//import SubmitButton from '@/components/SubmitButton.vue'
 import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
 import Labeling from '@/components/Labeling.vue'
