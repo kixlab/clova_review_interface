@@ -63,6 +63,9 @@ export default {
   margin:auto;
   min-width: 80% !important;
 }
+table{
+  width: 100% !important;
+}
 td{
   margin: auto;
   border: 1px solid grey;
