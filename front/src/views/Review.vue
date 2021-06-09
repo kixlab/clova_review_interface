@@ -51,7 +51,7 @@ import InstructionButton from '@/components/InstructionButton.vue'
 import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
-import axios from 'axios'
+//import axios from 'axios'
 import SubmitButton from '../components/SubmitButton.vue'
 
 export default {
@@ -70,21 +70,5 @@ export default {
     this.$helpers.isWrongAccess(this)
 
   },
-  methods:{
-    updateStatus(){
-      const self=this;
-      axios.get(self.$store.state.server_url+'/api/get-status/', {
-        params: {
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType
-          }
-        }).then(function (res) {
-          self.$store.commit('update_status',res.data.status);
-      })
-    }
-  },
-  mounted(){
-    this.updateStatus();
-  }
 }
 </script>

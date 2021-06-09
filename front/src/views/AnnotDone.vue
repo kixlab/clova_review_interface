@@ -30,47 +30,8 @@ export default {
   name: 'AnnotDone',
   methods: {
     onClickNext: function () {
-      const self = this;
-
-      self.$helpers.server_get(self, "/api/instr-done", 
-        function(self, res){ // eslint-disable-line no-unused-vars
-          self.$router.push('doctypelist/')
-        })
+      var doctype=this.$router.currentRoute.fullPath.split('/')[2];
+      this.$router.push('../../review/'+doctype);
     }
-  },
-  beforeCreate() {
-    this.$helpers.isWrongAccess(this)
-  },
-  created: function () {
-    setTimeout(() => {
-      this.passOneMinute = true
-    }, 2*1000);
-    setInterval(() => {
-      this.time_now += 1
-    }, 1000);
   }
 }
-</script>
-
-<style scoped>
-.v-responsive__content {
-  align-content: center !important;
-  display: flex !important;;
-}
-
-.v-card__text {
-  color:black !important;
-}
-
-.endPanel {
-  margin-left: auto;
-  margin-right: auto;
-  width: 70%;
-  background-color: white !important;
-}
-
-.reds {
-  color:red;
-  background-color:white !important;
-}
-</style>
