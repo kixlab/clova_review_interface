@@ -65,7 +65,6 @@ export default {
   //  OverviewButton,
     DeferredAnnotation,
     BoxSelectionStatus,
-    DeferredAnnotation,
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
