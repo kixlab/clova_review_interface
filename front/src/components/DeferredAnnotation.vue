@@ -181,6 +181,7 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       self.category=self.cats[0];
+      console.log(res);
       })
     
     setTimeout( function(){
