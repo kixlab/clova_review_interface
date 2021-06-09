@@ -30,7 +30,7 @@
         <v-col cols="7">
           <v-row dense>
             <box-selection-status/>
-            <labeling/>
+            <deferred-annotation/>
             <annotation-status/>
           </v-row>
         </v-col>
@@ -53,6 +53,7 @@ import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
 import axios from 'axios'
 import SubmitButton from '../components/SubmitButton.vue'
+import DeferredAnnotation from '../components/DeferredAnnotation.vue'
 
 export default {
   name: 'Home',
@@ -65,6 +66,7 @@ export default {
   //  OverviewButton,
     DeferredAnnotation,
     BoxSelectionStatus,
+    DeferredAnnotation,
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
