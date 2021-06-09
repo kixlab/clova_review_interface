@@ -191,7 +191,7 @@ export default {
 
 <style scoped>
 
-.na{
+.error{
   background-color: #ff5252 !important;
   color: white !important;
 
