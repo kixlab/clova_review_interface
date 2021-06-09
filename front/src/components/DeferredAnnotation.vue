@@ -181,11 +181,10 @@ export default {
       self.cats=res.data.cats;
       self.subcats=res.data.subcats;
       self.category=self.cats[0];
-      console.log(res);
       })
     
     setTimeout( function(){
-    axios.get(self.$store.state.server_url+'/api/get-annotations/',{
+    axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
       params:{
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
