@@ -34,10 +34,12 @@
                 color="indigo"
               >
                 <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk">
-                  <span>
+                  <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
+                    <span class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                     <v-btn x-small outlined color="warning" v-on:click.stop="annotate(subcat, 0)">Can be</v-btn>
+                    </span>
                   </span>
                 </v-list-item>
               </v-list-item-group>
@@ -476,7 +478,7 @@ export default {
   margin-left: 1rem;
 }
 
-.rev-btn{
+.conf-btn{
   margin: 0 !important;
   padding: 0 !important;
   outline: 0 !important;
@@ -486,7 +488,7 @@ export default {
   position: absolute;
 }
 
-.rev-div{
+.subcat-div{
   display:contents !important;
 }
 
