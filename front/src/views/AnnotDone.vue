@@ -28,7 +28,7 @@
 <script>
 export default {
   name: 'AnnotDone',
-  data:{},
+  data: ()=>{},
   methods: {
     onClickNext: function () {
       var doctype=this.$router.currentRoute.fullPath.split('/')[2];
