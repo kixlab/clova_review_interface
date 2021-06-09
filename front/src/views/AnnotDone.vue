@@ -18,7 +18,6 @@
           </v-btn>
       </v-card>
       <br>
-      <v-divider/>
     </v-col>
     </v-row>
   </v-container>
