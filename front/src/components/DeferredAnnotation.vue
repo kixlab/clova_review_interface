@@ -192,6 +192,7 @@ export default {
       }
     }).then(function(res){
       var annotations=res.data.annotations;
+      console.log(res)
       self.loadAnnotatedBoxes(annotations);})},1000);
   },
   methods: {
