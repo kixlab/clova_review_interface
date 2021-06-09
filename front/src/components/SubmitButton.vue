@@ -26,7 +26,9 @@ export default {
   name: "SubmitButton",
   methods: {
     onSubmit: function() {
-      this.$router.push('../after-done')
+      var doctype=this.$router.currentRoute;
+      console.log(doctype);
+     // this.$router.push('../annot-done')
  }
   },
 

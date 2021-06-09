@@ -7,6 +7,8 @@ import Annotation from '../views/Annotation.vue'
 import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
 import DocTypeList from '../views/DocTypeList.vue'
+import AnnotDone from '../views/AnnotDone.vue'
+import Review from '../views/Review.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +39,17 @@ Vue.use(VueRouter)
     name: 'DocTypeList',
     component: DocTypeList
   },
+  {
+    path: '/annot-done/:docType/',
+    name: 'AnnotDone',
+    component: AnnotDone
+  },
+  {
+    path: '/review/:docType/',
+    name: 'Review',
+    component: Review
+  },
+
   {
     path: '/after-done',
     name: 'AfterDone',
