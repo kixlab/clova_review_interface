@@ -235,7 +235,7 @@ def saveAsRegular(request):
 
         confDefAnnots=DefAnnotation.objects.filter(user=user, confidence=True, is_alive=True)
         for annot in confDefAnnots:
-            newAnnot=Annotation(user=user, document=annot.document, boxes_id=annot.boxes, cat=annot.cat, subcat=annot.subcat, is_alive=True)
+            newAnnot=Annotation(user=user, document=annot.document, boxes_id=annot.boxes_id, cat=annot.cat, subcat=annot.subcat, is_alive=True)
             newAnnot.save()
         response={
             'annot_pk': newAnnot.pk
