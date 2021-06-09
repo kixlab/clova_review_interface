@@ -371,7 +371,7 @@ export default {
             catpk: catpk,
             confidence: confidence
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: agroup.confidence, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
