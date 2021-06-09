@@ -20,11 +20,19 @@ def checkUser(request):
                 Status(user=user, document=document, status=False).save()
             # initialize usercats
             for initcat in InitCat.objects.all():
-                UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text).save()
+                usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
+                usercat.save()
+                # add N/A subcategory 
+                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
+            # add N/A category 
+            UserCat(user=user, doctype=initcat.doctype, cat_text="N/A").save()
             # initialize usersubcats 
             for initsubcat in InitSubCat.objects.all():
                 usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
-                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()
+                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()   
+            # add N/A subcategory to each category 
+            for usercat in UserCat.objects.filter(user=user):
+                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
         else: 
             user=User.objects.get(username=username)
         user, created = User.objects.get_or_create(username=username)
@@ -145,6 +153,32 @@ def getAnnotations(request):
         return JsonResponse(response)
 
 @csrf_exempt
+def getDefAnnotations(request):
+    if request.method=='GET':
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =request.GET['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        annots=DefAnnotation.objects.filter(user=user, document=document,is_alive=True)
+        print(annots)
+
+        annotations=[]
+        for annot in annots: 
+            if(annot.subcat==None):
+                annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+            else:
+                if(annot.subcat.subbcat_text=="N/A"):
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                else:
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+        response={
+            'annotations':annotations
+        }
+        return JsonResponse(response)
+
+@csrf_exempt
 def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
@@ -161,6 +195,36 @@ def saveAnnotation(request):
         newAnnot.save()
         response={
             'annot_pk': newAnnot.pk
+        }
+        return JsonResponse(response)
+
+@csrf_exempt
+def saveDefAnnotation(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =query_json['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        boxes = query_json['boxes_id']
+        subcatpk = query_json['subcatpk']
+        catpk = query_json['catpk']
+        confidence=query_json['confidence']
+        if(subcatpk==None):
+            thisCat=UserCat.objects.get(pk=catpk)
+            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=None, confidence=False)
+        else: 
+            thisSubcat=UserSubcat.objects.get(pk=subcatpk)
+            thisCat=UserCat.objects.get(pk=catpk)
+            if(thisSubcat.subcat_text=='N/A'):
+                newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False)
+            else:
+                newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence)
+        newDefAnnot.save()
+        response={
+            'annot_pk': newDefAnnot.pk
         }
         return JsonResponse(response)
 

@@ -114,6 +114,17 @@ class UserSubcat(models.Model):
     def __str__(self):
         return self.usercat.user.username+'-'+str(self.subcat_text)
 
+class DefAnnotation(models.Model):
+    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
+    boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
+    subcat = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
+    cat= models.ForeignKey('UserCat', on_delete=models.CASCADE, null=True)
+    confidence=models.BooleanField(default=True)
+    is_alive=models.BooleanField(default=False)
+    def __str__(self):
+        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
+
 class Annotation(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
