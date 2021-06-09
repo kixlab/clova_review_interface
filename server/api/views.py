@@ -23,7 +23,8 @@ def checkUser(request):
                 usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
                 usercat.save()
             # add N/A category 
-            UserCat(user=user, doctype=initcat.doctype, cat_text="N/A").save()
+            for doctype in DocType.objects.all():
+                UserCat(user=user, doctype=doctype, cat_text="N/A").save()
             # initialize usersubcats 
             for initsubcat in InitSubCat.objects.all():
                 usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
