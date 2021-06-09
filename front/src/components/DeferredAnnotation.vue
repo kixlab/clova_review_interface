@@ -146,7 +146,7 @@ import { mapActions, mapGetters } from 'vuex'
 import axios from "axios";
 
 export default {
-  name: 'Labeling',
+  name: 'DeferredAnnotation',
   data() {
     return{
       selection: [],
