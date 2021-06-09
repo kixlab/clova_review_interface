@@ -21,6 +21,7 @@ urlpatterns = [
     path('save-def-annotation/', views.saveDefAnnotation),
     path('save-as-regular/', views.saveAsRegular),
     path('delete-annotation/', views.deleteAnnotation),
+    path('delete-def-annotation/', views.deleteDefAnnotation),
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
     path('submit/', views.submit),

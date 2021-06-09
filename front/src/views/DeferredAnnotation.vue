@@ -31,7 +31,7 @@
           <v-row dense>
             <box-selection-status/>
             <deferred-annotation/>
-            <annotation-status/>
+            <deferred-annotation-status/>
           </v-row>
         </v-col>
       </v-row>
@@ -44,7 +44,7 @@
 <script>
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
-import AnnotationStatus from '@/components/AnnotationStatus.vue'
+import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 //import SubmitButton from '@/components/SubmitButton.vue'
 import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
@@ -59,7 +59,7 @@ export default {
   components: {
     Progress,
     ImagePanel,
-    AnnotationStatus,
+    DeferredAnnotationStatus,
     SubmitButton,
     InstructionButton,
   //  OverviewButton,

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Landing from '../views/Landing.vue'
 import InformedConsent from '../views/InformedConsent.vue'
 import Instruction from '../views/Instruction.vue'
-import Annotation from '../views/Annotation.vue'
+import DeferredAnnotation from '../views/Annotation.vue'
 import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
 import DocTypeList from '../views/DocTypeList.vue'
@@ -15,8 +15,8 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/annotation/:docType/',
-    name: 'Annotation',
-    component: Annotation
+    name: 'DeferredAnnotation',
+    component: DeferredAnnotation
   },
   {
     path: '/landing',
