@@ -8,7 +8,7 @@
           In the next phase, you will review items that you marked as 'N/A' or 'CAN BE'.
         </v-card-text>
          <v-btn
-            v-on:click="startreview"
+            @click="startreview"
             color="deep-purple accent-2"
             class="mr-4"
             style="margin-left: auto;"
@@ -31,8 +31,9 @@ export default {
   data: ()=>{},
   methods: {
     startreview: function () {
-      var doctype=this.$router.currentRoute.fullPath.split('/')[2];
-      this.$router.push('../../review/'+doctype);
+//      var doctype=this.$router.currentRoute.fullPath.split('/')[2];
+//      this.$router.push('../../review/'+doctype);
+      console.log("gotoreview")
     }
   }
 }
