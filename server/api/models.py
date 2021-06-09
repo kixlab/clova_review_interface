@@ -133,7 +133,7 @@ class Annotation(models.Model):
     subcat = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
     cat= models.ForeignKey('UserCat', on_delete=models.CASCADE, null=True)
     def __str__(self):
-        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
+        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)
