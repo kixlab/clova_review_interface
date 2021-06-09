@@ -191,7 +191,7 @@ export default {
 
 <style scoped>
 
-.error{
+.error.warning{
   background-color: #ff5252 !important;
   color: white !important;
 
