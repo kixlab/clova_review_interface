@@ -211,16 +211,12 @@ def saveDefAnnotation(request):
         subcatpk = query_json['subcatpk']
         catpk = query_json['catpk']
         confidence=query_json['confidence']
-        if(subcatpk==None):
-            thisCat=UserCat.objects.get(pk=catpk)
-            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=None, confidence=False)
-        else: 
-            thisSubcat=UserSubcat.objects.get(pk=subcatpk)
-            thisCat=UserCat.objects.get(pk=catpk)
-            if(thisSubcat.subcat_text=='N/A'):
-                newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False)
-            else:
-                newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence)
+        thisSubcat=UserSubcat.objects.get(pk=subcatpk)
+        thisCat=UserCat.objects.get(pk=catpk)
+        if(thisSubcat.subcat_text=='N/A'):
+            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
+        else:
+            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
         newDefAnnot.save()
         response={
             'annot_pk': newDefAnnot.pk
