@@ -53,7 +53,6 @@ import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
 import axios from 'axios'
 import SubmitButton from '../components/SubmitButton.vue'
-import DeferredAnnotation from '../components/DeferredAnnotation.vue'
 
 export default {
   name: 'Home',
