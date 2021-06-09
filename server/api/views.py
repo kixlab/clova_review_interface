@@ -22,8 +22,6 @@ def checkUser(request):
             for initcat in InitCat.objects.all():
                 usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
                 usercat.save()
-                # add N/A subcategory 
-                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
             # add N/A category 
             UserCat(user=user, doctype=initcat.doctype, cat_text="N/A").save()
             # initialize usersubcats 
