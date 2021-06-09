@@ -27,7 +27,6 @@
 <script>
 export default {
   name: 'AnnotDone',
-  data: ()=>{},
   methods: {
     gotoReview: function () {
       var doctype=this.$router.currentRoute.fullPath.split('/')[2];
