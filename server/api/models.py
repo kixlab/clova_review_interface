@@ -130,9 +130,10 @@ class Annotation(models.Model):
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
     is_alive=models.BooleanField(default=False)
-    label = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
+    subcat = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
+    cat= models.ForeignKey('UserCat', on_delete=models.CASCADE, null=True)
     def __str__(self):
-        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.label.subcat_text
+        return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
 
 class Status(models.Model):
     user=models.ForeignKey('User', on_delete=models.CASCADE)

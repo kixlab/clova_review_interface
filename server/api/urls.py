@@ -19,6 +19,7 @@ urlpatterns = [
     path('get-def-annotations/',views.getDefAnnotations),
     path('save-annotation/', views.saveAnnotation),
     path('save-def-annotation/', views.saveDefAnnotation),
+    path('save-as-regular/', views.saveAsRegular),
     path('delete-annotation/', views.deleteAnnotation),
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),

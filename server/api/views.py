@@ -190,7 +190,7 @@ def saveAnnotation(request):
         boxes = query_json['boxes_id']
         labelpk = query_json['labelpk']
         thisLabel = UserSubcat.objects.get(pk=labelpk)
-        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, label=thisLabel, is_alive=True)
+        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisLabe.usercat, subcat=thisLabel, is_alive=True)
         newAnnot.save()
         response={
             'annot_pk': newAnnot.pk
@@ -222,6 +222,26 @@ def saveDefAnnotation(request):
             'annot_pk': newDefAnnot.pk
         }
         return JsonResponse(response)
+
+
+@csrf_exempt
+def saveAsRegular(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        confDefAnnots=DefAnnotation.objects.filter(user=user, confidence=True, is_alive=True)
+        for annot in confDefAnnots:
+            newAnnot=Annotation(user=user, document=annot.document, boxes_id=annot.boxes, cat=annot.cat, subcat=annot.subcat, is_alive=True)
+            newAnnot.save()
+        response={
+            'annot_pk': newAnnot.pk
+        }
+        return JsonResponse(response)
+
 
 @csrf_exempt
 def deleteAnnotation(request):
