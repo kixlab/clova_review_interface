@@ -40,7 +40,7 @@
                     </span>
                     <span v-if="subcat.subcat=='N/A'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
-                    <span>
+                    </span>
                   </span>
                 </v-list-item>
               </v-list-item-group>
