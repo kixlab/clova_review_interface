@@ -34,7 +34,9 @@ export default {
 
   computed: {
     disabled() {
-      return !this.$store.getters.getIfAllImagesAnnotated
+      return true
+
+//      return !this.$store.getters.getIfAllImagesAnnotated
     }
   }
 }
