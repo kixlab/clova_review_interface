@@ -166,12 +166,12 @@ def getDefAnnotations(request):
         annotations=[]
         for annot in annots: 
             if(annot.subcat==None):
-                annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.subcat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
             else:
                 if(annot.subcat.subcat_text=="N/A"):
-                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.subcat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
                 else:
-                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.subcat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
         response={
             'annotations':annotations
         }
