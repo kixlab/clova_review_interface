@@ -1,5 +1,5 @@
 doctype,initcat,subcat_no,subcat_text,subcat_description
-receipt,menu,1,id,Id of the menu
+receipt,menu,1,id,Iddd
 receipt,menu,2,name,Name of the menu
 receipt,menu,3,count,Number of menu consumed
 receipt,menu,4,unitprice,Unit price of the menu
