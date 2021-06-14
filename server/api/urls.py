@@ -26,6 +26,7 @@ urlpatterns = [
     path('get-status/', views.getStatus),
     path('submit/', views.submit),
     path(r'image/<image_id>/', views.getImage, name='image_id'),
-    path(r'image/box_info/<image_id>/', views.getImageBoxInfo, name='image_id'),
     path(r'upload_image/', views.uploadImage),
+    path(r'json/<json_id>/', views.getJson, name='json_id'),
+    path(r'upload_json/', views.uploadJson),
 ]

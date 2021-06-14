@@ -454,13 +454,13 @@ def getImage(request, image_id):
         # item = Image.objects.filter(is_done=True)[int(num)]
         return HttpResponse(item.image.url)
 
-
+'''
 @csrf_exempt
 def getImageBoxInfo(request, image_id):
     if request.method == 'GET':
         item = Image.objects.get(image_id=image_id)
         return HttpResponse(item.box_info)
-
+'''
 
 @csrf_exempt
 def uploadImage(request):
@@ -473,4 +473,25 @@ def uploadImage(request):
         data = request.POST
         image = Image(image_id=file.name.replace(".png", ""), image=file, box_info=data["text"])
         image.save()
+        return HttpResponse("Uploaded!")
+
+@csrf_exempt
+def getJson(request, json_id):
+    if request.method == 'GET':
+        item = Json.objects.get(json_id=json_id)
+        # item = Image.objects.filter(is_done=True)[int(num)]
+        return HttpResponse(item.json.url)
+
+
+@csrf_exempt
+def uploadJson(request):
+    if request.method == 'POST':
+        file = request.FILES["json_file"]
+        json_id = file.name.replace(".json", "")
+        if len(Image.objects.filter(json_id=json_id)) != 0:
+            return HttpResponseBadRequest("The json_id exists!")
+
+        data = request.POST
+        json = Json(image_id=file.name.replace(".json", ""), image=file)
+        json.save()
         return HttpResponse("Uploaded!")

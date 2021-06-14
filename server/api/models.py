@@ -145,8 +145,9 @@ class Status(models.Model):
 
 class Image(models.Model):
     image_id = models.CharField(max_length=256, primary_key=True)
-    image = models.ImageField(upload_to='', null=True, blank=True)
-    box_info = models.TextField(null=True, blank=True)
-    count_assigned = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='resume/', null=True, blank=True)
     is_done = models.BooleanField(default=False)
 
+class Json(models.Model):
+    json_id = models.CharField(max_length=256, primary_key=True)
+    json = models.FileField(upload_to="resume/")

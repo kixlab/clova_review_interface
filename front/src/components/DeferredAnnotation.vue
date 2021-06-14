@@ -6,7 +6,7 @@
       </v-card-title>
       
       <v-card-subtitle class='text-left'>
-        There are <b style="color:blue;">10 categories</b> and <b style="color:red;">N/A</b>. Please scroll down to take a look at all of them.
+        There are <b style="color:blue;">Categories</b> and <b style="color:blue;">Sub-categories</b>. Please scroll down to take a look at all of them.
       </v-card-subtitle>
       
       <v-card-text> 
