@@ -143,3 +143,10 @@ class Status(models.Model):
         return self.user.username+'-'+str(self.document)+'-'+str(self.status)
 
 
+class Image(models.Model):
+    image_id = models.CharField(max_length=256, primary_key=True)
+    image = models.ImageField(upload_to='', null=True, blank=True)
+    box_info = models.TextField(null=True, blank=True)
+    count_assigned = models.IntegerField(default=0)
+    is_done = models.BooleanField(default=False)
+

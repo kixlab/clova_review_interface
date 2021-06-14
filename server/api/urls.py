@@ -25,4 +25,7 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
     path('submit/', views.submit),
+    path(r'image/<image_id>/', views.getImage, name='image_id'),
+    path(r'image/box_info/<image_id>/', views.getImageBoxInfo, name='image_id'),
+    path(r'upload_image/', views.uploadImage),
 ]

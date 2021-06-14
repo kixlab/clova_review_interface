@@ -447,4 +447,30 @@ def reviseSubcat(request):
         return HttpResponse('')
 
 
+@csrf_exempt
+def getImage(request, image_id):
+    if request.method == 'GET':
+        item = Image.objects.get(image_id=image_id)
+        # item = Image.objects.filter(is_done=True)[int(num)]
+        return HttpResponse(item.image.url)
 
+
+@csrf_exempt
+def getImageBoxInfo(request, image_id):
+    if request.method == 'GET':
+        item = Image.objects.get(image_id=image_id)
+        return HttpResponse(item.box_info)
+
+
+@csrf_exempt
+def uploadImage(request):
+    if request.method == 'POST':
+        file = request.FILES["image_file"]
+        image_id = file.name.replace(".png", "")
+        if len(Image.objects.filter(image_id=image_id)) != 0:
+            return HttpResponseBadRequest("The image_id exists!")
+
+        data = request.POST
+        image = Image(image_id=file.name.replace(".png", ""), image=file, box_info=data["text"])
+        image.save()
+        return HttpResponse("Uploaded!")
