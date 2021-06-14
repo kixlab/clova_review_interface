@@ -65,13 +65,13 @@ resume,education,4,major,Major field of study for the degree
 resume,education,5,graduation year,Year that the person received the degree
 resume,education,6,honors,Honors that the person received
 resume,education,7,others,others
-resume,experience,1,title,Year that the person received the degree
-resume,experience,2,institution,Title of the experience
-resume,experience,3,location,Institution of the experience
-resume,experience,4,role description,Location of the experience
-resume,experience,5,start year,Role description of the experience
-resume,experience,6,end year,Start date of the experience
-resume,experience,7,others,End date of the experience
+resume,experience,1,title,Title of the experience
+resume,experience,2,institution,Institution of the experience
+resume,experience,3,location,Location of the experience
+resume,experience,4,role description,Role description of the experience
+resume,experience,5,start year,Start date of the experience
+resume,experience,6,end year,End date of the experience
+resume,experience,7,others,others
 resume,publication,1,title,Publication title
 resume,publication,2,year,Publication year
 resume,publication,3,venue,Journal or conference the paper was published
