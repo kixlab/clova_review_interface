@@ -1,25 +1,20 @@
 <template>
 <div class='center'>
- <table >
-   <tbody>
-    <tr>
-      <template v-for="(status, index) in stats" > 
-        <template v-if="status === true">
-          <td class="done" v-on:click="goTo(index);" :key='index'>
+  <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
+      <template v-for="(status, index) in stats_temp"> 
+        <template v-if="index===img_temp">
+          <div class="done" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
           #{{index+1}}
-          </td>
+          </div>
         </template>
-        <template v-else-if="status === false">
-          <td class="yet" v-on:click="goTo(index);" :key='index'>
+        <template v-else>
+          <div class="yet" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
           #{{index+1}}
-          </td>
+          </div>
         </template>
-        
       </template>
-      
-    </tr>
-   </tbody>
- </table>
+
+  </div>
 <!--  <div>
   {{stats}}
  </div>
@@ -28,31 +23,44 @@
 
 
 <script>
-//import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: "Progress",
   data() {
     return {
       stats: this.$store.getters.status,
-      image_box: this.$store.getters.getImageBoxes
+      image_box: this.$store.getters.getImageBoxes,
+
+      stats_temp: new Array(300).fill(false),
+      img_temp: this.$store.getters.get_curr_image
     };
   },
   mounted() {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setAStatus' || action.type === 'setImageBoxes') {
             this.stats = this.$store.getters.status;
-          //  console.log('stats updated')
-          //  console.log("***", this.stats)
+            
+            console.log('stats updated')
+            console.log("***", this.stats)
+            
+        }
+    }})
+
+    this.$store.subscribeAction({after: (action) => {
+        if (action.type ==='setCurrImage') {
+            this.img_temp = this.$store.getters.get_curr_image
             
         }
     }})
 
   },
   methods:{
+      ...mapActions(['setCurrImage']),
       goTo: function(imgNo){
         this.$store.commit('set_image_count', imgNo);
         this.image_box = this.$store.getters.getImageBoxes;
+        this.setCurrImage(imgNo)
       },
   }
 };
@@ -61,16 +69,18 @@ export default {
 <style scoped>
 .center{
   margin:auto;
-  min-width: 80% !important;
+  width: 80% !important;
 }
 table{
   width: 100% !important;
+  overflow-x: scroll;
 }
 td{
   margin: auto;
   border: 1px solid grey;
   width: 5%!important;
   cursor:pointer !important;
+  
 }
 .yet{
   background-color: rgba(180, 180, 180, 0.548);

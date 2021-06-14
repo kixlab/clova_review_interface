@@ -15,7 +15,8 @@ export default new Vuex.Store({
     mturk_id: null,
     server_url: 'http://13.125.232.221:8000',
     image_order: 0,
-    annot_status: new Array(20).fill(false) 
+    annot_status: new Array(20).fill(false),
+    curr_image: 0,
   },
   mutations: {
     set_image_count (state, cnt) {
@@ -37,32 +38,42 @@ export default new Vuex.Store({
       //console.log('before', state.annot_status)
       state.annot_status = new_status
       //console.log('after', state.annot_status)
+    },
+    set_curr_image(state, curr_image) {
+      state.curr_image = curr_image
     }
   },
   getters: {
     image_url: state => {
       var docType= router.currentRoute.params.docType
       var image_order=state.image_order
- //     var imgNo=router.currentRoute.params.imgNo
-      var two_digit_id = ("0" + image_order).slice(-2);
-      return state.server_url + '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.png'
+      
+      var three_digit_id = ("00" + image_order).slice(-3);
+      console.log("server_url ** ", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png')
+      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
+      
     },
     json_url: state => {
       var docType= router.currentRoute.params.docType
       var image_order=state.image_order
-//      var imgNo=router.currentRoute.params.imgNo
-      var two_digit_id = ("0" + image_order).slice(-2);
-      return state.server_url + '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.json'
+
+      var three_digit_id = ("00" + image_order).slice(-3);
+      console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
+      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
     },
     image_no: state =>{
       return state.image_order
     },
     status: state=>{
+      console.log(state.annot_status)
       return state.annot_status
     },
     getIfAllImagesAnnotated: function (state) {
       return state.annot_status.every(status => status === true)
-  }
+    },
+    get_curr_image: (state) => {
+      return state.curr_image
+    }
 
   },
   actions:{
@@ -76,6 +87,9 @@ export default new Vuex.Store({
       //console.log('setAStatus called with', payload)
       
       commit('update_a_status', new_status)
+    },
+    setCurrImage({commit}, newidx) {
+      commit('set_curr_image', newidx)
     }
   },
   modules: {

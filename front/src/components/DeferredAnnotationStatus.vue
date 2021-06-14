@@ -32,7 +32,7 @@
                   text
                   @click="reset"
                 >
-                  Yes, I want
+                  Yes, I want to
                 </v-btn>
                 <v-spacer/>
                 <v-btn
@@ -40,7 +40,7 @@
                   text
                   @click="undo_warning = false"
                 >
-                  No, I don't want
+                  No, I don't want to
                 </v-btn>
               </v-card-actions>
               </v-card>
