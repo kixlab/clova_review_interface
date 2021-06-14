@@ -129,3 +129,4 @@ email,original message,3,subject,subject (title) of the original message
 email,original message,4,receiver,receiver of the original message
 email,original message,5,contents,contents of the original message
 email,original message,6,others,others
+email,others,1,meaningless,Meaningless boxes
