@@ -3,13 +3,17 @@ receipt,1,menu
 receipt,2,subtotal
 receipt,3,total
 receipt,4,payment
-resume,1,personal info
-resume,2,employment
-resume,3,education
-resume,4,experience
-resume,5,publication
-resume,6,committee
-resume,7,awards
+resume,1,document info
+resume,2,personal info
+resume,3,employment
+resume,4,education
+resume,5,experience
+resume,6,publication
+resume,7,research projects
+resume,8,military service
+resume,9,organization
+resume,10,awards
+resume,11,others
 event,1,event
 event,2,organizer
 event,3,sponsor
@@ -21,5 +25,7 @@ email,2,account_name
 email,3,sender
 email,4,date
 email,5,receiver
-email,6,contents
-email,7,signature
+email,6,tag
+email,7,contents
+email,8,signature
+email,9,original message
