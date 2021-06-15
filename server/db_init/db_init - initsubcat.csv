@@ -115,7 +115,8 @@ email,tag,1,category,category tags in the email
 email,tag,2,sensitivity,sensitivity tags in the email
 email,tag,3,importance,importance tag in the email
 email,tag,4,warning,warnings in the email
-email,tag,5,others,others
+email,tag,5,original message,original message tag in the email
+email,tag,6,others,others
 email,contents,1,subject,subject (title) of the email
 email,contents,2,bodytext,body of the email
 email,contents,3,attachment,attachment added to the email
@@ -125,10 +126,4 @@ email,signature,2,title,job title in the signature
 email,signature,3,institution,institution affiliation in the signature
 email,signature,4,contact,contact in the signature
 email,signature,5,others,others
-email,original message,1,sender,sender of the original message
-email,original message,2,date,date the original message was sent
-email,original message,3,subject,subject (title) of the original message
-email,original message,4,receiver,receiver of the original message
-email,original message,5,contents,contents of the original message
-email,original message,6,others,others
 email,others,1,meaningless,Meaningless boxes
