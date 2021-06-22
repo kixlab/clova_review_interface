@@ -26,8 +26,7 @@ SECRET_KEY = 'zf%(k#^&(_044^ypb_&@6s+)1yozp=h0roq^khh^x&e&^)08u1'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://13.125.232.221',
-    'http://172.31.26.161',
+    'http://3.35.230.13',
     '*'
     ]
 
@@ -47,8 +46,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
-    'http://13.125.232.221:8080',
-    'http://13.125.232.221'
+    'http://3.35.230.13:8080',
+    'http://3.35.230.13'
 )
 
 INSTALLED_APPS = [
