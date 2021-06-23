@@ -43,7 +43,7 @@ export default {
       const self = this;
       self.$helpers.server_get(self, "/api/consent-agreed", 
         function(self, res){ // eslint-disable-line no-unused-vars
-          self.$router.push('doctypelist')
+          self.$router.push('annotation/receipt')
         })
     }
   },
