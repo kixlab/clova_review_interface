@@ -6,10 +6,11 @@
       </v-card-title>
       
       <v-card-subtitle class='text-left'>
-        There are <b style="color:blue;">Categories</b> and <b style="color:blue;">Sub-categories</b>. Please scroll down to take a look at all of them.
+        There are <b style="color:blue;">Sub-categories</b> to <b style="color:blue;"> each category</b>. We recommend you take a look at all of them before starting to annotate.
       </v-card-subtitle>
       
       <v-card-text> 
+        <div>{{cats}}</div>
         <v-row>
           <v-col :cols="4" style="text-align:left;">
             Category
@@ -31,20 +32,16 @@
              <v-list>
               <v-list-item-group
               >
-                <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk" v-on:click.stop="annotate(subcat, 1)">
+                <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk">
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
-                    <!--
                     <span v-if="subcat.subcat!='N/A'" class='conf-btn'>
-                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Annotate</v-btn>
+                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                     <v-btn x-small outlined color="warning" v-on:click.stop="annotate(subcat, 0)">Can be</v-btn>
                     </span>
-                    -->
-                    <!--
                     <span v-if="subcat.subcat=='N/A'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
                     </span>
-                    -->
                   </span>
                 </v-list-item>
               </v-list-item-group>

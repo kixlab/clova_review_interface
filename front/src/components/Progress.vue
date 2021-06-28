@@ -32,7 +32,7 @@ export default {
       stats: this.$store.getters.status,
       image_box: this.$store.getters.getImageBoxes,
 
-      stats_temp: new Array(300).fill(false),
+      stats_temp: new Array(30).fill(false),
       img_temp: this.$store.getters.get_curr_image
     };
   },

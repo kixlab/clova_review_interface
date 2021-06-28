@@ -23,15 +23,15 @@ def checkUser(request):
                 usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
                 usercat.save()
             # add N/A category 
-            #for doctype in DocType.objects.all():
-                #UserCat(user=user, doctype=doctype, cat_text="N/A").save()
+            for doctype in DocType.objects.all():
+                UserCat(user=user, doctype=doctype, cat_text="N/A").save()
             # initialize usersubcats 
             for initsubcat in InitSubCat.objects.all():
                 usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
                 UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()   
             # add N/A subcategory to each category 
-            #for usercat in UserCat.objects.filter(user=user):
-                #UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
+            for usercat in UserCat.objects.filter(user=user):
+                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
         else: 
             user=User.objects.get(username=username)
         user, created = User.objects.get_or_create(username=username)
