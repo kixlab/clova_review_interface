@@ -10,7 +10,6 @@
       </v-card-subtitle>
       
       <v-card-text> 
-        <div>{{cats}}</div>
         <v-row>
           <v-col :cols="4" style="text-align:left;">
             Category

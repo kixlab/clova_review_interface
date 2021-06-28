@@ -7,7 +7,7 @@
 
       2. This research is to re-design the machine learning dataset generation process with crowdsourcing. <br><br>
 
-      3. In this experiment, you will <b>assign appropriate labels to the text boxes</b> on <b>30 different receipt images</b>.<br><br>
+      3. In this experiment, you will <b>assign appropriate labels to the text boxes</b> on <b>21 different receipt images</b>.<br><br>
 
       4. As the annotation interface to be used in this experiment does not include an invasive treatment, 
       you are informed that no side effects are known or expected. 
@@ -23,7 +23,7 @@
       7. Contact Information<br>
       
       If you have any questions or wish to express any discomfort related to this research, please feel free to contact the researcher below. <br><br>
-      <b>&lt;Name of researcher: Jeongeon Park, Contact: <a>jeongeon.park@kaist.ac.kr</a>&gt; <br><br></b>
+      <b>&lt;Name of researcher: Jeongeon Park, Contact: <a>jeongeonpark1@gmail.com</a>&gt; <br><br></b>
 
       <v-divider/> <br/>
       <h4>I have read this Informed Consent and received a response to each and every question asked. <br/>I hereby confirm that I would like to voluntarily participate in the research.<br><br></h4>
