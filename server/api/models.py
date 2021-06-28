@@ -11,7 +11,7 @@ from django.core.validators import int_list_validator
 # Create your models here.
 class User(models.Model):
     username= models.TextField()
-    
+    mturk_id= models.TextField()
     consentAgreed = models.BooleanField(default=False)
     instrEnded = models.BooleanField(default=False)
     # start_image_id = models.IntegerField(default=0)
