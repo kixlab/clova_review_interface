@@ -4,7 +4,9 @@ export default {
     server_get(self, url, fn) {
       //console.log(self)
         axios.get(self.$store.state.server_url + url, {
-          mturk_id:self.$store.state.mturk_id
+          params:{          
+            mturk_id:self.$store.state.mturk_id
+          }
         }).then(function (res) {
           fn.apply(this, [self, res])
         }).catch(function(err) {
