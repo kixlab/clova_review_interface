@@ -22,6 +22,7 @@ def signup(request):
     password = username
     if len(User.objects.filter(username=username))==0:
         new_user=User(username=username, password=password)
+        print(username)
         new_user.save()
         login(request, new_user)
         

@@ -41,6 +41,7 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, **kwargs):
+    print(instance)
     Profile.objects.create(user=instance, doctype='receipt').save()
 
 """ # Create your models here.
