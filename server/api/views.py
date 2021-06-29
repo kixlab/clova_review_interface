@@ -24,7 +24,7 @@ def signup(request):
         new_user=User(username=username, password=password)
         new_user.save()
         login(request, new_user)
-        print('logged in?', new_user.is_authenticated)
+#        print('logged in?', new_user.is_authenticated)
         
         response = {
             'status': 'new',
