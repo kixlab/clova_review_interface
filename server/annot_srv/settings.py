@@ -42,13 +42,29 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+    'http://13.125.191.49:8080',
+    'http://13.125.191.49:8000'
+]
+
+CORS_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://13.125.191.49:8080',
+    'http://13.125.191.49:8000'
+]
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
     'http://13.125.191.49:8080',
     'http://13.125.191.49'
 )
+
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+
 
 INSTALLED_APPS = [
     'corsheaders',
