@@ -35,6 +35,7 @@ export default {
     )
   ,
   mounted: function () {
+    const self=this;
       axios.get(self.$store.state.server_url + "/api/check-user/", {
         }).then(function(res){
         var login_status=res.data.login_status;
