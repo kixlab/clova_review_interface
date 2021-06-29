@@ -82,6 +82,7 @@ def checkUser(request):
     if request.method =='GET':
         user=request.user 
         print('user', user)
+        print('request', request)
         if(user==None):
             response={
                 'login_status': False
