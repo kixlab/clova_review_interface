@@ -86,7 +86,7 @@ class Log(models.Model):
         readInstruction = 'RI', _('ReadInstruction')
         submit = 'SU', _('Submit')
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     logTime = models.DateTimeField(auto_now_add=True)
     imageID = models.IntegerField(default=-1)
     boxIDs = models.TextField(default=[], validators=[validate_comma_separated_integer_list])
@@ -98,7 +98,7 @@ class Log(models.Model):
     )
 
 class Label(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     imageID = models.IntegerField()
     groupID = models.IntegerField()
     boxIDs = models.TextField(validators=[validate_comma_separated_integer_list])
@@ -134,7 +134,7 @@ class InitSubCat(models.Model):
 
 
 class UserCat(models.Model):
-    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     cat_text=models.CharField(max_length=255)
     made_at=models.IntegerField(null=True, default=9999)
@@ -150,7 +150,7 @@ class UserSubcat(models.Model):
         return self.usercat.user.username+'-'+str(self.subcat_text)
 
 class DefAnnotation(models.Model):
-    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
     subcat = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
@@ -161,7 +161,7 @@ class DefAnnotation(models.Model):
         return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
 
 class Annotation(models.Model):
-    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
     is_alive=models.BooleanField(default=False)
@@ -171,7 +171,7 @@ class Annotation(models.Model):
         return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)
 
 class Status(models.Model):
-    user=models.ForeignKey('User', on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     status=models.BooleanField(default=False)
     def __str__(self):
