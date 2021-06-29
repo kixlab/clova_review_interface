@@ -13,6 +13,38 @@ receipt,total,1,price,Total price
 receipt,payment,1,cash,Price paid by cash
 receipt,payment,2,change,Amount of change received
 receipt,payment,3,credit card,Price paid by credit card
+resume,personal info,1,name,Name of the person
+resume,personal info,2,office address,Address of the office
+resume,personal info,3,office no.,Phone number of the office
+resume,personal info,4,job title,Title of the current job
+resume,personal info,5,institution,Institution that the person works at
+resume,personal info,6,birthplace,Birthplace of the person
+resume,personal info,7,birthdate,Birthdate of the person
+resume,personal info,8,research interest,Field that the person is working on or interested in
+resume,employment,1,title,Title of the job
+resume,employment,2,institution,Institution that the person worked at
+resume,employment,3,location,Location of the institution
+resume,employment,4,year,Dates of the experience
+resume,education,1,degree,Degree that the person has
+resume,education,2,institution,Institution or school that the person received the degree
+resume,education,3,location,Location of the institution
+resume,education,4,major,Major field of study for the degree
+resume,education,5,graduation year,Year that the person received the degree
+resume,experience,1,title,Title of the experience
+resume,experience,2,institution,Institution of the experience
+resume,experience,3,location,Location of the experience
+resume,experience,4,role description,Role description of the experience
+resume,experience,5,year,Dates of the experience
+resume,publication,1,title,Publication title
+resume,publication,2,year,Publication year
+resume,publication,3,venue,Journal or conference the paper was published
+resume,publication,4,authors,Author list of the publication
+resume,committee,1,title,Title of the committee that the person belongs to
+resume,committee,2,organization,Organization of the committee
+resume,committee,3,year,Dates that the person served in the committee
+resume,awards,1,title,Title of the award
+resume,awards,2,institution,Institution that gave the award
+resume,awards,3,year,Dates that the person received the award
 event,event,1,title,Title of the event
 event,event,2,subtitle,Subtitle of the event
 event,event,3,date,Dates of the event
@@ -35,95 +67,20 @@ event,registration,2,date,Deadline of registration
 event,registration,3,fee,Registration fee
 event,submission,1,type,Type of submission
 event,submission,2,date,Deadline of submission
-resume,document info,1,date written,Date that the document was written
-resume,document info,2,to where,Place that the document was submitted
-resume,document info,3,document id,Id of the document
-resume,document info,4,others,others
-resume,personal info,1,name,Name of the person
-resume,personal info,2,home address,Home address of the person
-resume,personal info,3,office address,Address of the office
-resume,personal info,4,office no.,Phone number of the office
-resume,personal info,5,home no.,Phone number of the person's home
-resume,personal info,6,fax no.,Fax number of the office
-resume,personal info,7,citizenship,Citizenship information of the person
-resume,personal info,8,social security #,Social security number of the person
-resume,personal info,9,job title,Title of the current job
-resume,personal info,10,job role,Role of the current job
-resume,personal info,11,institution,Institution that the person works at
-resume,personal info,12,birthplace,Birthplace of the person
-resume,personal info,13,birthdate,Birthdate of the person
-resume,personal info,14,research interest,Field that the person is working on or interested in
-resume,personal info,15,others,others
-resume,employment,1,title,Title of the job
-resume,employment,2,institution,Institution that the person worked at
-resume,employment,3,location,Location of the institution
-resume,employment,4,start year,Start date of the employment
-resume,employment,5,end year,End date of the employment
-resume,employment,6,others,others
-resume,education,1,degree,Degree that the person has
-resume,education,2,institution,Institution or school that the person received the degree
-resume,education,3,location,Location of the institution
-resume,education,4,major,Major field of study for the degree
-resume,education,5,graduation year,Year that the person received the degree
-resume,education,6,honors,Honors that the person received
-resume,education,7,others,others
-resume,experience,1,title,Title of the experience
-resume,experience,2,institution,Institution of the experience
-resume,experience,3,location,Location of the experience
-resume,experience,4,role description,Role description of the experience
-resume,experience,5,start year,Start date of the experience
-resume,experience,6,end year,End date of the experience
-resume,experience,7,others,others
-resume,publication,1,title,Publication title
-resume,publication,2,year,Publication year
-resume,publication,3,venue,Journal or conference the paper was published
-resume,publication,4,authors,Author list of the publication
-resume,publication,5,others,others
-resume,research projects,1,description,Description of the research project
-resume,research projects,2,others,others
-resume,military service,1,title,Title of the military service
-resume,military service,2,start year,Start date of the military service
-resume,military service,3,end year,End date of the military service
-resume,military service,4,others,others
-resume,organization,1,title,Title of the person in the organization
-resume,organization,2,organization name,Name of the organization
-resume,organization,3,start year,Start date of the person in the organization
-resume,organization,4,end year,End date of the person in the organization
-resume,organization,5,others,others
-resume,awards,1,name,Name of the award the person received
-resume,awards,2,institution,Institution that gave the award
-resume,awards,3,start year,Start date of the award
-resume,awards,4,end year,End date of the award
-resume,awards,5,others,others
-resume,others,1,meaningless,Meaningless boxes
 email,email_id,1,email_id,id of the email
-email,email_id,2,others,others
 email,account_name,1,account_name,name of the email account
-email,account_name,2,others,others
 email,sender,1,sender,sender of the email
-email,sender,2,others,others
 email,date,1,date_sent,date the email was sent
-email,date,2,date_modified,primary date of the email
-email,date,3,date_primary,last modified date of the email
+email,date,2,date_primary,primary date of the email
+email,date,3,date_modified,last modified date of the email
 email,date,4,date_touched,last touched date of the email
-email,date,5,others,others
 email,receiver,1,receiver_to,the people who received the email
 email,receiver,2,receiver_cc,the people who were cc'ed to the email
 email,receiver,3,receiver_bcc,the people who were bcc'ed to the email
-email,receiver,4,others,others
-email,tag,1,category,category tags in the email
-email,tag,2,sensitivity,sensitivity tags in the email
-email,tag,3,importance,importance tag in the email
-email,tag,4,warning,warnings in the email
-email,tag,5,original message,original message tag in the email
-email,tag,6,others,others
 email,contents,1,subject,subject (title) of the email
 email,contents,2,bodytext,body of the email
 email,contents,3,attachment,attachment added to the email
-email,contents,4,others,others
 email,signature,1,name,name in the signature
 email,signature,2,title,job title in the signature
 email,signature,3,institution,institution affiliation in the signature
 email,signature,4,contact,contact in the signature
-email,signature,5,others,others
-email,others,1,meaningless,Meaningless boxes

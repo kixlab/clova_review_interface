@@ -46,7 +46,7 @@ def create_user_profile(sender, instance):
 """ # Create your models here.
 class User(models.Model):
     username= models.TextField()
-    
+
     consentAgreed = models.BooleanField(default=False)
     instrEnded = models.BooleanField(default=False)
     # start_image_id = models.IntegerField(default=0)

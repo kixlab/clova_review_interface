@@ -5,15 +5,15 @@
     <h1> Welcome! </h1>
     Thank you for your participation!<br><br>
 
-    This task is conducted as a part of a research project in which we try to re-design the taxonomy generation for annotation with crowdsourcing. 
-    In this task, you will be asked to annotate text boxes on a receipt image with an appropriate labels.<br>
+    This task is conducted as a part of a research project in which we try to re-design the machine learning dataset generation process with crowdsourcing. 
+    In this task, you will be asked to label text boxes on a receipt image with a given label set.<br>
 
     <br><v-divider/><br>
 
     <h3 style="color:red;"> CAUTIONS </h3>
     <ul>
       <li> <b>An MTurk user can participate in this task only once.</b> </li>
-      <li> This task is expected to take 30 minutes at maximum.</li>
+      <li> This task is expected to take 60 minutes at maximum.</li>
       <li> You will be provided with a token after completing the task. You <b>MUST</b> submit this token to the Amazon MTurk website to get rewards. </li>
       <li> If majority of your annotations are found to not follow the instructions, you may not be rewarded.</li>
       <li> It is strongly recommended that you use <a target="_blank" rel="noopener noreferrer" href="https://www.google.com/chrome/">chrome</a> browser in your desktop/laptop for the task. 
@@ -24,12 +24,12 @@
     <h3> STEPS </h3>
     <ol>
       <li> Read instruction </li>
-      <li> Annotate 20 receipt images </li>
-      <li> Submit a token to Amazon MTurk webpage</li>
+      <li> Annotate 21 receipt images </li>
+      <li> Do a simple survey and submit a token to Amazon MTurk webpage</li>
     </ol>
-    <br><br>
+    <br>
 
-    <h4> Contact : <a>jeongeonpark1@gmail.com</a> </h4>
+    <h4>For any questions, please contact : <a>jeongeonpark1@gmail.com</a> </h4> <br/>
     <h4>Fill in the blank with your MTurk ID and click the button below to proceed to the next step.</h4>
     <v-form
       ref="form"
