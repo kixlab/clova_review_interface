@@ -4,8 +4,8 @@ export default {
     server_get(self, url, fn) {
       //console.log(self)
         axios.get(self.$store.state.server_url + url, {
-          params:{          
-            mturk_id:self.$store.state.mturk_id
+          params: {
+            mturk_id: self.$store.state.mturk_id
           }
         }).then(function (res) {
           fn.apply(this, [self, res])
@@ -15,7 +15,7 @@ export default {
     },
     server_post(self, url, fn) {
         axios.post(self.$store.state.server_url + url, {
-          mturk_id:self.$store.state.mturk_id
+          mturk_id: self.$store.state.mturk_id
         }).then(function (res) {
           fn.apply(this, [self, res])
         }).catch(function(err) {
@@ -24,7 +24,7 @@ export default {
     },
     server_log(self, type, box_ids, label='') {
       axios.post(self.$store.state.server_url + '/api/log/', {
-        mturk_id:self.$store.state.mturk_id,
+        mturk_id: self.$store.state.mturk_id,
         type: type,
         image_id : self.$store.state.image_order,
         box_ids : box_ids,
@@ -34,15 +34,9 @@ export default {
       });
   },
     isWrongAccess(self) {
-      console.log(self.$store.state.mturk_id)
-      axios.get(self.$store.state.server_url + '/api/check-user/', {
-        mturk_id:self.$store.state.mturk_id
-      }).then(function(res){
-        var login_status=res.data.login_status;
-        if(!login_status){
-          alert("You are not logged in. You will be redirected to the login page.")
-          self.$router.push('landing');
-        }
-      });
+      if (self.$store.state.mturk_id === null) {
+        self.$router.push('landing')
+        alert("You should register your mturk ID to proceed to the task.\n")
+      }
     }
 };
