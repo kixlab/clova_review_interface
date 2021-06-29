@@ -30,6 +30,7 @@ export default {
   },
     isWrongAccess(self) {
       axios.get(self.$store.state.server_url + '/api/check-user/', {
+        mturk_id:self.$store.state.mturk_id;
       }).then(function(res){
         var login_status=res.data.login_status;
         if(!login_status){
