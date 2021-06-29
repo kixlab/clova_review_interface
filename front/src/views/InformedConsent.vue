@@ -41,13 +41,15 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'InformedConsent',
   methods: {
     onClickNext: function () {
       const self = this;
       axios.post(self.$store.state.server_url + "/api/consent-agreed/", {
-        }).then(function (res) {
+        }).then(function () {
           self.$router.push('instruction');           
         });
     }
