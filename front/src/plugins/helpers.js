@@ -29,9 +29,12 @@ export default {
       });
   },
     isWrongAccess(self) {
-      if (self.$store.state.mturk_id === null) {
-        self.$router.push('landing')
-        alert("You should register your mturk ID to proceed to the task.\n")
-      }
+      axios.get(self.$store.state.server_url + '/api/check-user/', {
+      }).then(function(res){
+        var login_status=res.data.login_status;
+        if(!login_status){
+          alert("You are not logged in. You will be redirected to the login page.")
+        }
+      });
     }
 };

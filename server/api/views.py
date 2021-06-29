@@ -79,6 +79,21 @@ def startTask(request):
 
 @csrf_exempt
 def checkUser(request):
+    if request.method =='GET':
+        user=request.user 
+        if(user==None):
+            response={
+                'login_status': False
+            }
+        else:
+            response={
+                'login_status': True
+            }
+        return JsonResponse(response)
+
+        
+""" @csrf_exempt
+def checkUser(request):
     if request.method == 'GET':
         username = request.GET['mturk_id']
         print(User.objects)
@@ -109,7 +124,7 @@ def checkUser(request):
             'consent_agreed': user.consentAgreed,
             'step': 1
         }
-        return JsonResponse(response)
+        return JsonResponse(response) """
 
 @csrf_exempt
 def recordconsentAgreed(request):

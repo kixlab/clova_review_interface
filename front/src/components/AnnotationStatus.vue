@@ -124,7 +124,7 @@ export default {
     remove(group) {
       const self = this;
       axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
-        mturk_id: self.$store.state.mturk_id,
+//        mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.image_order,
         annot_pk: group.annotpk
@@ -146,7 +146,7 @@ export default {
       });
 
       axios.post(self.$store.state.server_url + "/api/update-status/", {
-        mturk_id: self.$store.state.mturk_id,
+       // mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.image_order,
         status: false
