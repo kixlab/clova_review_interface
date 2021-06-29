@@ -137,7 +137,7 @@ def checkUser(request):
 
 @csrf_exempt
 def recordconsentAgreed(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
         #user=request.user
