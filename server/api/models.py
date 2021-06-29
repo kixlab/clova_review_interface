@@ -37,7 +37,7 @@ class Profile(models.Model):
     token=models.CharField(max_length=50, default='coffee chocolate black tea')
 
     def __str__(self):
-        return self.user.username + self.group
+        return self.user.username + self.doctype
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance,created, **kwargs):
