@@ -132,6 +132,8 @@ def recordconsentAgreed(request):
         #username = request.GET['mturk_id']
         #user = User.objects.get(username=username)
         user=request.user
+        print('User', user)
+        print('request', request)
         profile=Profile.objects.get(user=user)
         profile.consent_agreed=True
         profile.save()
