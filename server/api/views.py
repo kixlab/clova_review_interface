@@ -19,8 +19,6 @@ from django.db.models import Max
 @permission_classes([AllowAny])
 def signup(request):
     username = request.data['username']
-    print(request.POST)
-    print('Hi',username)
     password = username
     if len(User.objects.filter(username=username))==0:
         new_user=User(username=username, password=password)
