@@ -30,8 +30,9 @@ ALLOWED_HOSTS = [
     '*'
     ]
 
-CSRF_COOKIE_NAME = "csrftoken"
-CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_NAME = 'XSRF-TOKEN'
+CSRF_HEADER_NAME = 'X-XSRF-TOKEN'
+
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
     'http://13.125.191.49:8080',
