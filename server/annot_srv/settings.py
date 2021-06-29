@@ -30,6 +30,16 @@ ALLOWED_HOSTS = [
     '*'
     ]
 
+CSRF_COOKIE_NAME = "csrftoken"
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8080',
+    'http://13.125.191.49:8080',
+    'http://13.125.191.49'
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 REST_FRAMEWORK = {
@@ -41,24 +51,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
-    'http://13.125.191.49:8080',
-    'http://13.125.191.49:8000'
-]
-
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',
-    'http://13.125.191.49:8080',
-    'http://13.125.191.49'
-)
-
-CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = True
-
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
 
 
 INSTALLED_APPS = [
