@@ -29,20 +29,20 @@ export default {
   created () {
       document.title = "Annotation";
   },
-  data: () => ({
-    id_field: function () {
+  data: () => (
+    {
+    id_field: ''}
+    )
+  ,
+  mounted: function () {
       axios.get(self.$store.state.server_url + "/api/check-user/", {
         }).then(function(res){
         var login_status=res.data.login_status;
-        if(!login_status){
-          return ''
-        }
-        else{
-          return '(ID: '+ res.data.username+')'
+        if(login_status){
+          this.id_field='(ID: '+res.data.username+')'
         }
       });
   }
-  }),
 }
 </script>
 
