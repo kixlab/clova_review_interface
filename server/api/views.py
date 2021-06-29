@@ -80,7 +80,7 @@ def startTask(request):
 @csrf_exempt
 def checkUser(request):
     if request.method =='GET':
-        username = request.GET['mturk_id']
+        username = request.GET.get('mturk_id')
         user = User.objects.get(username=username)
         
         #user=request.user 
