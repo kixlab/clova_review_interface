@@ -46,10 +46,10 @@ export default {
   methods: {
     onClickNext: function () {
       const self = this;
-      self.$helpers.server_post(self, "/api/consent-agreed/", 
-        function(self, res){ // eslint-disable-line no-unused-vars
-          self.$router.push('instruction')
-        })
+      axios.post(self.$store.state.server_url + "/api/consent-agreed/", {
+        }).then(function (res) {
+          self.$router.push('instruction');           
+        });
     }
   },
   beforeCreate() {
