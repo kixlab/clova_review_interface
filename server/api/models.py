@@ -32,7 +32,7 @@ class Profile(models.Model):
     endtime=models.DateTimeField(blank=True, null=True)
 
     dropout=models.BooleanField(default=True)
-    
+
     done=models.BooleanField(default=False)
     token=models.CharField(max_length=50, default='coffee chocolate black tea')
 
@@ -40,7 +40,7 @@ class Profile(models.Model):
         return self.user.username + self.group
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance):
+def create_user_profile(sender, instance, **kwargs):
     Profile.objects.create(user=instance, group='receipt').save()
 
 """ # Create your models here.
