@@ -83,15 +83,15 @@ export default {
     onClickNext: function () {
       const self = this;
       self.$refs.form.validate()
-      console.log(self.turk_id.trim())
+      self.$store.state.mturk_id=self.turk_id.trim()
       axios.post(self.$store.state.server_url + '/api/signup/', {
-        username: self.turk_id.trim(),
+        username: self.$store.state.mturk_id,
       }).then( function(res){
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
         if(res.data.status=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         } else{
-          self.$router.push('/informed-consent/')
+          elf.$router.push('/landing/')
         }
       });
     }

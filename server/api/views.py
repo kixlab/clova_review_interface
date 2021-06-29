@@ -80,10 +80,13 @@ def startTask(request):
 @csrf_exempt
 def checkUser(request):
     if request.method =='GET':
-        user=request.user 
-        print('user', user)
-        print('request', request)
-        if(user.is_anonymous):
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        
+        #user=request.user 
+        #print('user', user)
+        #print('request', request)
+        if(user == None):
             response={
                 'login_status': False
             }
@@ -132,11 +135,9 @@ def checkUser(request):
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'POST':
-        #username = request.GET['mturk_id']
-        #user = User.objects.get(username=username)
-        user=request.user
-        print('User', user)
-        print('request', request)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        #user=request.user
         profile=Profile.objects.get(user=user)
         profile.consent_agreed=True
         profile.save()
