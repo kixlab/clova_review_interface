@@ -32,6 +32,7 @@ export default {
       });
   },
     isWrongAccess(self) {
+      console.log(self.$store.state.mturk_id)
       axios.get(self.$store.state.server_url + '/api/check-user/', {
         mturk_id:self.$store.state.mturk_id
       }).then(function(res){
