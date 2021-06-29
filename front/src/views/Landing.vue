@@ -83,7 +83,7 @@ export default {
     onClickNext: function () {
       const self = this;
       self.$refs.form.validate()
-      self.$store.state.mturk_id=self.turk_id.trim()
+      self.$store.commit('set_mturk_id', self.turk_id.trim())
       axios.post(self.$store.state.server_url + '/api/signup/', {
         username: self.$store.state.mturk_id,
       }).then( function(res){
