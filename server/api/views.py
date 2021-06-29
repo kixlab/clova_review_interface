@@ -81,6 +81,7 @@ def startTask(request):
 def checkUser(request):
     if request.method =='GET':
         username = request.GET.get('mturk_id')
+        print('hi')
         user = User.objects.get(username=username)
         print(username, user)
         
