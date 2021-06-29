@@ -30,13 +30,16 @@ export default {
   },
   computed: {
     id_field: function () {
-      var mturk_id = this.$store.state.mturk_id;
-      if (mturk_id === null) {
-        return ''
-      }
-      else {
-        return '(ID : ' + mturk_id + ')'
-      }
+      axios.get(self.$store.state.server_url + "/api/check-user/", {
+        }).then(function(res){
+        var login_status=res.data.login_status;
+        if(!login_status){
+          return ''
+        }
+        else{
+          return '(ID: '+ res.data.username+')'
+        }
+      });      
     }
   }
 }

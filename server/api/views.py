@@ -87,7 +87,8 @@ def checkUser(request):
             }
         else:
             response={
-                'login_status': True
+                'login_status': True,
+                'username': user.username
             }
         return JsonResponse(response)
 
