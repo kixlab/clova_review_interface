@@ -18,7 +18,7 @@ from django.db.models import Max
 @api_view(['POST','GET'])
 @permission_classes([AllowAny])
 def signup(request):
-    username = request.POST.get('username')
+    username = request.data['username']
     print(request.POST)
     print('Hi',username)
     password = username
