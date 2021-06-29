@@ -91,7 +91,7 @@ export default {
         if(res.data.status=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         } else{
-          elf.$router.push('/landing/')
+          self.$router.push('landing/')
         }
       });
     }
