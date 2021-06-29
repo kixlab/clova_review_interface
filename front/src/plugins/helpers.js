@@ -34,6 +34,7 @@ export default {
         var login_status=res.data.login_status;
         if(!login_status){
           alert("You are not logged in. You will be redirected to the login page.")
+          self.$router.push('landing');
         }
       });
     }

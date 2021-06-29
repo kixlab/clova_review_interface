@@ -132,7 +132,9 @@ def recordconsentAgreed(request):
         #username = request.GET['mturk_id']
         #user = User.objects.get(username=username)
         user=request.user
-        user.consentEnd()
+        profile=Profile.objects.get(user=user)
+        profile.consent_agreed=True
+        profile.save()
         return HttpResponse('')
 
 @csrf_exempt
