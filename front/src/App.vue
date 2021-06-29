@@ -23,13 +23,12 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   name: 'app',
   created () {
       document.title = "Annotation";
   },
-  computed: {
+  data: () => ({
     id_field: function () {
       axios.get(self.$store.state.server_url + "/api/check-user/", {
         }).then(function(res){
@@ -40,9 +39,9 @@ export default {
         else{
           return '(ID: '+ res.data.username+')'
         }
-      });      
-    }
+      });
   }
+  }),
 }
 </script>
 
