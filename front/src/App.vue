@@ -40,7 +40,7 @@ export default {
         }).then(function(res){
         var login_status=res.data.login_status;
         if(login_status){
-          this.id_field='(ID: '+res.data.username+')'
+          self.id_field='(ID: '+res.data.username+')'
         }
       });
   }
