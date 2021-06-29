@@ -35,7 +35,7 @@ export default {
       var self=this;
       
       axios.post(self.$store.state.server_url + "/api/save-as-regular/", {
-            mturk_id: self.$store.state.mturk_id,
+            //mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
           }).then(function () {
             self.$router.push('../../review/'+doctype);

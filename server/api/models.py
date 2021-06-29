@@ -1,5 +1,9 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import validate_comma_separated_integer_list
@@ -7,8 +11,39 @@ from django.core.validators import int_list_validator
 
 
 
+class Profile(models.Model):
+    user=models.OneToOneField(User, on_delete=models.CASCADE)
+    signuptime=models.DateTimeField(auto_now_add=True, blank=True)
+    
+    DOCTYPES=[
+        ('receipt', 'receipt'),
+        ('email', 'email'),
+        ('event', 'event')
+    ]
+    doctype=models.CharField(max_length=20, choices=DOCTYPES, default='receipt')
+    
+    consent_agreed=models.BooleanField(default=False)
 
-# Create your models here.
+    instr_read=models.BooleanField(default=False)
+
+    starttime=models.DateTimeField(blank=True, null=True)
+    user_order=models.IntegerField(default=0)
+
+    endtime=models.DateTimeField(blank=True, null=True)
+
+    dropout=models.BooleanField(default=True)
+    
+    done=models.BooleanField(default=False)
+    token=models.CharField(max_length=50, default='coffee chocolate black tea')
+
+    def __str__(self):
+        return self.user.username + self.group
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance):
+    Profile.objects.create(user=instance, group='receipt').save()
+
+""" # Create your models here.
 class User(models.Model):
     username= models.TextField()
     
@@ -35,7 +70,7 @@ class User(models.Model):
         self.instrEndTime = timezone.now()
         self.start_image_id = 0
         self.save()
-
+ """
 class Log(models.Model):
     class BehaviorTypes(models.TextChoices):
         null = 'NL', _('NULL')

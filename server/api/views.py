@@ -1,11 +1,79 @@
 from django.shortcuts import render
-
-# Create your views here.
+from django.contrib.auth import authenticate, login
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import viewsets, permissions
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from .models import *
 
 import json
+from datetime import datetime, timedelta
+from django.db.models import Max
+
+
+@csrf_exempt
+@api_view(['POST','GET'])
+@permission_classes([AllowAny])
+def signup(request):
+    username = request.GET['username']
+    password = username
+    if len(User.objects.filter(username=username))==0:
+        new_user=User.objects.create_user(username=username, password=password)
+        login(request, new_user)
+        
+        response = {
+            'status': 'new',
+            'doctype': 'receipt'
+        }
+    else: # if already signed up 
+        user=User.objects.get(username=username)
+        profile=Profile.objects.get(user=user)
+        login(request, user)
+        if profile.consent_agreed:
+            response = {
+                'status': 'annotation',
+                'doctype':profile.doctype
+            }
+        else:
+            response = {
+                'status':'consent',
+                'doctype':profile.doctype
+            }
+    return JsonResponse(response)
+
+@csrf_exempt
+def startTask(request):
+    if request.method == 'POST':
+        user=request.user
+        profile=Profile.objects.get(user=user)
+        profile.instr_read = True
+
+        # assign task by assigning start image number 
+        ## get smallest available user_order 
+        # check if there is a user order taken but not completed
+        dropouts=Profile.objects.filter(instr_read=True, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
+        if(len(dropouts)==0):
+            # assign new order
+            order=Profile.objects.filter(instr_read=True, dropout=False).aggregate(Max('user_order'))+1 
+
+        else:
+            # reassign the first dropout order to this user 
+            dropout=dropouts[0]
+            dropout.dropout=True
+            dropout.save()
+
+            order=dropout.user_order
+        profile.starttime=datetime.now()
+        profile.user_order=order        
+        profile.save()
+
+        response={
+            'user_order': order
+        }
+        return JsonResponse(response)
 
 @csrf_exempt
 def checkUser(request):
@@ -44,17 +112,18 @@ def checkUser(request):
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
+        #username = request.GET['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         user.consentEnd()
         return HttpResponse('')
 
 @csrf_exempt
 def recordInstrDone(request):
     if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-
+        #username = request.GET['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         if (user.instrEnded == False):
             valid_usrs = len(list(User.objects.filter(instrEnded = True)))
             user.startTask(valid_usrs)
@@ -72,13 +141,14 @@ def getDocTypes(request):
 def recordLog(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+        user=request.user
+#        username = query_json['mturk_id']
         behavior_type = query_json['type']
         box_ids = query_json['box_ids']
         image_id = query_json['image_id']
         label = query_json['label']
 
-        user = User.objects.get(username=username)
+#        user = User.objects.get(username=username)
 
         Log.objects.create(
             user = user,
@@ -93,9 +163,11 @@ def recordLog(request):
 @csrf_exempt
 def getImageID(request):
     if request.method == 'GET':
-        username = request.GET['mturk_id']
+        user=request.user
+        #username = request.GET['mturk_id']
+        
         doctypetext=request.GET['doctype']
-        user = User.objects.get(username=username)
+        #user = User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
@@ -113,8 +185,9 @@ def getImageID(request):
 @csrf_exempt
 def getCats(request):
     if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
+#        username = request.GET['mturk_id']
+#        user = User.objects.get(username=username)
+        user=request.user
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         usercats=UserCat.objects.filter(user=user, doctype=doctype)
@@ -133,8 +206,9 @@ def getCats(request):
 @csrf_exempt
 def getAnnotations(request):
     if request.method=='GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
+        #username = request.GET['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =request.GET['image_id']
@@ -154,8 +228,9 @@ def getAnnotations(request):
 @csrf_exempt
 def getDefAnnotations(request):
     if request.method=='GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
+#        username = request.GET['mturk_id']
+#        user = User.objects.get(username=username)
+        user=request.user
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =request.GET['image_id']
@@ -181,8 +256,9 @@ def getDefAnnotations(request):
 def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
+        #username=query_json['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =query_json['image_id']
@@ -201,8 +277,9 @@ def saveAnnotation(request):
 def saveDefAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
+        #username=query_json['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =query_json['image_id']
@@ -228,8 +305,9 @@ def saveDefAnnotation(request):
 def saveAsRegular(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
+        user=request.user
+#        username=query_json['mturk_id']
+#        user = User.objects.get(username=username)
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
 
@@ -247,8 +325,9 @@ def saveAsRegular(request):
 def deleteAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
+        user=request.user
+#        username=query_json['mturk_id']
+#        user = User.objects.get(username=username)
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =query_json['image_id']
@@ -265,8 +344,9 @@ def deleteAnnotation(request):
 def deleteDefAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
+        #username=query_json['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =query_json['image_id']
@@ -284,7 +364,8 @@ def deleteDefAnnotation(request):
 def submit(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+        user=request.user
+#        username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         annotation_data = query_json['annotationData']
@@ -292,7 +373,7 @@ def submit(request):
         doctype=DocType.objects.get(doctype=doctypetext)
 
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        user = User.objects.get(username=username)
+ #       user = User.objects.get(username=username)
         Status.objects.filter(user=user, document=document).update(status=True)
 
         #delete old labels --> this to be changed to record all the logs later
@@ -340,14 +421,15 @@ def submit(request):
 def updateStatus(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+        user=request.user
+#        username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         status= query_json['status']
         doctype=DocType.objects.get(doctype=doctypetext)
 
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        user = User.objects.get(username=username)
+#        user = User.objects.get(username=username)
         if(status):
             Status.objects.filter(user=user, document=document).update(status=True)
         else:
@@ -359,8 +441,9 @@ def updateStatus(request):
 @csrf_exempt
 def getStatus(request):
     if request.method=='GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
+        #username = request.GET['mturk_id']
+        #user = User.objects.get(username=username)
+        user=request.user
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
 
@@ -376,12 +459,13 @@ def getStatus(request):
 def addCat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+#        username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         cat= query_json['cat']
         doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
+#        user = User.objects.get(username=username)
+        user=request.user
         newCat=UserCat(user=user, doctype=doctype, cat_text=cat, made_at=int(image_id))
         newCat.save()
         response = {
@@ -394,7 +478,7 @@ def addCat(request):
 def addSubcat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+        #username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         image_id = query_json['image_id']
         cat= query_json['cat']
@@ -402,7 +486,8 @@ def addSubcat(request):
         desc=query_json['description']
 
         doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
+        #user = User.objects.get(username=username)
+        user=request.user
         print(cat)
         cat = UserCat.objects.get(user=user, doctype=doctype, cat_text=cat)
 
@@ -418,13 +503,14 @@ def addSubcat(request):
 def reviseCat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+        #username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         cat_pk= query_json['cat_pk']
         revcat=query_json['revcat']
 
         doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
+        #user = User.objects.get(username=username)
+        user=request.user
 
         UserCat.objects.filter(user=user, doctype=doctype, pk=int(cat_pk)).update(cat_text=revcat)
         return HttpResponse('')
@@ -434,14 +520,15 @@ def reviseCat(request):
 def reviseSubcat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username = query_json['mturk_id']
+#        username = query_json['mturk_id']
         doctypetext=query_json['doctype']
         subcat_pk= query_json['subcat_pk']
         revsubcat=query_json['revsubcat']
         revdesc=query_json['revdesc']
 
         doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
+#        user = User.objects.get(username=username)
+        user=request.user
 
         UserSubcat.objects.filter(pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
         return HttpResponse('')

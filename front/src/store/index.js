@@ -13,7 +13,8 @@ export default new Vuex.Store({
   })],
   state: {
     mturk_id: null,
-    server_url: 'http://3.35.230.13:8000',
+    doctype: null,
+    server_url: 'http://13.125.191.49:8000',
     image_order: 0,
     annot_status: new Array(300).fill(false),
     curr_image: 0,

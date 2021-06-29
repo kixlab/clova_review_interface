@@ -65,6 +65,7 @@
 <script>
 // @ is an alias to /src
 import { mapState } from "vuex";
+import axios from 'axios';
 
 export default {
   name: 'Landing',
@@ -82,15 +83,16 @@ export default {
     onClickNext: function () {
       const self = this;
       self.$refs.form.validate()
-      self.$store.commit('set_mturk_id', self.turk_id.trim())
-      self.$helpers.server_get(self, "/api/check-user", 
-        function(self, res){
-          if (res.data.consent_agreed === false){
-            self.$router.push('/informed-consent')
-          } else {
-            self.$router.push('/doctypelist')
-          }
-      })
+      axios.post(self.$store.state.server_url + '/api/signup/', {
+        username: self.turk_id.trim(),
+      }).then( function(res){
+//        self.$store.commit('set_mturk_id', self.turk_id.trim())
+        if(res.data.status=='annotation'){
+          self.$router.push('/annotation/'+res.data.doctype)
+        } else{
+          self.$router.push('/informed-consent')
+        }
+      });
     }
   },
   mounted() {
