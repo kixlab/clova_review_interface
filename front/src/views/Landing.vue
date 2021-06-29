@@ -91,8 +91,7 @@ export default {
         if(res.data.status=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         } else{
-          //self.$router.push('/landing/')
-          console.log('logged in')
+          self.$router.push('/informed-consent/')
         }
       });
     }
