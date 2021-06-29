@@ -83,7 +83,7 @@ def checkUser(request):
         user=request.user 
         print('user', user)
         print('request', request)
-        if(user==None):
+        if(user.is_anonymous):
             response={
                 'login_status': False
             }
