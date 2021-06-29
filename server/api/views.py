@@ -82,6 +82,7 @@ def checkUser(request):
     if request.method =='GET':
         username = request.GET['mturk_id']
         print('hi??!!')
+        print(request.GET)
         user = User.objects.get(username=username)
         print('username', username, user)
         
