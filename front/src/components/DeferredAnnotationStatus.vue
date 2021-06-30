@@ -103,7 +103,7 @@ export default {
 
 
   methods: {
-    ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setStatus', 'setAStatus']),
+    ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),
     ...mapGetters(['getImageBoxes']),
 
     highlight(item) { item.hover = true },
