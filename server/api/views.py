@@ -63,7 +63,7 @@ def startTask(request):
             # assign new order
             hgst_order=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False).aggregate(Max('user_order'))
             print(hgst_order)
-            order=hgst_order[0]+1 
+            order=hgst_order['max__user_order']+1 
         else:
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
