@@ -91,6 +91,7 @@ export default {
         if(res.data.status=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         } else{
+          self.$store.commit('update_status', new Array(21).fill(false));
           self.$router.push('../informed-consent/')
         }
       });
