@@ -3,9 +3,16 @@
   <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
-          <div class="curr status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
-          #{{index+1}}
-          </div>
+          <template v-if="status===true">
+            <div class="curr done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            #{{index+1}}
+            </div>
+          </template>
+          <template v-else>
+            <div class="curr yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            #{{index+1}}
+            </div>
+          </template>
         </template>
         <template v-else>
           <template v-if="status===true">
@@ -97,6 +104,6 @@ table{
 }
 
 .curr{
-  background-color: rgba(221, 172, 11, 0.815) !important;
+  border: 2px solid red !important;
 }
 </style>
