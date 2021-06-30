@@ -223,7 +223,6 @@ def getImageID(request):
             startdoc=undonedocs[0]
         startno=startdoc.document.doc_no
         response = {
-            'consent_agreed': user.consentAgreed,
             'start_image_id': startno
         }
         return JsonResponse(response)

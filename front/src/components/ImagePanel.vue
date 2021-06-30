@@ -112,10 +112,7 @@ export default {
           doctype: self.$route.params.docType
         }
       }).then(function (res) {
-        if (res.data.consent_agreed === false) {
-          alert('You should agree the informed consent to start this task!\n');
-          self.$router.push('informed-consent')
-        } else if (res.data.step >= 20) {
+        if (res.data.step >= 20) {
           alert('You already finished the task!\n');
           self.$router.push('after-done')
         }
