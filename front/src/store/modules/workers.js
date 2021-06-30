@@ -2,11 +2,13 @@
 const state = {
     assignedImages: [],
     annotatedImages: [],
+    annnot_status: new Array(21).fill(false),
 }
 
 const getters = {
     getAssignedImages: (state) => state.assignedImages,
     getAnnotatedImages: (state) => state.annotatedImages,
+    getStatus: (state) => state.annot_status,
 }
 
 const actions = {
@@ -30,6 +32,15 @@ const actions = {
         commit('setAssignedImages', images)
         commit('setAnnotatedImages', annotated)
     },
+    setStatus({commit}, status){
+        //console.log('setStatus called with', status)
+        commit('update_status', status)
+      },
+      setAStatus({commit}, payload){
+        var new_status = this.state.annot_status
+        new_status[payload.idx] = payload.val
+        commit('update_a_status', new_status)      
+      },  
 }
 
 const mutations = {
@@ -39,6 +50,17 @@ const mutations = {
     setAnnotatedImages: (state, annotatedImages) => {
         state.annotatedImages = annotatedImages
     },
+    update_status(state, status){
+        console.log("old",state.annot_status)
+        console.log("new",status)
+        state.annot_status=status
+    },
+    update_a_status(state, new_status){
+    //console.log('before', state.annot_status)
+    state.annot_status = new_status
+    //console.log('after', state.annot_status)
+    },
+  
 }
 
 export default {

@@ -37,7 +37,7 @@
 
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters} from 'vuex'
 
 export default {
   name: "Progress",
@@ -57,8 +57,10 @@ export default {
 
   },
   computed: {
-    stats(){return this.$store.getters.status;}
-  },
+    stats() {
+          return this.$store.getters.getStatus;
+        }
+  }, 
   methods:{
       ...mapActions(['setCurrImage']),
       goTo: function(imgNo){

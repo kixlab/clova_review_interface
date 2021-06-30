@@ -17,7 +17,6 @@ export default new Vuex.Store({
     server_url: 'http://13.125.191.49:8000',
     start_image_no: 0,
     image_order: 0,
-    annot_status: new Array(21).fill(false),
     curr_image: 0,
   },
   mutations: {
@@ -35,16 +34,6 @@ export default new Vuex.Store({
     },
     set_step (state, step){
       state.step = step
-    },
-    update_status(state, status){
-      console.log("old",state.annot_status)
-      console.log("new",status)
-      state.annot_status=status
-    },
-    update_a_status(state, new_status){
-      //console.log('before', state.annot_status)
-      state.annot_status = new_status
-      //console.log('after', state.annot_status)
     },
     set_curr_image(state, curr_image) {
       state.curr_image = curr_image
@@ -71,10 +60,6 @@ export default new Vuex.Store({
     image_no: state =>{
       return state.image_order
     },
-    status: state=>{
-      console.log('get status', state.annot_status)
-      return state.annot_status
-    },
     getIfAllImagesAnnotated: function (state) {
       return state.annot_status.every(status => status === true)
     },
@@ -84,20 +69,6 @@ export default new Vuex.Store({
 
   },
   actions:{
-    setStatus({commit}, status){
-      //console.log('setStatus called with', status)
-      commit('update_status', status)
-    },
-    setAStatus({commit}, payload){
-      var new_status = this.state.annot_status
-      console.log('old stat', new_status)
-      console.log('new stat', payload)
-      new_status[payload.idx] = payload.val
-      console.log('new stat', new_status)
-      commit('update_a_status', new_status)
-      console.log('new stat after commit', this.state.annot_status)
-      
-    },
     setCurrImage({commit}, newidx) {
       commit('set_curr_image', newidx)
     }
