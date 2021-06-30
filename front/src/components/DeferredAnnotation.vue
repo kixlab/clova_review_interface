@@ -237,7 +237,7 @@ export default {
 
         if(group.length>0){
           axios.post(self.$store.state.server_url + "/api/save-def-annotation/", {
-            //mturk_id: self.$store.state.mturk_id,
+            mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order,
             boxes_id: group.map((i) => {return i.box_id}),
@@ -256,7 +256,7 @@ export default {
 
         if(this.$store.getters.getIfAllBoxesAnnotated){
           axios.post(self.$store.state.server_url + "/api/update-status/", {
-            //mturk_id: self.$store.state.mturk_id,
+            mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order,
             status: true
