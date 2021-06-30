@@ -62,9 +62,12 @@ def startTask(request):
         if(len(dropouts)==0):
             # assign new order
             active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
-            last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
-            print(last_order)
-            order=last_order+1 
+            if(len(active_profile)==0):
+                order=0
+            else:
+                last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
+                print(last_order)
+                order=last_order+1 
         else:
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
