@@ -195,7 +195,7 @@ export default {
       self.loadAnnotatedBoxes(annotations);})},1000);
   },
   methods: {
-      ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus']),
+      ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),
       ...mapGetters(['getImageBoxes']),
 
       selectCategory(selectedCategory){
