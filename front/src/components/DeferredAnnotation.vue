@@ -174,7 +174,7 @@ export default {
 
     axios.get(self.$store.state.server_url + "/api/get-cats",{
       params:{
-        //mturk_id: self.$store.state.mturk_id,
+        mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType
       }
     }).then(function(res){
@@ -186,7 +186,7 @@ export default {
     setTimeout( function(){
     axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
       params:{
-        //mturk_id: self.$store.state.mturk_id,
+        mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.image_order
       }
