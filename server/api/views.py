@@ -49,18 +49,19 @@ def signup(request):
 @csrf_exempt
 def startTask(request):
     if request.method == 'POST':
-        user=request.user
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
         profile.instr_read = True
 
         # assign task by assigning start image number 
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
-        dropouts=Profile.objects.filter(instr_read=True, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
+        dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
         if(len(dropouts)==0):
             # assign new order
-            order=Profile.objects.filter(instr_read=True, dropout=False).aggregate(Max('user_order'))+1 
-
+            order=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False).aggregate(Max('user_order'))+1 
         else:
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
@@ -73,7 +74,8 @@ def startTask(request):
         profile.save()
 
         response={
-            'user_order': order
+            'user_order': order,
+            'doctype': profile.doctype
         }
         return JsonResponse(response)
 
@@ -81,10 +83,7 @@ def startTask(request):
 def checkUser(request):
     if request.method =='GET':
         username = request.GET['mturk_id']
-        print('hi??!!')
-        print(request.GET)
         user = User.objects.get(username=username)
-        print('username', username, user)
         
         #user=request.user 
         #print('user', user)
@@ -146,17 +145,24 @@ def recordconsentAgreed(request):
         profile.save()
         return HttpResponse('')
 
-@csrf_exempt
+""" @csrf_exempt
 def recordInstrDone(request):
     if request.method == 'GET':
-        #username = request.GET['mturk_id']
-        #user = User.objects.get(username=username)
-        user=request.user
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        #user=request.user
+        profile=Profile.objects.get(user=user)
+        profile.instr_read=True
+        profile.starttime=datetime.now()
+
+
+
+
         if (user.instrEnded == False):
             valid_usrs = len(list(User.objects.filter(instrEnded = True)))
             user.startTask(valid_usrs)
 
-        return HttpResponse('')
+        return HttpResponse('') """
 
 @csrf_exempt
 def getDocTypes(request):

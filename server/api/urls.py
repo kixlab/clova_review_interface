@@ -9,7 +9,7 @@ urlpatterns = [
     path('log/', views.recordLog),
     path('check-user/', views.checkUser),
     path('consent-agreed/', views.recordconsentAgreed),
-    path('instr-done/', views.recordInstrDone),
+    path('instr-done/', views.startTask),
     path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
     path('add-cat/', views.addCat),

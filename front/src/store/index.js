@@ -15,6 +15,7 @@ export default new Vuex.Store({
     mturk_id: null,
     doctype: null,
     server_url: 'http://13.125.191.49:8000',
+    start_image_no: 0,
     image_order: 0,
     annot_status: new Array(300).fill(false),
     curr_image: 0,
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     set_mturk_id (state, id){
       state.mturk_id = id
+    },
+    set_start_image_no(state, img_no){
+      state.start_image_no=img_no
     },
     set_step (state, step){
       state.step = step

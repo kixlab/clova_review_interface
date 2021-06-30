@@ -93,7 +93,8 @@ export default {
 
       self.$helpers.server_get(self, "/api/instr-done", 
         function(self, res){ // eslint-disable-line no-unused-vars
-          self.$router.push('doctypelist/')
+          self.$store.commit('set_start_image_no', res.data.user_order*21);
+          self.$router.push('annotation/'+res.data.doctype);
         })
     }
   },
