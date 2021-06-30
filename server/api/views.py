@@ -61,9 +61,10 @@ def startTask(request):
         dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
         if(len(dropouts)==0):
             # assign new order
-            hgst_order=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False).aggregate(Max('user_order'))
-            print(hgst_order)
-            order=hgst_order['max__user_order']+1 
+            active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
+            last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
+            print(last_order)
+            order=last_order+1 
         else:
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
