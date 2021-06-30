@@ -158,7 +158,7 @@ export default {
           'idx':self.$store.state.image_order,
           'val':false
         });
-        //console.log('### setAStatus called - remove')
+        console.log('### setAStatus called - remove')
       });
   
 
