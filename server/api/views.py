@@ -232,16 +232,14 @@ def getCats(request):
     if request.method == 'GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
-#        user=request.user
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        usercats=UserCat.objects.filter(user=user, doctype=doctype)
+        profile=Profile.objects.get(user=user)
+        initcats=InitCat.objects.filter(doctype=profile.doctype)
         subcats=[]
         cats=[]
-        for usercat in usercats:
-            cats.append({'cat': usercat.cat_text, 'pk': usercat.pk, 'usermade': (usercat.made_at!=9999), 'rev':False})
-            for subcat in UserSubcat.objects.filter(usercat=usercat):
-                subcats.append({'cat': subcat.usercat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'usermade': (subcat.made_at!=9999),'rev':False, 'catpk':subcat.usercat.pk})
+        for cat in initcats:
+            cats.append({'cat': cat.cat_text, 'pk': cat.pk})
+            for subcat in InitSubCat.objects.filter(initcat=cat):
+                subcats.append({'cat': subcat.initcat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'catpk':subcat.initcat.pk})
         response = {
             'cats': cats,
             'subcats': subcats
