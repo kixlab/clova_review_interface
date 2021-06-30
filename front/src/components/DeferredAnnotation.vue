@@ -34,11 +34,11 @@
                 <v-list-item v-for="subcat in subcats.filter(e=>e.cat == category.cat)" :key="subcat.pk">
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
-                    <span v-if="subcat.subcat!='N/A'" class='conf-btn'>
+                    <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                     <v-btn x-small outlined color="warning" v-on:click.stop="annotate(subcat, 0)">Can be</v-btn>
                     </span>
-                    <span v-if="subcat.subcat=='N/A'" class='conf-btn'>
+                    <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
                     </span>
                   </span>

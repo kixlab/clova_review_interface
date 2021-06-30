@@ -50,5 +50,5 @@ for row in reader:
     initsubcat.save()
 
 for doctype in DocType.objects.all():
-    for cat in InitCat.objects.filter(doctype=doctype, cat_no__lt=99):
+    for cat in InitCat.objects.all():
         InitSubCat(initcat=cat, subcat_no=99, subcat_text='n/a', subcat_description='Not applicable').save()
