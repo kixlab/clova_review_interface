@@ -15,12 +15,7 @@ class Profile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
     signuptime=models.DateTimeField(auto_now_add=True, blank=True)
     
-    DOCTYPES=[
-        ('receipt', 'receipt'),
-        ('email', 'email'),
-        ('event', 'event')
-    ]
-    doctype=models.CharField(max_length=20, choices=DOCTYPES, default='receipt')
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     
     consent_agreed=models.BooleanField(default=False)
 
@@ -42,7 +37,8 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance,created, **kwargs):
     if created:
-        Profile.objects.create(user=instance, doctype='receipt')
+        doctype=DocType.objects.get(doctype='receipt')
+        Profile.objects.create(user=instance, doctype=doctype)
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()

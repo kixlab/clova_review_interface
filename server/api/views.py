@@ -37,12 +37,12 @@ def signup(request):
         if profile.consent_agreed:
             response = {
                 'status': 'annotation',
-                'doctype':profile.doctype
+                'doctype':profile.doctype.doctype
             }
         else:
             response = {
                 'status':'consent',
-                'doctype':profile.doctype
+                'doctype':profile.doctype.doctype
             }
     return JsonResponse(response)
 
@@ -88,7 +88,7 @@ def startTask(request):
 
         response={
             'user_order': order,
-            'doctype': profile.doctype
+            'doctype': profile.doctype.doctype
         }
         return JsonResponse(response)
 
@@ -214,7 +214,6 @@ def getImageID(request):
         username = request.GET['mturk_id']        
         user = User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
-        doctype=DocType.objects.get(doctype=profile.doctype)
 
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
