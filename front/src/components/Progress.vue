@@ -58,11 +58,13 @@ export default {
   },
   computed: {
     stats() {
+      console.log(this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   }, 
   methods:{
       ...mapActions(['setCurrImage']),
+      ...mapGetters(['getStatus']),
       goTo: function(imgNo){
         this.$store.commit('set_image_count', imgNo);
         this.image_box = this.$store.getters.getImageBoxes;
