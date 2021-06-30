@@ -57,7 +57,7 @@ export default {
 
   },
   computed: {
-    stats: function(){return this.$store.getters.status}
+    stats(){return this.$store.getters.status;}
   },
   methods:{
       ...mapActions(['setCurrImage']),
