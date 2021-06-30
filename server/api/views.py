@@ -61,7 +61,7 @@ def startTask(request):
         dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
         if(len(dropouts)==0):
             # assign new order
-            order=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False).aggregate(Max('user_order'))+1 
+            order=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False).aggregate(Max('user_order'))['max_user_order']+1 
         else:
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
