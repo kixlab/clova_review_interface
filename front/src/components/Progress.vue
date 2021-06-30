@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     this.$store.subscribeAction({after: (action) => {
-        if (action.type ==='setAStatus' || action.type === 'setImageBoxes') {
+        if (action.type ==='setStatus' || action.type === 'setImageBoxes') {
             this.stats = this.$store.getters.status;
             
             console.log('stats updated')

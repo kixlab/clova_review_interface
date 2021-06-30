@@ -70,7 +70,7 @@ export default new Vuex.Store({
       return state.image_order
     },
     status: state=>{
-      console.log(state.annot_status)
+      console.log('get status', state.annot_status)
       return state.annot_status
     },
     getIfAllImagesAnnotated: function (state) {
