@@ -32,7 +32,7 @@ export default {
       stats: this.$store.getters.status,
       image_box: this.$store.getters.getImageBoxes,
 
-      stats_temp: new Array(30).fill(false),
+      stats_temp: new Array(21).fill(false),
       img_temp: this.$store.getters.get_curr_image
     };
   },
@@ -78,7 +78,7 @@ table{
 .status{
   margin: auto;
   border: 1px solid grey;
-  width: 5%!important;
+  width: 4%!important;
   cursor:pointer !important;
   
 }
