@@ -79,6 +79,13 @@ def startTask(request):
         profile.user_order=order        
         profile.save()
 
+        # assign documents 
+        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*21:((order+1)*21)]
+
+        # initialize status 
+        for document in documents:
+            Status(user=user, document=document, status=False).save()
+
         response={
             'user_order': order,
             'doctype': profile.doctype
@@ -204,11 +211,11 @@ def recordLog(request):
 def getImageID(request):
     if request.method == 'GET':
 #        user=request.user
-        username = request.GET['mturk_id']
-        
-        doctypetext=request.GET['doctype']
+        username = request.GET['mturk_id']        
         user = User.objects.get(username=username)
-        doctype=DocType.objects.get(doctype=doctypetext)
+        profile=Profile.objects.get(user=user)
+        doctype=DocType.objects.get(doctype=profile.doctype)
+
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
         if(len(undonedocs)==0):
