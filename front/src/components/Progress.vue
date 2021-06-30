@@ -3,14 +3,21 @@
   <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
-          <div class="done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+          <div class="curr status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
           #{{index+1}}
           </div>
         </template>
         <template v-else>
-          <div class="yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
-          #{{index+1}}
-          </div>
+          <template v-if="status===true">
+            <div class="done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            #{{index+1}}
+            </div>
+          </template>
+          <template v-else>
+            <div class="yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            #{{index+1}}
+            </div>
+          </template>
         </template>
       </template>
 
@@ -87,5 +94,9 @@ table{
 }
 .done{
   background-color: rgba(79, 192, 79, 0.548) !important;
+}
+
+.curr{
+  background-color: rgba(16, 145, 16, 0.548) !important;
 }
 </style>
