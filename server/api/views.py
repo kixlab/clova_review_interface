@@ -307,7 +307,7 @@ def saveAnnotation(request):
         document=Document.objects.get(doctype=profile.doctype, doc_no=int(image_id))
         boxes = query_json['boxes_id']
         labelpk = query_json['labelpk']
-        thisLabel = InitSubcat.objects.get(pk=labelpk)
+        thisLabel = InitSubCat.objects.get(pk=labelpk)
         newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisLabel.initcat, subcat=thisLabel, is_alive=True)
         newAnnot.save()
         response={
@@ -329,7 +329,7 @@ def saveDefAnnotation(request):
         subcatpk = query_json['subcatpk']
         catpk = query_json['catpk']
         confidence=query_json['confidence']
-        thisSubcat=InitSubcat.objects.get(pk=subcatpk)
+        thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
         if(thisSubcat.subcat_text=='n/a'):
             newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
