@@ -38,8 +38,9 @@ const actions = {
       },
       setAStatus({commit}, payload){
         var new_status = this.state.annot_status
+        console.log('before payload', new_status)
         new_status[payload.idx] = payload.val
-        console.log('setAStatus called', payload)
+        console.log('after payload', new_status)
         commit('update_a_status', new_status)      
       },  
 }
