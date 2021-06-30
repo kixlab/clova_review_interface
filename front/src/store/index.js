@@ -92,7 +92,7 @@ export default new Vuex.Store({
       console.log('setAStatus called with', payload)
       console.log('setAStatus called with', new_status)
       
-      commit('update_a_status', new_status)
+      commit('update_status', new_status)
     },
     setCurrImage({commit}, newidx) {
       commit('set_curr_image', newidx)
