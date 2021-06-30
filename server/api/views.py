@@ -494,11 +494,7 @@ def getStatus(request):
         doctype=DocType.objects.get(doctype=doctypetext)
 
         documents=Document.objects.filter(doctype=doctype)
-        status=[]
-        for doc in documents:
-            thisStat=Status.objects.get(document=doc, user=user)
-            status.append(thisStat.status)
-
+        status=Status.objects.filter(user=user)
         return JsonResponse({'status': status})
 
 @csrf_exempt
