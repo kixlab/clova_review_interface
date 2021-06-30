@@ -301,15 +301,14 @@ def saveAnnotation(request):
         query_json = json.loads(request.body)
         username=query_json['mturk_id']
         user = User.objects.get(username=username)
-        #user=request.user
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
+        profile=Profile.objects.get(user=user)
+
         image_id =query_json['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        document=Document.objects.get(doctype=profile.doctype, doc_no=int(image_id))
         boxes = query_json['boxes_id']
         labelpk = query_json['labelpk']
-        thisLabel = UserSubcat.objects.get(pk=labelpk)
-        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisLabe.usercat, subcat=thisLabel, is_alive=True)
+        thisLabel = InitSubcat.objects.get(pk=labelpk)
+        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisLabel.initcat, subcat=thisLabel, is_alive=True)
         newAnnot.save()
         response={
             'annot_pk': newAnnot.pk
@@ -323,17 +322,16 @@ def saveDefAnnotation(request):
         username=query_json['mturk_id']
         user = User.objects.get(username=username)
         #user=request.user
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
+        profile=Profile.objects.get(user=user)
         image_id =query_json['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        document=Document.objects.get(doctype=profile.doctype, doc_no=int(image_id))
         boxes = query_json['boxes_id']
         subcatpk = query_json['subcatpk']
         catpk = query_json['catpk']
         confidence=query_json['confidence']
-        thisSubcat=UserSubcat.objects.get(pk=subcatpk)
-        thisCat=UserCat.objects.get(pk=catpk)
-        if(thisSubcat.subcat_text=='N/A'):
+        thisSubcat=InitSubcat.objects.get(pk=subcatpk)
+        thisCat=InitCat.objects.get(pk=catpk)
+        if(thisSubcat.subcat_text=='n/a'):
             newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
         else:
             newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
