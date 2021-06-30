@@ -62,7 +62,7 @@ def startTask(request):
         if(len(dropouts)==0):
             # assign new order
             active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
-            if(len(active_profile)==0):
+            if(len(active_profiles)==0):
                 order=0
             else:
                 last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
