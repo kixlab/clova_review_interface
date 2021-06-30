@@ -108,7 +108,7 @@ export default {
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
         params: {
-          //mturk_id: self.$store.state.mturk_id,
+          mturk_id: self.$store.state.mturk_id,
           doctype: self.$route.params.docType
         }
       }).then(function (res) {
