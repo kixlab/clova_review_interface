@@ -261,13 +261,12 @@ export default {
             image_id: self.$store.state.image_order,
             status: true
           }).then(function () {
-            console.log('we should call status update')
-/*             self.setAStatus({
+            self.setAStatus({
               'idx':self.$store.state.image_order,
               'val':true
             });
             console.log('### setAStatus called - annotate')
- */          });
+          });
         }
       },
 
