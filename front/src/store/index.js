@@ -95,6 +95,8 @@ export default new Vuex.Store({
       new_status[payload.idx] = payload.val
       console.log('new stat', new_status)
       commit('update_a_status', new_status)
+      console.log('new stat after commit', this.state.annot_status)
+      
     },
     setCurrImage({commit}, newidx) {
       commit('set_curr_image', newidx)
