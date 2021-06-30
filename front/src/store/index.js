@@ -77,7 +77,8 @@ export default new Vuex.Store({
     get_curr_image: (state) => {
       return state.curr_image
     },
-    getStatus: (state) => state.annot_status,
+    getStatus: (state) => {
+      return state.annot_status},
 
 
   },
