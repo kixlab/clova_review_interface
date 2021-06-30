@@ -37,6 +37,8 @@ export default new Vuex.Store({
       state.step = step
     },
     update_status(state, status){
+      console.log("old",state.annot_status)
+      console.log("new",status)
       state.annot_status=status
     },
     update_a_status(state, new_status){
@@ -89,9 +91,6 @@ export default new Vuex.Store({
     setAStatus({commit}, payload){
       var new_status = this.state.annot_status
       new_status[payload.idx] = payload.val
-      console.log('setAStatus called with', payload)
-      console.log('setAStatus called with', new_status)
-      
       commit('update_status', new_status)
     },
     setCurrImage({commit}, newidx) {
