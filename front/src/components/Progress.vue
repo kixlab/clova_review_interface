@@ -3,12 +3,12 @@
   <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats_temp"> 
         <template v-if="index===img_temp">
-          <div class="done" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+          <div class="done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
           #{{index+1}}
           </div>
         </template>
         <template v-else>
-          <div class="yet" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+          <div class="yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
           #{{index+1}}
           </div>
         </template>
@@ -75,7 +75,7 @@ table{
   width: 100% !important;
   overflow-x: scroll;
 }
-td{
+.status{
   margin: auto;
   border: 1px solid grey;
   width: 5%!important;
