@@ -91,7 +91,7 @@ export default {
     onClickNext: function () {
       const self = this;
 
-      self.$helpers.server_post(self, "/api/instr-done", 
+      self.$helpers.server_post(self, "/api/instr-done/", 
         function(self, res){ // eslint-disable-line no-unused-vars
           self.$store.commit('set_start_image_no', res.data.user_order*21);
           self.$router.push('annotation/'+res.data.doctype);
