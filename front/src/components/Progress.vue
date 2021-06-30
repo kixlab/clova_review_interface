@@ -43,24 +43,11 @@ export default {
   name: "Progress",
   data() {
     return {
-      stats: this.$store.getters.status,
       image_box: this.$store.getters.getImageBoxes,
-
-      stats_temp: new Array(21).fill(false),
       img_temp: this.$store.getters.get_curr_image
     };
   },
   mounted() {
-    this.$store.subscribeAction({after: (action) => {
-        if (action.type ==='setStatus' || action.type === 'setImageBoxes') {
-            this.stats = this.$store.getters.status;
-            
-            console.log('stats updated')
-            console.log("***", this.stats)
-            
-        }
-    }})
-
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
             this.img_temp = this.$store.getters.get_curr_image
@@ -68,6 +55,9 @@ export default {
         }
     }})
 
+  },
+  computed: {
+    stats: this.$store.getters.status,
   },
   methods:{
       ...mapActions(['setCurrImage']),
