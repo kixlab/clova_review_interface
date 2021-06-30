@@ -97,6 +97,6 @@ table{
 }
 
 .curr{
-  background-color: rgba(16, 145, 16, 0.548) !important;
+  background-color: rgba(221, 172, 11, 0.815) !important;
 }
 </style>
