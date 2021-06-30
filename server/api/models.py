@@ -132,7 +132,7 @@ class InitSubCat(models.Model):
     def __str__(self):
         return str(self.subcat_no)+'-'+str(self.subcat_text)
 
-
+""" 
 class UserCat(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
@@ -147,14 +147,14 @@ class UserSubcat(models.Model):
     subcat_description=models.CharField(max_length=255)
     made_at=models.IntegerField(null=True, default=9999)
     def __str__(self):
-        return self.usercat.user.username+'-'+str(self.subcat_text)
+        return self.usercat.user.username+'-'+str(self.subcat_text) """
 
 class DefAnnotation(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
     boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
-    subcat = models.ForeignKey('UserSubcat', on_delete=models.CASCADE, null=True)
-    cat= models.ForeignKey('UserCat', on_delete=models.CASCADE, null=True)
+    subcat = models.ForeignKey('InitSubcat', on_delete=models.CASCADE, null=True)
+    cat= models.ForeignKey('InitCat', on_delete=models.CASCADE, null=True)
     confidence=models.BooleanField(null=True, default=True)
     is_alive=models.BooleanField(default=False)
     def __str__(self):
