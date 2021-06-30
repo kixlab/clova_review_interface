@@ -216,9 +216,9 @@ def getImageID(request):
         profile=Profile.objects.get(user=user)
 
         #get least unannotated document
-        undonedocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
+        undonedocs=Status.objects.filter(user=user, document__doctype=profile.doctype, status=False)
         if(len(undonedocs)==0):
-            startdoc=Status.objects.filter(user=user, document__doctype=doctype, status=True).last()
+            startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True).last()
         else:
             startdoc=undonedocs[0]
         startno=startdoc.document.doc_no
@@ -494,8 +494,8 @@ def getStatus(request):
         doctype=DocType.objects.get(doctype=doctypetext)
 
         documents=Document.objects.filter(doctype=doctype)
-        status=Status.objects.filter(user=user)
-        return JsonResponse({'status': status})
+        status=Status.objects.filter(user=user).values_list('status', flat=True)
+        return JsonResponse({'status': list(status)})
 
 @csrf_exempt
 def addCat(request):

@@ -17,7 +17,7 @@ export default new Vuex.Store({
     server_url: 'http://13.125.191.49:8000',
     start_image_no: 0,
     image_order: 0,
-    annot_status: new Array(300).fill(false),
+    annot_status: new Array(21).fill(false),
     curr_image: 0,
   },
   mutations: {
