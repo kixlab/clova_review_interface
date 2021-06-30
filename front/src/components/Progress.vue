@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     stats() {
-      console.log(this.$store.getters.getStatus);
+      console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   }, 

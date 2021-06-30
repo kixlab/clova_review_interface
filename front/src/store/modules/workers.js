@@ -36,7 +36,7 @@ const actions = {
         //console.log('setStatus called with', status)
         commit('update_status', status)
       },
-      setAStatus({commit}, payload){
+    setAStatus({commit}, payload){
         var new_status = this.state.annot_status
         console.log('before payload', new_status)
         new_status[payload.idx] = payload.val
