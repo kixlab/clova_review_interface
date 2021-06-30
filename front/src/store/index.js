@@ -18,7 +18,6 @@ export default new Vuex.Store({
     start_image_no: 0,
     image_order: 0,
     curr_image: 0,
-    annnot_status: new Array(21).fill(false)
   },
   mutations: {
     set_image_count (state, cnt) {
@@ -39,16 +38,7 @@ export default new Vuex.Store({
     set_curr_image(state, curr_image) {
       state.curr_image = curr_image
     },
-    update_status(state, status){
-      console.log("old",state.annot_status)
-      console.log("new",status)
-      state.annot_status=status
-    },
-    update_a_status(state, new_status){
-    console.log('before', state.annot_status)
-    state.annot_status = new_status
-    console.log('after', state.annot_status)
-    },
+    
   },
   getters: {
     image_url: state => {
@@ -77,8 +67,6 @@ export default new Vuex.Store({
     get_curr_image: (state) => {
       return state.curr_image
     },
-    getStatus: (state) => {
-      return state.annot_status},
 
 
   },
@@ -86,17 +74,7 @@ export default new Vuex.Store({
     setCurrImage({commit}, newidx) {
       commit('set_curr_image', newidx)
     },
-    setStatus({commit}, status){
-      //console.log('setStatus called with', status)
-      commit('update_status', status)
-    },
-    setAStatus({commit}, payload){
-        var new_status = this.state.annot_status
-        console.log('before payload', new_status)
-        new_status[payload.idx] = payload.val
-        console.log('after payload', new_status)
-        commit('update_a_status', new_status)      
-      },
+    
   },
   modules: {
     images,
