@@ -69,9 +69,10 @@ def startTask(request):
             print('active_profiles', active_profiles)
             if(len(active_profiles)==0):
                 order=0
+                print("no active profiles")
             else:
                 last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
-                print(last_order)
+                print('last order of active profiles', last_order)
                 order=last_order+1 
         else:
             print("dropouts",dropouts)
