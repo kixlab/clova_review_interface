@@ -66,6 +66,7 @@ def startTask(request):
             print('No drop out')
             # assign new order
             active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
+            print('active_profiles', active_profiles)
             if(len(active_profiles)==0):
                 order=0
             else:
