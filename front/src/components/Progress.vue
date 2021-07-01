@@ -90,8 +90,9 @@ table{
   overflow-x: scroll;
 }
 .status{
-  margin: auto;
+  margin: 1px;
   border: 1px solid grey;
+  border-radius: 2% !important;
   width: 4%!important;
   cursor:pointer !important;
   
