@@ -81,6 +81,7 @@ def startTask(request):
 
             order=dropout.user_order
         profile.starttime=datetime.now()
+        print(profile.starttime, 'starttime')
         profile.user_order=order        
         profile.save()
 
