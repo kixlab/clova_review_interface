@@ -76,7 +76,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import axios from "axios";
-import Progress from '../components/Progress.vue' 
 
 
 export default {
@@ -159,8 +158,6 @@ export default {
           'idx':self.$store.state.image_order,
           'val':false
         });
-        console.log('### setAStatus called - remove');
-        Progress.$forceUpdate();
       });
   
 
