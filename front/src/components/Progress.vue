@@ -83,7 +83,7 @@ export default {
 <style scoped>
 .center{
   margin:auto;
-  width: 80% !important;
+  width: 90% !important;
 }
 table{
   width: 100% !important;
