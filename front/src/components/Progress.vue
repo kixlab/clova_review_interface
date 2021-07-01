@@ -4,26 +4,26 @@
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
           <template v-if="status===true">
-            <div class="curr done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            <button class="curr done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
             #{{index+1}}
-            </div>
+            </button>
           </template>
           <template v-else>
-            <div class="curr yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            <button class="curr yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
             #{{index+1}}
-            </div>
+            </button>
           </template>
         </template>
         <template v-else>
           <template v-if="status===true">
-            <div class="done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            <button class="done status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
             #{{index+1}}
-            </div>
+            </button>
           </template>
           <template v-else>
-            <div class="yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
+            <button class="yet status" v-on:click="goTo(index);" :key='index' style="white-space: normal; display: inline-block; border: 1px solid grey; margin: 1px; white-space: normal;">
             #{{index+1}}
-            </div>
+            </button>
           </template>
         </template>
       </template>

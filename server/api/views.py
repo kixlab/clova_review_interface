@@ -87,7 +87,7 @@ def startTask(request):
         profile.save()
 
         # assign documents 
-        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*21:((order+1)*21)]
+        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*7:(order*7+21)]
 
         # initialize status 
         for document in documents:
@@ -414,7 +414,7 @@ def submit(request):
         query_json = json.loads(request.body)
         username = query_json['mturk_id']
         user = User.objects.get(username=username)
-        
+
         profile=Profile.objects.get(user=user)
         profile.endtime=datetime.now()
         profile.done=True
