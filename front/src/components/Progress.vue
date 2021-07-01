@@ -4,26 +4,26 @@
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
           <template v-if="status===true">
-            <v-btn small class="curr done status" v-on:click="goTo(index);" :key='index' >
+            <button class="curr done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
-            </v-btn>
+            </button>
           </template>
           <template v-else>
-            <v-btn small class="curr yet status" v-on:click="goTo(index);" :key='index'>
+            <button class="curr yet status" v-on:click="goTo(index);" :key='index'>
             #{{index+1}}
-            </v-btn>
+            </button>
           </template>
         </template>
         <template v-else>
           <template v-if="status===true">
-            <v-btn small class="done status" v-on:click="goTo(index);" :key='index' >
+            <button class="done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
-            </v-btn>
+            </button>
           </template>
           <template v-else>
-            <v-btn small class="yet status" v-on:click="goTo(index);" :key='index' >
+            <button class="yet status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
-            </v-btn>
+            </button>
           </template>
         </template>
       </template>
@@ -90,11 +90,10 @@ table{
   overflow-x: scroll;
 }
 .status{
-  margin: 1px;
+  margin: auto;
   border: 1px solid grey;
-  width: 3.5% !important;
+  width: 4%!important;
   cursor:pointer !important;
-  padding: 1px !important;
   
 }
 .yet{
@@ -106,15 +105,5 @@ table{
 
 .curr{
   border: 2px solid red !important;
-}
-div.btn__content {
-  padding: 0;
-}
-.v-btn {
-  min-width: 0;
-}
-
-div.card__actions .btn {
-  min-width: 0;
 }
 </style>
