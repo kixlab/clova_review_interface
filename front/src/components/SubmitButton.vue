@@ -26,16 +26,21 @@ export default {
   name: "SubmitButton",
   methods: {
     onSubmit: function() {
-      var doctype=this.$router.currentRoute.fullPath.split('/')[2];
-      this.$router.push('../../annot-done/'+doctype);
+      const self=this;
+      axios.post(self.$store.state.server_url + '/api/submit/', {
+        username: self.$store.state.mturk_id,
+      }).then( function(){
+        var doctype=self.$router.currentRoute.fullPath.split('/')[2];
+        self.$router.push('../../annot-done/'+doctype);
+      });
+
+      
  }
   },
 
   computed: {
     disabled() {
-      return false
-
-//      return !this.$store.getters.getIfAllImagesAnnotated
+      return !this.$store.getters.getIfAllImagesAnnotated
     }
   }
 }
