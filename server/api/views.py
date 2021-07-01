@@ -471,10 +471,12 @@ def updateStatus(request):
         query_json = json.loads(request.body)
         #user=request.user
         username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
+        user = User.objects.get(username=username)
+        profile=Profile.objects.get(user=user)
         image_id = query_json['image_id']
         status= query_json['status']
-        doctype=DocType.objects.get(doctype=doctypetext)
+        doctype=profile.doctype
+        print(image_id)
 
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         user = User.objects.get(username=username)
@@ -491,11 +493,11 @@ def getStatus(request):
     if request.method=='GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
-        #user=request.user
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
+        profile=Profile.objects.get(user=user)
 
-        documents=Document.objects.filter(doctype=doctype)
+        #user=request.user
+        
+        doctype=profile.doctype
         status=Status.objects.filter(user=user).values_list('status', flat=True)
         return JsonResponse({'status': list(status)})
 
