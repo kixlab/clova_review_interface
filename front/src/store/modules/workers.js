@@ -55,16 +55,16 @@ const mutations = {
         state.annotatedImages = annotatedImages
     },
     update_status(state, status){
-        console.log("old",state.annot_status)
-        console.log("new",status)
+        //console.log("old",state.annot_status)
+        //console.log("new",status)
         state.annot_status=status
     },
     update_a_status(state, new_status){
-        console.log('before', state.annot_status)
+        //console.log('before', state.annot_status)
         state.annot_status = new Array(21).fill(false)
-        console.log('before', state.annot_status)
+        //console.log('before', state.annot_status)
         state.annot_status = new_status
-        console.log('after', state.annot_status)
+        //console.log('after', state.annot_status)
     },
   
 }
