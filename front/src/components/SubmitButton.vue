@@ -30,7 +30,7 @@ export default {
     onSubmit: function() {
       const self=this;
       axios.post(self.$store.state.server_url + '/api/submit/', {
-        username: self.$store.state.mturk_id,
+        mturk_id: self.$store.state.mturk_id,
       }).then( function(){
         var doctype=self.$router.currentRoute.fullPath.split('/')[2];
         self.$router.push('../../annot-done/'+doctype);
