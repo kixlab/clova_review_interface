@@ -92,7 +92,7 @@ table{
 .status{
   margin: 1px;
   border: 1px solid grey;
-  width: 4%!important;
+  width: 3.5% !important;
   cursor:pointer !important;
   
 }
