@@ -4,24 +4,24 @@
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
           <template v-if="status===true">
-            <v-btn class="curr done status" v-on:click="goTo(index);" :key='index' >
+            <v-btn x-small class="curr done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
             </v-btn>
           </template>
           <template v-else>
-            <v-btn class="curr yet status" v-on:click="goTo(index);" :key='index'>
+            <v-btn x-small class="curr yet status" v-on:click="goTo(index);" :key='index'>
             #{{index+1}}
             </v-btn>
           </template>
         </template>
         <template v-else>
           <template v-if="status===true">
-            <v-btn class="done status" v-on:click="goTo(index);" :key='index' >
+            <v-btn x-small class="done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
             </v-btn>
           </template>
           <template v-else>
-            <v-btn class="yet status" v-on:click="goTo(index);" :key='index' >
+            <v-btn x-small class="yet status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
             </v-btn>
           </template>
