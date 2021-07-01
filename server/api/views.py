@@ -59,7 +59,11 @@ def startTask(request):
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
         dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
+        print(datetime.now())
+        print(profile.signuptime)
+
         if(len(dropouts)==0):
+            print('No drop out')
             # assign new order
             active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
             if(len(active_profiles)==0):
@@ -69,6 +73,7 @@ def startTask(request):
                 print(last_order)
                 order=last_order+1 
         else:
+            print("dropouts",dropouts)
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
             dropout.dropout=True
