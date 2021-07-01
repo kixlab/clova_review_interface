@@ -20,11 +20,13 @@
 
 <script>
 import axios from "axios";
-//import {mapActions} from 'vuex';
+import {mapGetters} from 'vuex';
 
 export default {
   name: "SubmitButton",
   methods: {
+    ...mapGetters(['getIfAllImagesAnnotated']),
+
     onSubmit: function() {
       const self=this;
       axios.post(self.$store.state.server_url + '/api/submit/', {
