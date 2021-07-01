@@ -58,7 +58,7 @@ def startTask(request):
         # assign task by assigning start image number 
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
-        dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=True)
+        dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)))
         print(datetime.now())
         print(profile.signuptime)
 
@@ -77,12 +77,9 @@ def startTask(request):
             print("dropouts",dropouts)
             # reassign the first dropout order to this user 
             dropout=dropouts[0]
-            dropout.dropout=True
-            dropout.save()
-
             order=dropout.user_order
         profile.starttime=datetime.now()
-        print(profile.starttime, 'starttime')
+        print('neworder', order)
         profile.user_order=order        
         profile.save()
 

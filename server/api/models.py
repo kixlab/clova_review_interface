@@ -26,7 +26,7 @@ class Profile(models.Model):
 
     endtime=models.DateTimeField(blank=True, null=True)
 
-    dropout=models.BooleanField(default=True)
+    dropout=models.BooleanField(default=False)
 
     done=models.BooleanField(default=False)
     token=models.CharField(max_length=50, default='coffee chocolate black tea')
