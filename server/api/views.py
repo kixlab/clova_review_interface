@@ -71,7 +71,7 @@ def startTask(request):
                 order=0
                 print("no active profiles")
             else:
-                last_order= actice_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
+                last_order= active_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
                 print('last order of active profiles', last_order)
                 order=last_order+1 
         else:
