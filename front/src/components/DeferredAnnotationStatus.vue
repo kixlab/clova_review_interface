@@ -76,7 +76,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import axios from "axios";
-import Progress from '.Progress.vue' 
+import Progress from 'Progress.vue' 
 
 
 export default {
