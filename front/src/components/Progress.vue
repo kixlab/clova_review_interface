@@ -106,4 +106,11 @@ table{
 .curr{
   border: 2px solid red !important;
 }
+div.btn__content {
+  padding: 0;
+}
+
+div.card__actions .btn {
+  min-width: 0;
+}
 </style>
