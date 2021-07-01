@@ -94,6 +94,7 @@ table{
   border: 1px solid grey;
   width: 3.5% !important;
   cursor:pointer !important;
+  padding: 1px !important;
   
 }
 .yet{
@@ -108,6 +109,9 @@ table{
 }
 div.btn__content {
   padding: 0;
+}
+.v-btn {
+  min-width: 0;
 }
 
 div.card__actions .btn {
