@@ -60,7 +60,7 @@ export default {
       axios.post(self.$store.state.server_url + "/api/submit/", {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
-        image_id: self.$store.state.image_order,
+        image_id: self.$store.state.image_order + self.$store.state.start_image_no,
         annotationData: annotationData,
       }).then(function (res) {
         

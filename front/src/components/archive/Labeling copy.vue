@@ -241,7 +241,7 @@ export default {
       params:{
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
-        image_id: self.$store.state.image_order
+        image_id: self.$store.state.image_order + self.$store.state.start_image_no
       }
     }).then(function(res){
       var annotations=res.data.annotations;
@@ -273,7 +273,7 @@ export default {
         axios.post(self.$store.state.server_url + "/api/add-cat/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order,
+            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
             cat: newcat
           }).then(function (res) {
             self.cats.push({cat: newcat, pk:res.data.newcat_pk,usermade:true, rev:false});
@@ -289,7 +289,7 @@ export default {
         axios.post(self.$store.state.server_url + "/api/add-subcat/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order,
+            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
             cat: cat,
             subcat: newsubcat,
             description: newdesc
@@ -422,7 +422,7 @@ export default {
           axios.post(self.$store.state.server_url + "/api/save-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order,
+            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
             boxes_id: group.map((i) => {return i.box_id}),
             labelpk:labelpk
           }).then(function (res) {
@@ -439,7 +439,7 @@ export default {
           axios.post(self.$store.state.server_url + "/api/update-status/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order,
+            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
             status: true
           }).then(function () {
             self.setAStatus({
@@ -506,7 +506,7 @@ export default {
           params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order
+            image_id: self.$store.state.image_order + self.$store.state.start_image_no
           }
         }).then(function(res){
           var annotations=res.data.annotations;
