@@ -56,6 +56,12 @@ export default {
     }})
 
   },
+  computed: {
+    stats() {
+      console.log("Hi", this.$store.getters.getStatus);
+          return this.$store.getters.getStatus;
+        }
+  },
   watch: {
     stats() {
       console.log("Hi", this.$store.getters.getStatus);
