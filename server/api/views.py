@@ -494,10 +494,6 @@ def getStatus(request):
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
-
-        #user=request.user
-        
-        doctype=profile.doctype
         status=Status.objects.filter(user=user).values_list('status', flat=True)
         return JsonResponse({'status': list(status)})
 
