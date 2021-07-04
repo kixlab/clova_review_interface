@@ -62,9 +62,6 @@ export default new Vuex.Store({
     image_no: state =>{
       return state.image_order
     },
-    getIfAllImagesAnnotated: function (state) {
-      return state.annot_status.every(status => status === true)
-    },
     get_curr_image: (state) => {
       return state.curr_image
     },

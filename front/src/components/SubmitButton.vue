@@ -19,23 +19,30 @@
 </template>
 
 <script>
-//import axios from "axios";
-//import {mapActions} from 'vuex';
+import axios from "axios";
+import {mapGetters} from 'vuex';
 
 export default {
   name: "SubmitButton",
   methods: {
+    ...mapGetters(['getIfAllImagesAnnotated']),
+
     onSubmit: function() {
-      var doctype=this.$router.currentRoute.fullPath.split('/')[2];
-      this.$router.push('../../annot-done/'+doctype);
+      const self=this;
+      axios.post(self.$store.state.server_url + '/api/submit/', {
+        mturk_id: self.$store.state.mturk_id,
+      }).then( function(){
+        var doctype=self.$router.currentRoute.fullPath.split('/')[2];
+        self.$router.push('../../annot-done/'+doctype);
+      });
+
+      
  }
   },
 
   computed: {
     disabled() {
-      return false
-
-//      return !this.$store.getters.getIfAllImagesAnnotated
+      return !this.$store.getters.getIfAllImagesAnnotated
     }
   }
 }

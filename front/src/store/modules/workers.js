@@ -11,6 +11,9 @@ const getters = {
     getStatus: (state) => {
         return state.annot_status
       },
+    getIfAllImagesAnnotated: function (state) {
+    return state.annot_status.every(status => status === true)
+    },
 }
 
 const actions = {
@@ -44,7 +47,7 @@ const actions = {
         new_status[payload.idx] = payload.val
         console.log('after payload', new_status)
         commit('update_a_status', new_status)      
-    },
+    },  
 }
 
 const mutations = {

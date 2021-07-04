@@ -87,7 +87,7 @@ def startTask(request):
         profile.save()
 
         # assign documents 
-        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*21:((order+1)*21)]
+        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*7:(order*7+21)]
 
         # initialize status 
         for document in documents:
@@ -412,57 +412,13 @@ def deleteDefAnnotation(request):
 def submit(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        user=request.user
-#        username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
-        image_id = query_json['image_id']
-        annotation_data = query_json['annotationData']
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
 
-        doctype=DocType.objects.get(doctype=doctypetext)
-
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
- #       user = User.objects.get(username=username)
-        Status.objects.filter(user=user, document=document).update(status=True)
-
-        #delete old labels --> this to be changed to record all the logs later
-        Annotation.objects.filter(user=user, document=document).delete()
-
-        for group in annotation_data:
-            box_ids = group['boxes']
-            label = group['label']
-            group_id = group['group_id']
-
-            for box_id in box_ids:
-                Annotation(user=user, document=document, group_id=group_id, box_id=box_id,
-                status=True, label=label).save()
-
-            Label.objects.create(
-                user = user,
-                imageID = image_id,
-                groupID = group_id,
-                label = label,
-                boxIDs = box_ids
-            )
-
-        Log.objects.create(
-            user = user,
-            imageID = image_id,
-            behavior = 'SU'
-        )
-
-        yetdocs=Status.objects.filter(user=user, document__doctype=doctype, status=False)
-        if(len(yetdocs)>0):
-            startno=yetdocs[0].document.doc_no
-        else:
-            startno=99
-
-        donedocs=Status.objects.filter(user=user, document__doctype=doctype, status=True)
-
-        response = {
-            'next_img': startno,
-            'step': len(donedocs)
-        }
-        return JsonResponse(response)
+        profile=Profile.objects.get(user=user)
+        profile.endtime=datetime.now()
+        profile.done=True
+        return HttpResponse('')
 
 
 @csrf_exempt
