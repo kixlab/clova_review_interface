@@ -109,7 +109,7 @@ const actions = {
                         quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
                         label: ""}
             })
-
+            //console.log("***", padding_x, padding_y)
             commit('setCurrBox', processedData)
             }
 

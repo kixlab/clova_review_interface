@@ -2,15 +2,13 @@
  <v-col cols="12">
   <v-card
     tile
-    width="100%"
     @mousedown="clickDown" @mouseup="clickUp"
+    
     >
-    <!-- <v-card-title style="font-size: 110%"><b> Image </b></v-card-title> -->
-    <!-- <v-card-text> -->
       <v-row>
         <v-col>
           <div ref="img_container">
-          <v-img :src=image_url contain style="justifyContent: center">
+          <v-img :src=image_url contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
@@ -39,7 +37,6 @@
 
       </v-row>
 
-    <!-- </v-card-text>    -->
   </v-card>
  </v-col>
 </template>
@@ -98,6 +95,7 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
+        console.log('********** watching!!!')
       }
     }
     
@@ -127,9 +125,11 @@ export default {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
-          var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
-          var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
-          self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
+          //var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
+          //var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
+          //console.log(img_width, img_height)
+          //console.log(self.width, self.height, self.width*img_height/img_width)
+          self.setImageBoxes([json, self.width, self.height, true]);
           self.original_box = json;
       })
       .catch(function(err) {
@@ -137,6 +137,7 @@ export default {
       });
     },
     newSize: function() {
+      console.log("here------")
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
       const width = cont_pos.right-cont_pos.left
       const height = cont_pos.bottom-cont_pos.top
@@ -164,6 +165,7 @@ export default {
         temp.x_len = (temp.quad.x2-temp.quad.x1)/ratio
         temp.y_len = (temp.quad.y3-temp.quad.y2)/ratio
       }
+      console.log("***", padding_x, padding_y)
       this.updateImageBoxes(temp_image_box)
     },
 
