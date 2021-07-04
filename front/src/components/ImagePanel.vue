@@ -5,6 +5,9 @@
     @mousedown="clickDown" @mouseup="clickUp"
     
     >
+    <!--
+    <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
+    -->
       <v-row>
         <v-col>
           <div ref="img_container">
@@ -37,6 +40,17 @@
 
       </v-row>
 
+  </v-card>
+  <v-card >
+    <br>
+    As the receipts are from Indonesia, here are some translations for commonly occuring words: <br>
+    <span style="textAlign: left;">
+    <b >
+    Bayar - Pay <br>
+    Tunai - Cash <br>
+    Kembalian - Change <br>
+    </b>
+    </span>
   </v-card>
  </v-col>
 </template>
