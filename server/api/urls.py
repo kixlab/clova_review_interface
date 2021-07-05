@@ -5,7 +5,7 @@ urlpatterns = [
     # path(r'image/', views.selectedImage),
     # path(r'image/box_info/', views.selectedImageBox)
     path('signup/',views.signup),
-    path('start-task/', views.startTask),
+    #path('start-task/', views.startTask),
     path('log/', views.recordLog),
     path('check-user/', views.checkUser),
     path('consent-agreed/', views.recordconsentAgreed),

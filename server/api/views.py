@@ -35,10 +35,16 @@ def signup(request):
         profile=Profile.objects.get(user=user)
         login(request, user)
         if profile.consent_agreed:
-            response = {
-                'status': 'instruction',
-                'doctype':profile.doctype.doctype
-            }
+            if profile.instr_read:
+                response = {
+                    'status': 'annotation',
+                    'doctype':profile.doctype.doctype
+                }
+            else:
+                response = {
+                    'status': 'instruction',
+                    'doctype':profile.doctype.doctype
+                }
         else:
             response = {
                 'status':'consent',
