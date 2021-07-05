@@ -6,7 +6,7 @@
         <v-card-text>
         <h2>Please carefully read the instruction below.<br>
         As it is expected to take a minute to read, 
-        <span v-if="time_now < 2" class="reds">you can leave this page after {{2 - time_now}} seconds from now.</span>
+        <span v-if="time_now < 60" class="reds">you can leave this page after {{60 - time_now}} seconds from now.</span>
         <span v-else class="reds"> you can leave this page now.</span>
         </h2>
         </v-card-text>
@@ -41,7 +41,7 @@
         <v-card class="endPanel">
           <v-card-text>
             <div v-if="passOneMinute === false">
-              <h2>You may read the instruction too fast.<br><br>
+              <h2>You may have read the instruction too fast.<br><br>
               Why don't you read it again? :-)</h2>
             </div>
             <div v-else>
@@ -84,6 +84,7 @@ export default {
       {src: require('@/assets/tutorial_clova3.png')},
       {src: require('@/assets/tutorial_clova4.png')},
       {src: require('@/assets/tutorial_clova5.png')},
+      {src: require('@/assets/tutorial_clova6.png')},
       {}
     ]
   }),
@@ -104,7 +105,7 @@ export default {
   created: function () {
     setTimeout(() => {
       this.passOneMinute = true
-    }, 2*1000);
+    }, 60*1000);
     setInterval(() => {
       this.time_now += 1
     }, 1000);
