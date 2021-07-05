@@ -225,7 +225,7 @@ def getImageID(request):
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=profile.doctype, status=False)
         if(len(undonedocs)==0):
-            startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True).last()
+            startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True)[0]
         else:
             startdoc=undonedocs[0]
         startno=startdoc.document.doc_no
