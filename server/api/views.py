@@ -38,7 +38,8 @@ def signup(request):
             if profile.instr_read:
                 response = {
                     'status': 'annotation',
-                    'doctype':profile.doctype.doctype
+                    'doctype':profile.doctype.doctype,
+                    'user_order': profile.user_order
                 }
             else:
                 response = {

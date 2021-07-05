@@ -92,6 +92,7 @@ export default {
           self.$router.push('/instruction/')
         } else{
           if(res.data.status=='annotation'){
+            self.$store.commit('set_start_image_no', res.data.user_order*7);
             self.$router.push('/annotation/'+res.data.doctype)
           }else{
             self.$store.commit('update_status', new Array(21).fill(false));
