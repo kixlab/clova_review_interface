@@ -88,8 +88,8 @@ export default {
         username: self.$store.state.mturk_id,
       }).then( function(res){
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
-        if(res.data.status=='annotation'){
-          self.$router.push('/annotation/'+res.data.doctype)
+        if(res.data.status=='instruction'){
+          self.$router.push('/instruction/')
         } else{
           self.$store.commit('update_status', new Array(21).fill(false));
           self.$router.push('../informed-consent/')

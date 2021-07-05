@@ -36,7 +36,7 @@ def signup(request):
         login(request, user)
         if profile.consent_agreed:
             response = {
-                'status': 'annotation',
+                'status': 'instruction',
                 'doctype':profile.doctype.doctype
             }
         else:
