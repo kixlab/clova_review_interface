@@ -43,7 +43,7 @@ const actions = {
       },
     setAStatus({commit}, payload){
         console.log(this.state)
-        var new_status = this.state.annot_status
+        var new_status = this.state.workers.annot_status
         console.log('before payload', new_status)
         new_status[payload.idx] = payload.val
         console.log('after payload', new_status)
