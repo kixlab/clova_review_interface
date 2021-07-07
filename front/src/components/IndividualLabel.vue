@@ -6,10 +6,16 @@
                     <v-col cols="2">
                         <h4>Boxes</h4>
                     </v-col>
-                    <v-col cols="8">
-                        <h4>Worker Labels</h4>
+                    <v-col cols="3">
+                        <h4>Worker 1</h4>
                     </v-col>
-                    <v-col cols="2">
+                    <v-col cols="3">
+                        <h4>Worker 2</h4>
+                    </v-col>
+                    <v-col cols="3">
+                        <h4>Worker 3</h4>
+                    </v-col>
+                    <v-col cols="1">
                         <h4>Majority</h4>
                     </v-col>
                 </v-row>
@@ -26,19 +32,12 @@
                             </div>
                         </div>
                     </v-col>
-                    <v-col cols="8" style="border-right: 1px solid black;">
+                    <v-col cols="3" v-for="(user, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
-                        <div v-for="group in annotated_box" :key="group.id">
-                            <v-btn-toggle dense style="padding:5px" class="flex-wrap">
-                                <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;" v-bind:class="{success: group.confidence, error: (group.subcat=='N/A'), warning: !group.confidence}"> 
-                                    {{group.cat}}-{{group.subcat}} 
-                                </v-btn>
-                                <div v-for="box in group.boxes" :key="box.id">
-                                    <v-btn small tile depressed @mouseover="highlight(box)" @mouseout="undoHighlight(box)" style="padding:0 3.5px; min-width:0px; border: 0.1px solid #eaeaea !important; font-size:80%; background-color: #f1f1f1"> 
-                                    {{box.text}}  
-                                    </v-btn>
-                                </div>
-                            </v-btn-toggle>
+                        <div v-for="box in worker_annots[index]" :key="box.box_id">
+                            <v-btn text small tile depressed v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
+                                    {{box.cat}}-{{box.subcat}} 
+                            </v-btn>
                         </div>
                         <!--{{this.$store.getters.getAnnotatedBoxes}}-->
                     </v-col>
