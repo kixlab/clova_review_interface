@@ -27,8 +27,20 @@
                         </div>
                     </v-col>
                     <v-col cols="8" style="border-right: 1px solid black;">
-                        {{image_box.map(v => [v.box_id, v.text])}}
-                        {{this.$store.getters.getAnnotatedBoxes}}
+                        <!--{{image_box.map(v => [v.box_id, v.text])}}-->
+                        <div v-for="group in annotated_box" :key="group.id">
+                            <v-btn-toggle dense style="padding:5px" class="flex-wrap">
+                                <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;" v-bind:class="{success: group.confidence, error: (group.subcat=='N/A'), warning: !group.confidence}"> 
+                                    {{group.cat}}-{{group.subcat}} 
+                                </v-btn>
+                                <div v-for="box in group.boxes" :key="box.id">
+                                    <v-btn small tile depressed @mouseover="highlight(box)" @mouseout="undoHighlight(box)" style="padding:0 3.5px; min-width:0px; border: 0.1px solid #eaeaea !important; font-size:80%; background-color: #f1f1f1"> 
+                                    {{box.text}}  
+                                    </v-btn>
+                                </div>
+                            </v-btn-toggle>
+                        </div>
+                        <!--{{this.$store.getters.getAnnotatedBoxes}}-->
                     </v-col>
                     <v-col cols="2">
                     dd
@@ -40,8 +52,9 @@
 </template>
 
 <script>
-//import {mapActions, mapGetters} from 'vuex';
 import axios from "axios";
+import {mapActions, mapGetters} from 'vuex';
+
 export default {
     name: "IndividualLabel",
     components: {
@@ -50,16 +63,21 @@ export default {
     data() {
         return {
             image_box : this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id),
+            annotated_box: this.$store.getters.getAnnotatedBoxes,
         };
     },
 
     mounted() {
         const self = this;
         this.image_box = this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id);
+        this.annotated_box = this.$store.getters.getAnnotatedBoxes;
 
         this.$store.subscribeAction({after: (action) => {
             if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
                 this.image_box = this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id);
+            }
+            if (action.type === 'updateAnnotatedBoxes' || action.type === 'loadAnnotatedBoxes' || action.type === 'setCurrImage' || action.type === 'updateImageBoxes') {
+                this.annotated_box = this.$store.getters.getAnnotatedBoxes;
             }
         }})
 
@@ -71,38 +89,82 @@ export default {
             image_id: self.$store.state.image_order + self.$store.state.start_image_no
         }
         }).then(function(res){
-        var annotations=res.data.annotations;
-        self.loadAnnotatedBoxes(annotations);})},1000);
+            var annotations=res.data.annotations;
+            self.loadAnnotatedBoxes(annotations);
+        })},1000);
 
     },
 
     
-
     methods: {
+        ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setCurrImage']),
+        ...mapGetters(['getImageBoxes']),
+
         highlight(item) { item.hover = true },
         undoHighlight(item) { item.hover = false },
+
+        highlightGroup(group) {
+            for (var box in group) {
+                group[box].hover = true;
+            }
+        },
+
+        undoHighlightGroup(group) {
+            for (var box in group) {
+                group[box].hover = false;
+            }
+        },
+
+        loadAnnotatedBoxes(annotations){
+            const self = this;
+            self.updateAnnotatedBoxes([[], "reset"])
+            var currImageBox = self.$store.getters.getImageBoxes
+            for (var gno in annotations){
+            var agroup=annotations[gno]
+            var group=[]
+            var ids=agroup.boxes_id.replace("[","").replace("]","").replace(" ","").replace(', ',',').split(',')
+            for(var id in ids){
+                var box_id=parseInt(ids[id])
+                var currBox=currImageBox[box_id]
+                if((currBox==undefined)||(currBox.box_id!=box_id)){
+                currBox=currImageBox[box_id-1];
+                }
+                currBox.annotated=true
+                group.push(currBox)
+            }
+            //console.log(currImageBox)
+            self.updateImageBoxes(currImageBox)
+            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
+            }          
+        },
+      clicked(label) {
+        console.log("Clicked", label)
+      }
     },
 
-    watch:{
-    image_no:{
-      deep: true,
-      handler(){
-        const self=this;
-        axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
-          params:{
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no
-          }
-        }).then(function(res){
-          var annotations=res.data.annotations;
-          console.log("RECEIVED ANNOTATION ***", res.data.annotations)
-          
-          setTimeout(
-          self.loadAnnotatedBoxes(annotations),1000);
+    computed: {
+        ...mapGetters(['image_no'])
+    },
 
-    })
-  }}},
+    watch: {
+        image_no: {
+            deep: true,
+            handler(){
+                const self=this;
+                axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+                    params:{
+                        mturk_id: self.$store.state.mturk_id,
+                        doctype: self.$route.params.docType,
+                        image_id: self.$store.state.image_order + self.$store.state.start_image_no
+                    }
+                }).then(function(res){
+                    var annotations=res.data.annotations;
+                    console.log("RECEIVED ANNOTATION ***", res.data.annotations)
+                    setTimeout(self.loadAnnotatedBoxes(annotations),1000);
+                })
+            }
+        }
+    },
 }
 </script>
 <style scoped>
