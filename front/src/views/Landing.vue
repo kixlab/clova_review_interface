@@ -95,7 +95,7 @@ export default {
             self.$store.commit('set_start_image_no', res.data.user_order*7);
             self.$router.push('/annotation/'+res.data.doctype)
           }else{
-            self.$store.commit('update_status', new Array(21).fill(false));
+            self.$store.commit('update_status', new Array(300).fill(false));
             self.$router.push('../informed-consent/')                    }
         }
       });

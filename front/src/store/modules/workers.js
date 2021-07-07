@@ -2,7 +2,7 @@
 const state = {
     assignedImages: [],
     annotatedImages: [],
-    annot_status: new Array(21).fill(false)
+    annot_status: new Array(300).fill(false)
 }
 
 const getters = {
@@ -65,7 +65,7 @@ const mutations = {
     },
     update_a_status(state, new_status){
         //console.log('before', state.annot_status)
-        state.annot_status = new Array(21).fill(false)
+        state.annot_status = new Array(300).fill(false)
         //console.log('before', state.annot_status)
         state.annot_status = new_status
         //console.log('after', state.annot_status)
