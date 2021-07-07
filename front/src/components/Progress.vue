@@ -58,15 +58,15 @@ export default {
   },
   computed: {
     stats() {
-          return new Array(300).fill(False);
+          return new Array(300).fill(false);
         }
   },
-  watch: {
+  /* watch: {
     stats() {
       console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
-  }, 
+  }, */ 
   methods:{
       ...mapActions(['setCurrImage']),
       ...mapGetters(['getStatus']),
