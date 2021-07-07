@@ -328,6 +328,8 @@ def getWorkerAnnotations(request):
             print(annots)
             annotations=[]
             for annot in annots: 
+                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+                print(boxes)
                 if(annot.subcat==None):
                     annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
                 else:
