@@ -23,7 +23,7 @@
             <v-card-text>
                 <v-row style="border: 0px solid blue; max-height: 90vh; overflow: scroll; padding: 0; margin-top: 6px;">
                     <v-col cols="2" style="border-right: 1px solid black;">
-                        <div v-for="box in image_box" :key="box.id" style="margin: 10px 0;" @mouseover="highlight(box)" @mouseout="undoHighlight(box)">
+                        <div v-for="box in image_box" :key="'box-'+box.id" style="margin: 10px 0;" @mouseover="highlight(box)" @mouseout="undoHighlight(box)">
                             <div v-if="box.hover === true">
                                 <span style="border: 2px solid yellow; margin: 0 2px; font-size: 95%; padding: 0 2px;"> <b>{{ box.text }}</b> </span>
                             </div>
@@ -34,24 +34,14 @@
                     </v-col>
                     <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
-                        <div v-for="box in userannot.annotations" :key="box.box_id">
+                        <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id">
                             <v-btn text small tile depressed v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
                                     {{box.cat}}-{{box.subcat}} 
                             </v-btn>
                         </div>
                         <!--{{this.$store.getters.getAnnotatedBoxes}}-->
                     </v-col>
-                    <v-col cols="3" v-for="(user, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
-                        <!--{{image_box.map(v => [v.box_id, v.text])}}-->
-                        <div v-for="box in worker_annots[index]" :key="box.box_id">
-                            {{user}}
-                            <v-btn x-small outlined v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
-                                    {{box.cat}}-{{box.subcat}} 
-                            </v-btn>
-                        </div>
-                        <!--{{this.$store.getters.getAnnotatedBoxes}}-->
-                    </v-col>
-                    <v-col cols="2">
+                    <v-col cols="1">
                     dd
                     </v-col>
                 </v-row>
