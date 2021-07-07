@@ -185,7 +185,7 @@ export default {
 }
 
 .labels{
-    background-color: white;
+    background-color: white !important;
     border: 1px solid;
 }
 </style>
