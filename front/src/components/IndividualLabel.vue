@@ -191,8 +191,9 @@ export default {
 }
 
 .datarow{
-    height: 20px !important;
-    margin: 10px 0 !important;
+    height: 45px !important;
+    margin: auto;
+    line-height: 45px !important;
 }
 </style>
 
