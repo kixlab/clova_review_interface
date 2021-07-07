@@ -328,6 +328,7 @@ export default {
           }
         }).then(function(res){
           var annotations=res.data.annotations;
+          console.log("RECEIVED ANNOTATION ***", res.data.annotations)
           
           setTimeout(
           self.loadAnnotatedBoxes(annotations),1000);

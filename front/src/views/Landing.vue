@@ -2,7 +2,7 @@
 <v-container>
   <v-row justify="center" align-content="center" align="center" class="up_margin">
     <div style="width: 80%;">
-    <h1> Welcome! </h1>
+    <h1> Resolution Interface </h1>
     Thank you for your participation!<br><br>
 
     This task is conducted as a part of a research project in which we try to re-design the machine learning dataset generation process with crowdsourcing. 

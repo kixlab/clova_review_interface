@@ -7,16 +7,16 @@
       dense
       fixed
     >
-      <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
+      <v-toolbar-title>Resolution Interface (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
       <v-spacer/>
-      <instruction-button/>
+      <!--<instruction-button/>-->
       <submit-button/>
     </v-app-bar>
 
     <v-main>
       <v-container fluid fill-height>
         <v-row>
-          <Progress/>
+          <Progress style="paddingBottom: 20px"/>
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
@@ -29,9 +29,10 @@
         <!-- COL2 - ANNOTATION UI -->
         <v-col cols="7">
           <v-row dense>
-            <box-selection-status/>
+            <individual-label/>
+            <!--<box-selection-status/>
             <deferred-annotation/>
-            <deferred-annotation-status/>
+            <deferred-annotation-status/>-->
           </v-row>
         </v-col>
       </v-row>
@@ -44,27 +45,29 @@
 <script>
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
-import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
+//import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
-import InstructionButton from '@/components/InstructionButton.vue'
+//import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
-import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
-import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
+//import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
+//import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
 import axios from 'axios'
 //import SubmitButton from '../components/SubmitButton.vue'
+import IndividualLabel from '@/components/IndividualLabel.vue'
 
 export default {
   name: 'Home',
   components: {
     Progress,
     ImagePanel,
-    DeferredAnnotationStatus,
+    //DeferredAnnotationStatus,
     SubmitButton,
-    InstructionButton,
+    //InstructionButton,
   //  OverviewButton,
-    DeferredAnnotation,
-    BoxSelectionStatus,
+    //DeferredAnnotation,
+    //BoxSelectionStatus,
+    IndividualLabel
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)

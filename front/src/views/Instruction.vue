@@ -6,7 +6,7 @@
         <v-card-text>
         <h2>Please carefully read the instruction below.<br>
         As it is expected to take a minute to read, 
-        <span v-if="time_now < 60" class="reds">you can leave this page after {{60 - time_now}} seconds from now.</span>
+        <span v-if="time_now < 1" class="reds">you can leave this page after {{1 - time_now}} seconds from now.</span>
         <span v-else class="reds"> you can leave this page now.</span>
         </h2>
         </v-card-text>
@@ -79,12 +79,14 @@ export default {
     time_now: 0,
     passOneMinute: false,
     items: [
+      /*
       {src: require('@/assets/tutorial_clova1.png')},
       {src: require('@/assets/tutorial_clova2.png')},
       {src: require('@/assets/tutorial_clova3.png')},
       {src: require('@/assets/tutorial_clova4.png')},
       {src: require('@/assets/tutorial_clova5.png')},
       {src: require('@/assets/tutorial_clova6.png')},
+      */
       {}
     ]
   }),
@@ -94,8 +96,9 @@ export default {
 
       self.$helpers.server_post(self, "/api/instr-done/", 
         function(self, res){ // eslint-disable-line no-unused-vars
-          self.$store.commit('set_start_image_no', res.data.user_order*7);
-          self.$router.push('annotation/'+res.data.doctype);
+          //self.$store.commit('set_start_image_no', res.data.user_order*7);
+          //self.$router.push('annotation/'+res.data.doctype);
+          self.$router.push('resolution');
         })
     }
   },
@@ -105,7 +108,7 @@ export default {
   created: function () {
     setTimeout(() => {
       this.passOneMinute = true
-    }, 60*1000);
+    }, 1*1000);
     setInterval(() => {
       this.time_now += 1
     }, 1000);

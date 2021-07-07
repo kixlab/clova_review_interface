@@ -1,29 +1,33 @@
 <template>
  <v-col cols="12">
   <v-card
-    tile
-    @mousedown="clickDown" @mouseup="clickUp"
-    
+    tile    
     >
     <!--
     <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
     -->
+      <v-card-title >
+        <h4 style="margin:auto;">Image #{{this.$store.state.image_order+1}}</h4>
+      </v-card-title>
       <v-row>
         <v-col>
+          
           <div ref="img_container">
           <v-img :src=image_url contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
               <div v-if="image_box" ref="img_box">
-                <div v-for="box in image_box" :key="box.id">
+                <div v-for="box in image_box" :key="box.id" >
                   <div v-if="box.selected === true">
                     <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
                   </div>
+                  <!--
                   <div v-else-if="box.annotated === true && box.hover === false">
                     <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
                   </div>
-                  <div v-else-if="box.annotated === true && box.hover === true">
+                  -->
+                  <div v-else-if="box.hover === true">
                     <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
                   </div>
                   <div v-else>
@@ -41,17 +45,7 @@
       </v-row>
 
   </v-card>
-  <v-card >
-    <br>
-    As the receipts are from Indonesia, here are some translations for commonly occuring words: <br>
-    <span style="textAlign: left;">
-    <b >
-    Bayar - Pay <br>
-    Tunai - Cash <br>
-    Kembalian - Change <br>
-    </b>
-    </span>
-  </v-card>
+  
  </v-col>
 </template>
 
@@ -116,6 +110,10 @@ export default {
   },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
+
+    highlight(item) { item.hover = true; console.log(item.text) },
+    undoHighlight(item) { item.hover = false },
+
     loadImageID: function (callback) {
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {

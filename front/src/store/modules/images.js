@@ -123,6 +123,7 @@ const actions = {
     },
 
     updateAnnotatedBoxes({ commit }, json) {
+        console.log("JSON", json)
         if (json[1] === "add") {
             commit('addAnnotatedBox', json[0])
         }
