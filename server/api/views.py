@@ -335,7 +335,7 @@ def getWorkerAnnotations(request):
                         annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
                     else:
                         annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-                workerannots.append({'user': user.username, 'annotations': annotations})
+            workerannots.append({'user': user.username, 'annotations': annotations})
             response={
                 'workerannots':workerannots
             }
