@@ -338,6 +338,7 @@ def getWorkerAnnotations(request):
                         else:
                             annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
             sorted_annots=annotations.sort(key=lambda s: int(s['box_id']))
+            print("Hi")
             print('before sort', annotations)
             print('sorted', sorted_annots)
             workerannots.append({'user': user.username, 'annotations': sorted_annots})
