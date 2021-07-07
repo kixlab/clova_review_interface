@@ -325,6 +325,7 @@ def getWorkerAnnotations(request):
         for status in statuses: 
             user=status.user
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            print(annots)
             annotations=[]
             for annot in annots: 
                 if(annot.subcat==None):
