@@ -112,7 +112,7 @@ export default {
         highlight(item) { item.hover = true },
         undoHighlight(item) { item.hover = false },
 
-        highlightGroup(group) {
+        /* highlightGroup(group) {
             for (var box in group) {
                 group[box].hover = true;
             }
@@ -145,10 +145,10 @@ export default {
             self.updateImageBoxes(currImageBox)
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
             }          
-        },
-      clicked(label) {
+        }, */
+      /* clicked(label) {
         console.log("Clicked", label)
-      }
+      } */
     },
 
     computed: {
