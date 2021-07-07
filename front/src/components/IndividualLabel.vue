@@ -35,7 +35,8 @@
                     <v-col cols="3" v-for="(user, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in worker_annots[index]" :key="box.box_id">
-                            <v-btn text small tile depressed v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
+                            {{user}}
+                            <v-btn x-small outlined v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
                                     {{box.cat}}-{{box.subcat}} 
                             </v-btn>
                         </div>
