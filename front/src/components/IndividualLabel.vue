@@ -23,7 +23,7 @@
             <v-card-text>
                 <v-row style="border: 0px solid blue; max-height: 90vh; overflow: scroll; padding: 0; margin-top: 6px;">
                     <v-col cols="2" style="border-right: 1px solid black;">
-                        <div v-for="box in image_box" :key="box.id" style="margin: 10px 0;" @mouseover="highlight(box)" @mouseout="undoHighlight(box)">
+                        <div v-for="box in image_box" :key="box.id" class="datarow" style="margin: 10px 0;" @mouseover="highlight(box)" @mouseout="undoHighlight(box)">
                             <div v-if="box.hover === true">
                                 <span style="border: 2px solid yellow; margin: 0 2px; font-size: 95%; padding: 0 2px;"> <b>{{ box.text }}</b> </span>
                             </div>
@@ -34,7 +34,7 @@
                     </v-col>
                     <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
-                        <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id">
+                        <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id" class="datarow">
                             <v-btn text small v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
                                     {{box.cat}}-{{box.subcat}} 
                             </v-btn>
@@ -181,5 +181,8 @@ export default {
     color: orange !important;
 }
 
+.datarow{
+    height: 20px !important;
+}
 </style>
 
