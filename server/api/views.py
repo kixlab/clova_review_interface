@@ -340,8 +340,8 @@ def getWorkerAnnotations(request):
                             annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
                         else:
                             annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-                print(annotations)
-                print(annotations.sort(key=lambda s: s['box_id']))
+            print(annotations)
+            print(annotations.sort(key=lambda s: s['box_id']))
             workerannots.append({'user': user.username, 'annotations': annotations})
             response={
                 'workerannots':workerannots
