@@ -63,6 +63,7 @@ export default {
         return {
             image_box : this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id),
             annotated_box: this.$store.getters.getAnnotatedBoxes,
+            worker_annots: []
         };
     },
 
@@ -87,8 +88,8 @@ export default {
             image_id: self.$store.state.image_order + self.$store.state.start_image_no
         }
         }).then(function(res){
-            var annotations=res.data.workerannots;
-            console.log(annotations);
+           self.worker_annots=res.data.workerannots;
+        console.log(res.data.workerannots);
 //            self.loadAnnotatedBoxes(annotations);
         })},1000);
 
