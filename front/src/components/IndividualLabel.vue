@@ -22,7 +22,7 @@
             </v-card-title>
             <v-card-text>
                 <v-row style="border: 0px solid blue; max-height: 90vh; overflow: scroll; padding: 0; margin-top: 6px;">
-                    <v-col cols="2" style="border-right: 1px solid black;">
+                    <v-col cols="2" style="border-right: 1px solid black;padding: 0px;">
                         <div v-for="box in image_box" :key="box.id" class="datarow"  @mouseover="highlight(box)" @mouseout="undoHighlight(box)">
                             <div v-if="box.hover === true">
                                 <span style="border: 2px solid yellow; margin: 0 2px; font-size: 95%; padding: 0 2px;"> <b>{{ box.text }}</b> </span>
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </v-col>
-                    <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
+                    <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black; padding: 0px;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id" class="datarow">
                             <v-btn text small v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
@@ -63,7 +63,16 @@ export default {
         return {
             image_box : this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id),
             annotated_box: this.$store.getters.getAnnotatedBoxes,
-            worker_annots: []
+            worker_annots: [],
+            headers:[
+                {
+                text: 'Boxes',
+                align: 'start',
+                sortable: false, 
+                value: ''
+                }
+
+            ]
         };
     },
 
