@@ -341,10 +341,10 @@ def getWorkerAnnotations(request):
             print(annotations)
             print(sorted_annots)
             workerannots.append({'user': user.username, 'annotations': sorted_annots})
-            response={
-                'workerannots':workerannots
-            }
-            return JsonResponse(response)
+        response={
+            'workerannots':workerannots
+        }
+        return JsonResponse(response)
 
 
 
