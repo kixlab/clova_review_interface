@@ -7,13 +7,13 @@
                         <h4>Boxes</h4>
                     </v-col>
                     <v-col cols="3">
-                        <h4>Worker 1</h4>
+                        <h4>Worker 1 - {{worker_annots[0].user}}</h4>
                     </v-col>
                     <v-col cols="3">
-                        <h4>Worker 2</h4>
+                        <h4>Worker 2 - {{worker_annots[1].user}}</h4>
                     </v-col>
                     <v-col cols="3">
-                        <h4>Worker 3</h4>
+                        <h4>Worker 3 - {{worker_annots[2].user}}</h4>
                     </v-col>
                     <v-col cols="1">
                         <h4>Majority</h4>
