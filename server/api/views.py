@@ -311,6 +311,8 @@ def getDefAnnotations(request):
         }
         return JsonResponse(response)
 
+
+
 @csrf_exempt
 def getWorkerAnnotations(request):
     if request.method=='GET':
@@ -330,13 +332,16 @@ def getWorkerAnnotations(request):
             for annot in annots: 
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 print(boxes)
-                if(annot.subcat==None):
-                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
-                else:
-                    if(annot.subcat.subcat_text=="N/A"):
-                        annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                for box in boxes:
+                    if(annot.subcat==None):
+                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
                     else:
-                        annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+                        if(annot.subcat.subcat_text=="N/A"):
+                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                        else:
+                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+                print(annotations)
+                print(annotations.sort(key=lambda s: s['box_id']))
             workerannots.append({'user': user.username, 'annotations': annotations})
             response={
                 'workerannots':workerannots
