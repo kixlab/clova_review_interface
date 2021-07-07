@@ -322,16 +322,13 @@ def getWorkerAnnotations(request):
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         statuses=Status.objects.filter(document=document, status=True)
-        print('statuses', statuses)
         workerannots=[]
         for status in statuses: 
             user=status.user
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
-            print(annots)
             annotations=[]
             for annot in annots: 
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
-                print(boxes)
                 for box in boxes:
                     if(annot.subcat==None):
                         annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
@@ -340,9 +337,8 @@ def getWorkerAnnotations(request):
                             annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
                         else:
                             annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-            print(annotations)
-            print(annotations.sort(key=lambda s: s['box_id']))
-            workerannots.append({'user': user.username, 'annotations': annotations})
+            sorted_annots=annotations.sort(key=lambda s: s['box_id'])
+            workerannots.append({'user': user.username, 'annotations': sorted_annots})
             response={
                 'workerannots':workerannots
             }
