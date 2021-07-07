@@ -9,6 +9,8 @@ import PageNotFound from '../views/404.vue'
 import DocTypeList from '../views/DocTypeList.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
+import Resolution from './views/Resolution.vue'
+
 //import Resolution from '../views/Annotation.vue'
 
 Vue.use(VueRouter)
@@ -22,7 +24,7 @@ Vue.use(VueRouter)
   {
     path: '/resolution/:docType/',
     name: 'Resolution',
-    component: DeferredAnnotation
+    component: Resolution
   },
   {
     path: '/landing',

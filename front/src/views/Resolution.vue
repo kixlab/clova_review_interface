@@ -54,7 +54,7 @@ import SubmitButton from '@/components/SubmitButton.vue'
 import Progress from '@/components/Progress.vue'
 import axios from 'axios'
 //import SubmitButton from '../components/SubmitButton.vue'
-
+import IndividualLabel from '@/components/IndividualLabel.vue'
 export default {
   name: 'Home',
   components: {
@@ -66,7 +66,7 @@ export default {
   //  OverviewButton,
     //DeferredAnnotation,
     //BoxSelectionStatus,
-  //  IndividualLabel
+    IndividualLabel
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)

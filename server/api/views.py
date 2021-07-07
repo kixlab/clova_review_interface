@@ -312,6 +312,36 @@ def getDefAnnotations(request):
         return JsonResponse(response)
 
 @csrf_exempt
+def getWorkerAnnotations(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =request.GET['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        statuses=Status.objects.filter(document=document, status=True)
+        workerannots=[]
+        for status in statuses: 
+            user=status.user
+            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annotations=[]
+            for annot in annots: 
+                if(annot.subcat==None):
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                else:
+                    if(annot.subcat.subcat_text=="N/A"):
+                        annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                    else:
+                        annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+                workerannots.append({'user': user.username, 'annotations': annotations})
+            response={
+                'workerannots':workerannots
+            }
+            return JsonResponse(response)
+
+
+
+@csrf_exempt
 def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)

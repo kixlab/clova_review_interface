@@ -98,7 +98,7 @@ export default {
         function(self, res){ // eslint-disable-line no-unused-vars
           //self.$store.commit('set_start_image_no', res.data.user_order*7);
           //self.$router.push('annotation/'+res.data.doctype);
-          self.$router.push('resolution');
+          self.$router.push('resolution/receipt/');
         })
     }
   },

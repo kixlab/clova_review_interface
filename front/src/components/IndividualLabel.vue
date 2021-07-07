@@ -82,15 +82,15 @@ export default {
         }})
 
         setTimeout( function(){
-        axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+        axios.get(self.$store.state.server_url+'/api/get-worker-annotations/',{
         params:{
-            mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order + self.$store.state.start_image_no
         }
         }).then(function(res){
-            var annotations=res.data.annotations;
-            self.loadAnnotatedBoxes(annotations);
+            var annotations=res.data.workerannots;
+            console.log(annotations);
+//            self.loadAnnotatedBoxes(annotations);
         })},1000);
 
     },
