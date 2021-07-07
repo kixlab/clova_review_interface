@@ -44,7 +44,8 @@ export default {
   data() {
     return {
       image_box: this.$store.getters.getImageBoxes,
-      img_temp: this.$store.getters.get_curr_image
+      img_temp: this.$store.getters.get_curr_image,
+      stats: new Array(300).fill(false)
     };
   },
   mounted() {
@@ -56,11 +57,11 @@ export default {
     }})
 
   },
-  computed: {
+ /*  computed: {
     stats() {
-          return new Array(300).fill(false);
+          return 
         }
-  },
+  }, */
   /* watch: {
     stats() {
       console.log("Hi", this.$store.getters.getStatus);
