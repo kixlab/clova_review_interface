@@ -35,7 +35,7 @@
                     <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id">
-                            <v-btn text small v-bind:class="{success: box.confidence, error: (box.subcat=='N/A'), warning: !box.confidence}"> 
+                            <v-btn text small v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
                                     {{box.cat}}-{{box.subcat}} 
                             </v-btn>
                         </div>
@@ -170,14 +170,14 @@ export default {
 
 <style scoped>
 
-.error.warning{
+.na.canbe{
   color: #ff5252 !important;
 }
-.success{
+.exactly{
   color: #4caf50 !important;
 }
 
-.warning{
+.canbe{
     color: orange !important;
 }
 
