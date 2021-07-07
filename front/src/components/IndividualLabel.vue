@@ -160,17 +160,16 @@ export default {
             deep: true,
             handler(){
                 const self=this;
-                axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
-                    params:{
-                        mturk_id: self.$store.state.mturk_id,
-                        doctype: self.$route.params.docType,
-                        image_id: self.$store.state.image_order + self.$store.state.start_image_no
-                    }
+                axios.get(self.$store.state.server_url+'/api/get-worker-annotations/',{
+                params:{
+                    doctype: self.$route.params.docType,
+                    image_id: self.$store.state.image_order + self.$store.state.start_image_no
+                }
                 }).then(function(res){
-                    var annotations=res.data.annotations;
-                    console.log("RECEIVED ANNOTATION ***", res.data.annotations)
-                    setTimeout(self.loadAnnotatedBoxes(annotations),1000);
-                })
+                self.worker_annots=res.data.workerannots;
+                console.log(res.data.workerannots);
+                });
+                }
             }
         }
     },
@@ -194,6 +193,7 @@ export default {
     height: 45px !important;
     margin: auto;
     line-height: 45px !important;
+    border-bottom: 1px solid !important;
 }
 </style>
 
