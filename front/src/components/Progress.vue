@@ -58,8 +58,7 @@ export default {
   },
   computed: {
     stats() {
-      console.log("Hi", this.$store.getters.getStatus);
-          return this.$store.getters.getStatus;
+          return new Array(300).fill(False);
         }
   },
   watch: {
