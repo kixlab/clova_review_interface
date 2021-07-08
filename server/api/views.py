@@ -328,7 +328,7 @@ def getWorkerAnnotations(request):
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
             for annot in annots: 
-                print(annot)
+                //print(annot)
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 for box in boxes:
                     if(annot.subcat==None):
@@ -340,7 +340,7 @@ def getWorkerAnnotations(request):
                             annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
             annotations.sort(key=lambda s: int(s['box_id']))
             workerannots.append({'user': user.username, 'annotations': annotations})
-        for i in range(3-len(workerannots)):
+        for i in range(4-len(workerannots)):
             workerannots.append({'user': 'null', 'annotations': []})
         response={
             'workerannots':workerannots
