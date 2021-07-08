@@ -4,7 +4,7 @@
             <v-card-title style="border-bottom: 0px solid black; background-color: lightgrey;">
                 <v-row>
                     <v-col cols="2">
-                        <h4>Boxes</h4>
+                        <h4>Boxes (Total-{{this.$store.getters.getImageBoxes.length}})</h4>
                     </v-col>
                     <v-col v-for="(userannot, index) in worker_annots" :key="index">
                         <h4>Worker {{index+1}} - {{worker_annots[index].user}}</h4>
@@ -33,10 +33,22 @@
                                     {{box.cat}}-{{box.subcat}} 
                             </v-btn>
                         </div>
-                        <!--{{this.$store.getters.getAnnotatedBoxes}}-->
+                        
                     </v-col>
-                    <v-col cols="2">
-                    dd
+                    <v-col cols="2" style="padding: 0px;">
+                        <div v-for="box in majority_list" :key="'annot-'+box.box_id" class="datarow">
+                            <div v-if="box.confidence && box.catMajority===3 && box.subcatMajority===3">
+                                <v-btn text small style="color: green"> 
+                                    {{box.cat}}-{{box.subcat}}
+                                </v-btn>
+
+                            </div>
+                            <div v-else>
+                                <v-btn text small style="color: black"> 
+                                    {{box.cat}}-{{box.subcat}}
+                                </v-btn>
+                            </div>
+                        </div>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -65,8 +77,8 @@ export default {
                 sortable: false, 
                 value: ''
                 }
-
-            ]
+            ],
+            majority_list: [],
         };
     },
 
@@ -93,9 +105,16 @@ export default {
         }).then(function(res){
             self.worker_annots=res.data.workerannots;
             console.log(res.data.workerannots);
+            /*
             for (var i in res.data.workerannots) {
                 console.log("&&&&&", res.data.workerannots[i].user + " -- " + res.data.workerannots[i].annotations.length)
+            }*/
+            var majority = []
+            for (var i in res.data.workerannots[0].annotations) {
+                majority.push(self.majority_three(res.data.workerannots[0].annotations[i], res.data.workerannots[1].annotations[i], res.data.workerannots[2].annotations[i]))
             }
+            self.majority_list = majority
+            console.log("MAJORITY - ", majority)
         })},1000);
 
     },
@@ -145,6 +164,62 @@ export default {
       /* clicked(label) {
         console.log("Clicked", label)
       } */
+
+        majority_three(label1, label2, label3) {
+            var conf = true
+            var box_id = label1.box_id
+            if (label1.confidence && label2.confidence && label3.confidence) {
+                conf = true
+            }
+            else {
+                conf = false
+            }
+            if (label1.cat === label2.cat && label2.cat === label3.cat) {
+                if (label1.subcat === label2.subcat && label1.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 3, subcatMajority: 3}
+                }
+                else if (label1.subcat === label2.subcat || label1.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 3, subcatMajority: 2}
+                }
+                else if (label2.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label2.subcat, confidence: conf, box_id: box_id, catMajority: 3, subcatMajority: 2} 
+                }
+                else {
+                    return {cat: label1.cat, subcat: "N/A", confidence: conf, box_id: box_id, catMajority: 3, subcatMajority: 1} 
+                }
+            }
+            else if (label1.cat === label2.cat || label1.cat === label3.cat) {
+                if (label1.subcat === label2.subcat && label1.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 3}
+                }
+                else if (label1.subcat === label2.subcat || label1.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 2}
+                }
+                else if (label2.subcat === label3.subcat) {
+                    return {cat: label1.cat, subcat: label2.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 2} 
+                }
+                else {
+                    return {cat: label1.cat, subcat: "N/A", confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 1} 
+                }
+            }
+            else if (label2.cat === label3.cat) {
+                if (label1.subcat === label2.subcat && label1.subcat === label3.subcat) {
+                    return {cat: label2.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 3}
+                }
+                else if (label1.subcat === label2.subcat || label1.subcat === label3.subcat) {
+                    return {cat: label2.cat, subcat: label1.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 2}
+                }
+                else if (label2.subcat === label3.subcat) {
+                    return {cat: label2.cat, subcat: label2.subcat, confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 2} 
+                }
+                else {
+                    return {cat: label2.cat, subcat: "N/A", confidence: conf, box_id: box_id, catMajority: 2, subcatMajority: 1} 
+                }
+            }
+            else {
+                return {cat: "N/A", subcat: "N/A", confidence: conf, box_id: box_id, catMajority: 1, subcatMajority: 1}
+            }
+        }
     },
 
     computed: {
@@ -164,9 +239,18 @@ export default {
                 }).then(function(res){
                     self.worker_annots=res.data.workerannots;
                     console.log(res.data.workerannots);
+                    /*
                     for (var i in res.data.workerannots) {
                         console.log("&&&&&", res.data.workerannots[i].user + " -- " + res.data.workerannots[i].annotations.length)
+                    }*/
+                    //var num_workers = res.data.workerannots.length
+                    var majority = []
+                    for (var i in res.data.workerannots[0].annotations) {
+                        console.log(res.data.workerannots[0].annotations[i])
+                        majority.push(self.majority_three(res.data.workerannots[0].annotations[i], res.data.workerannots[1].annotations[i], res.data.workerannots[2].annotations[i]))
                     }
+                    self.majority_list = majority
+                    console.log("MAJORITY -" , majority)
                 });
                 }
             }
