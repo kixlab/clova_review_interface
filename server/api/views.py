@@ -327,8 +327,8 @@ def getWorkerAnnotations(request):
             user=status.user
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
+            print(annots)
             for annot in annots: 
-                print(annot)
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 for box in boxes:
                     if(annot.subcat==None):
