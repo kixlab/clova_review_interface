@@ -6,16 +6,10 @@
                     <v-col cols="2">
                         <h4>Boxes</h4>
                     </v-col>
-                    <v-col cols="3">
-                        <h4>Worker 1 - {{worker_annots[0].user}}</h4>
+                    <v-col v-for="(userannot, index) in worker_annots" :key="index">
+                        <h4>Worker {{index+1}} - {{worker_annots[index].user}}</h4>
                     </v-col>
-                    <v-col cols="3">
-                        <h4>Worker 2 - {{worker_annots[1].user}}</h4>
-                    </v-col>
-                    <v-col cols="3">
-                        <h4>Worker 3 - {{worker_annots[2].user}}</h4>
-                    </v-col>
-                    <v-col cols="1">
+                    <v-col cols="2">
                         <h4>Majority</h4>
                     </v-col>
                 </v-row>
@@ -32,7 +26,7 @@
                             </div>
                         </div>
                     </v-col>
-                    <v-col cols="3" v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black; padding: 0px;">
+                    <v-col v-for="(userannot, index) in worker_annots" :key="index" style="border-right: 1px solid black; padding: 0px;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id" class="datarow">
                             <v-btn text small v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
@@ -41,7 +35,7 @@
                         </div>
                         <!--{{this.$store.getters.getAnnotatedBoxes}}-->
                     </v-col>
-                    <v-col cols="1">
+                    <v-col cols="2">
                     dd
                     </v-col>
                 </v-row>
@@ -97,9 +91,11 @@ export default {
             image_id: self.$store.state.image_order + self.$store.state.start_image_no
         }
         }).then(function(res){
-           self.worker_annots=res.data.workerannots;
-        console.log(res.data.workerannots);
-//            self.loadAnnotatedBoxes(annotations);
+            self.worker_annots=res.data.workerannots;
+            console.log(res.data.workerannots);
+            for (var i in res.data.workerannots) {
+                console.log("&&&&&", res.data.workerannots[i].user + " -- " + res.data.workerannots[i].annotations.length)
+            }
         })},1000);
 
     },
@@ -166,8 +162,11 @@ export default {
                     image_id: self.$store.state.image_order + self.$store.state.start_image_no
                 }
                 }).then(function(res){
-                self.worker_annots=res.data.workerannots;
-                console.log(res.data.workerannots);
+                    self.worker_annots=res.data.workerannots;
+                    console.log(res.data.workerannots);
+                    for (var i in res.data.workerannots) {
+                        console.log("&&&&&", res.data.workerannots[i].user + " -- " + res.data.workerannots[i].annotations.length)
+                    }
                 });
                 }
             }
