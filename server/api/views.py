@@ -323,12 +323,13 @@ def getWorkerAnnotations(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         statuses=Status.objects.filter(document=document, status=True)
         workerannots=[]
+        print(statuses)
         for status in statuses: 
             user=status.user
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
+            print(annots)
             for annot in annots: 
-                print(annot)
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 for box in boxes:
                     if(annot.subcat==None):
@@ -339,7 +340,10 @@ def getWorkerAnnotations(request):
                         else:
                             annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
             annotations.sort(key=lambda s: int(s['box_id']))
-            workerannots.append({'user': user.username, 'annotations': annotations})
+
+            # remove duplicate 
+
+            workerannots.append({'user': user.username, 'annotations': getLastAnnotations(annotations)})
         for i in range(4-len(workerannots)):
             workerannots.append({'user': 'null', 'annotations': []})
         response={
@@ -347,7 +351,18 @@ def getWorkerAnnotations(request):
         }
         return JsonResponse(response)
 
-
+def getLastAnnotations(jsonlist):
+    result=[]
+    result.append(jsonlist[0])
+    for idx in range(len(jsonlist)-1):
+        row=jsonlist[idx+1]
+        if(row["box_id"]==result[-1]["box_id"]):
+            result[-1]=row
+        else: 
+            result.append(row)
+    return result
+        
+        
 
 @csrf_exempt
 def saveAnnotation(request):

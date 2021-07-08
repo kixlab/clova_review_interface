@@ -69,7 +69,7 @@ export default {
         return {
             image_box : this.$store.getters.getImageBoxes.sort((a, b) => a.box_id - b.box_id),
             annotated_box: this.$store.getters.getAnnotatedBoxes,
-            worker_annots: [{'user': null, 'annotations': []},{'user': null, 'annotations': []},{'user': null, 'annotations': []}],
+            worker_annots: [{'user': null, 'annotations': []},{'user': null, 'annotations': []},{'user': null, 'annotations': []},{'user': null, 'annotations': []}],
             headers:[
                 {
                 text: 'Boxes',
