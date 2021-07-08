@@ -323,6 +323,7 @@ def getWorkerAnnotations(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         statuses=Status.objects.filter(document=document, status=True)
         workerannots=[]
+        print(statuses)
         for status in statuses: 
             user=status.user
             annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
