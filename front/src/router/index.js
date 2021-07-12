@@ -9,7 +9,8 @@ import PageNotFound from '../views/404.vue'
 import DocTypeList from '../views/DocTypeList.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
-import Resolution from '../views/Resolution.vue'
+import ResolutionImage from '../views/ResolutionImage.vue'
+import ResolutionOverall from '../views/ResolutionOverall.vue'
 
 //import Resolution from '../views/Annotation.vue'
 
@@ -22,9 +23,14 @@ Vue.use(VueRouter)
     component: DeferredAnnotation
   },
   {
-    path: '/resolution/:docType/',
-    name: 'Resolution',
-    component: Resolution
+    path: '/resolution/:docType/image',
+    name: 'ResolutionImage',
+    component: ResolutionImage
+  },
+  {
+    path: '/resolution/:docType/overall',
+    name: 'ResolutionOverall',
+    component: ResolutionOverall
   },
   {
     path: '/landing',

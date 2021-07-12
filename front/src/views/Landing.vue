@@ -62,7 +62,7 @@
     <v-btn
       style="marginTop: 10px"
       :disabled="!valid"
-      @click="onClickNext"
+      @click="onClickNext2"
       
       color="indigo lighten-1"
       class="mr-4"
@@ -105,13 +105,34 @@ export default {
         } else{
           if(res.data.status=='annotation'){
             self.$store.commit('set_start_image_no', res.data.user_order*7);
-            self.$router.push('/resolution/'+res.data.doctype)
+            self.$router.push('/resolution/'+res.data.doctype+'/image/')
+          }else{
+            self.$store.commit('update_status', new Array(300).fill(false));
+            self.$router.push('../informed-consent/')                    }
+        }
+      });
+    },
+    onClickNext2: function () {
+      const self = this;
+      self.$refs.form.validate()
+      self.$store.commit('set_mturk_id', self.turk_id.trim())
+      axios.post(self.$store.state.server_url + '/api/signup/', {
+        username: self.$store.state.mturk_id,
+      }).then( function(res){
+//        self.$store.commit('set_mturk_id', self.turk_id.trim())
+        if(res.data.status=='instruction'){
+          self.$router.push('/instruction/')
+        } else{
+          if(res.data.status=='annotation'){
+            self.$store.commit('set_start_image_no', res.data.user_order*7);
+            self.$router.push('/resolution/'+res.data.doctype+'/overall/')
           }else{
             self.$store.commit('update_status', new Array(300).fill(false));
             self.$router.push('../informed-consent/')                    }
         }
       });
     }
+    
   },
   mounted() {
     this.turk_id = this.mturk_id;

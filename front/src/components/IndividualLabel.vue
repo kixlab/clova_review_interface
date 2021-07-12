@@ -8,7 +8,6 @@
             </v-card-title>
             <v-card-text>
                 <v-container fluid>
-                <!--<span> {{selected_workers}} </span>-->
                 <v-row>
                 <v-col v-for="(userannot, index) in worker_annots" :key="index">
                     <v-checkbox v-model="selected_workers" :label="userannot.user" :value="userannot.user">
@@ -48,7 +47,6 @@
                         </div>
                     </v-col>
                     <v-col v-for="(userannot, index) in worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)" :key="index" style="border-right: 1px solid black; padding: 0px;">
-                        <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id" class="datarow">
                             <div v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
                                     {{box.cat}}-{{box.subcat}} 
@@ -155,31 +153,15 @@ export default {
         }
         }).then(function(res){
             var result = res.data.workerannots;
-            console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
-            /*
-            const idx = res.data.workerannots.map(v => v.user).indexOf("A1DVKS3R9SLQ1H");
-            if (idx > -1) {
-                result.splice(idx, 1);
-            }
-            const idx2 = res.data.workerannots.map(v => v.user).indexOf("A3JN18TC8GL3IH");
-            if (idx2 > -1) {
-                result.splice(idx2, 1);
-            }
-            const idx3 = res.data.workerannots.map(v => v.user).indexOf("AZS1ZZRYENXVK");
-            if (idx3> -1) {
-                result.splice(idx3, 1);
-            }
-            */
+            //console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
             self.worker_annots = result
             self.selected_workers = result.map(v => v.user).slice(0, 3)
-            console.log(self.worker_annots);
+            
             var majority = []
             for (var i in result[0].annotations) {
                 //console.log(res.data.workerannots[0].annotations[i])
                 var result_filter = result.filter(v => self.selected_workers.indexOf(v.user) > -1)
-                if (result_filter.length >= 3) {
-                    majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))
-                }
+                majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))
             }
             self.majority_list = majority
 
@@ -347,24 +329,10 @@ export default {
                 }
                 }).then(function(res){
                     var result = res.data.workerannots;
-                    console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
-                    /*
-                    const idx = res.data.workerannots.map(v => v.user).indexOf("A1DVKS3R9SLQ1H");
-                    if (idx > -1) {
-                        result.splice(idx, 1);
-                    }
-                    const idx2 = res.data.workerannots.map(v => v.user).indexOf("A3JN18TC8GL3IH");
-                    if (idx2 > -1) {
-                        result.splice(idx2, 1);
-                    }
-                    const idx3 = res.data.workerannots.map(v => v.user).indexOf("AZS1ZZRYENXVK");
-                    if (idx3> -1) {
-                        result.splice(idx3, 1);
-                    }
-                    */
+                    //console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
                     self.worker_annots = result
                     self.selected_workers = result.map(v => v.user).slice(0, 3)
-                    console.log(self.worker_annots);
+                    
                     var majority = []
                     for (var i in result[0].annotations) {
                         //console.log(res.data.workerannots[0].annotations[i])
@@ -386,7 +354,7 @@ export default {
         selected_workers: {
             deep: true,
             handler() {
-                console.log("CHANGEDDDD")
+                //console.log("CHANGEDDDD")
                 const self = this;
                 var majority = []
                 var result_filter = self.worker_annots.filter(v => self.selected_workers.indexOf(v.user) > -1)
@@ -394,7 +362,7 @@ export default {
                     //console.log(res.data.workerannots[0].annotations[i])
                     if (result_filter.length >= 3) {
                         majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))
-                        console.log("NEW MAJORITY")
+                        //console.log("NEW MAJORITY")
                     } else {
                         majority.push({cat: "none", subcat: "none", box_id: i})
                     } 
