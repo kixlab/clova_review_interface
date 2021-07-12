@@ -59,7 +59,6 @@ const actions = {
         
         if(json[0].valid_line==undefined){
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
-            //console.log(validData)
             const processedData = validData.map(function(i) {
                 if(i.box_id==undefined){
                     return {
@@ -96,6 +95,17 @@ const actions = {
         }
         else{
             const validData=json[0].valid_line.map(v => v.words).flat(1)
+
+            //const newValidData = []
+            for (var d in json[0].valid_line) {
+                var word = json[0].valid_line[d].words
+                var cat = json[0].valid_line[d].category
+                for (var w in word) {
+                    word[w]["GTlabel"] = cat
+                    //newValidData.push(word[w])
+                }
+            }
+            //console.log("VALIDDATA", validData)
             const processedData = validData.map(function(i, idx) {
                 return {box_id: idx,
                         text: i.text,
@@ -107,7 +117,9 @@ const actions = {
                         annotated: false, 
                         hover: false,
                         quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
-                        label: ""}
+                        label: "",
+                        GTlabel: i.GTlabel,
+                    }
             })
             //console.log("***", padding_x, padding_y)
             commit('setCurrBox', processedData)
