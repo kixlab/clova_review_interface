@@ -55,7 +55,19 @@
       color="indigo lighten-1"
       class="mr-4"
     >
-      Next
+      Image level
+    </v-btn>
+  </v-row>
+  <v-row justify="space-around" align="start" class="up_margin">
+    <v-btn
+      style="marginTop: 10px"
+      :disabled="!valid"
+      @click="onClickNext"
+      
+      color="indigo lighten-1"
+      class="mr-4"
+    >
+      Worker level
     </v-btn>
   </v-row>
 </v-container>
@@ -93,7 +105,7 @@ export default {
         } else{
           if(res.data.status=='annotation'){
             self.$store.commit('set_start_image_no', res.data.user_order*7);
-            self.$router.push('/annotation/'+res.data.doctype)
+            self.$router.push('/resolution/'+res.data.doctype)
           }else{
             self.$store.commit('update_status', new Array(300).fill(false));
             self.$router.push('../informed-consent/')                    }

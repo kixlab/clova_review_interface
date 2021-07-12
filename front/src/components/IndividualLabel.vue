@@ -1,19 +1,37 @@
 <template>
     <v-col cols="12">
         <v-card>
+            <v-card-title>
+                <h4 style="marginRight: 10px;">Filter with MTurk ids --- </h4>
+                <h5> <b style="color: red;">{{this.cnt_correct}}</b> out of <b style="color: blue">{{this.$store.getters.getImageBoxes.length}}</b> boxes 
+                ({{(this.cnt_correct/this.$store.getters.getImageBoxes.length).toFixed(4)*100}}%) have majority labels equal to GT labels</h5>
+            </v-card-title>
+            <v-card-text>
+                <v-container fluid>
+                <!--<span> {{selected_workers}} </span>-->
+                <v-row>
+                <v-col v-for="(userannot, index) in worker_annots" :key="index">
+                    <v-checkbox v-model="selected_workers" :label="userannot.user" :value="userannot.user">
+                    </v-checkbox>
+                </v-col>
+                </v-row>
+                </v-container>
+            </v-card-text>
+        </v-card>
+        <v-card>
             <v-card-title style="border-bottom: 0px solid black; background-color: lightgrey;">
                 <v-row>
                     <v-col cols="2">
-                        <h4>Boxes <br>(Total-{{this.$store.getters.getImageBoxes.length}}, correct-{{this.cnt_correct}})</h4>
+                        <h4>Boxes</h4>
                     </v-col>
-                    <v-col v-for="(userannot, index) in worker_annots.slice(0,3)" :key="index">
-                        <h4>Worker {{index+1}} - {{worker_annots[index].user}}</h4>
+                    <v-col v-for="(userannot, index) in worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)" :key="index">
+                        <h4>Worker {{index+1}} - {{worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)[index].user}}</h4>
                     </v-col>
                     <v-col cols="2">
                         <h4>Majority <br> (<span style="color: #4caf50">Green</span> if all same)</h4>
                     </v-col>
                     <v-col cols="2">
-                        <h4>GT <br> (<span style="color: #4caf50">Green</span> if == majority)</h4>
+                        <h4>GT <br> (<span style="color: #4caf50">Green</span> if GT == majority)</h4>
                     </v-col>
                 </v-row>
             </v-card-title>
@@ -29,7 +47,7 @@
                             </div>
                         </div>
                     </v-col>
-                    <v-col v-for="(userannot, index) in worker_annots.slice(0,3)" :key="index" style="border-right: 1px solid black; padding: 0px;">
+                    <v-col v-for="(userannot, index) in worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)" :key="index" style="border-right: 1px solid black; padding: 0px;">
                         <!--{{image_box.map(v => [v.box_id, v.text])}}-->
                         <div v-for="box in userannot.annotations" :key="'annot-'+userannot.user+box.box_id" class="datarow">
                             <div v-bind:class="{exactly: box.confidence, na: (box.subcat=='N/A'), canbe: !box.confidence}"> 
@@ -40,50 +58,44 @@
                     </v-col>
                     <v-col cols="2" style="padding: 0px;">
                         <div v-for="box in majority_list" :key="'annot-'+box.box_id" class="datarow">
-                            <div v-if="box.confidence && box.catMajority===3 && box.subcatMajority===3">
-                                <div style="color: #4caf50"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
-
+                            <div v-if="box.confidence && box.catMajority===3 && box.subcatMajority===3" style="color: #4caf50">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
-                            <div v-else-if="box.confidence===false && box.catMajority===3 && box.subcatMajority===3">
-                                <div style="color: orange"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
+                            <div v-else-if="box.confidence===false && box.catMajority===3 && box.subcatMajority===3" style="color: orange">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
-                            <div v-else-if="box.cat==='N/A' || box.subcat==='N/A'">
-                                <div style="color: red"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
+                            <div v-else-if="box.cat==='N/A' || box.subcat==='N/A'" style="color: red">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
-                            <div v-else-if="box.catMajority===3 && box.subcatMajority===2">
-                                <div style="color: lightblue"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
+                            <div v-else-if="box.catMajority===3 && box.subcatMajority===2" style="color: lightblue">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
-                            <div v-else-if="box.catMajority===2">
-                                <div style="color: blue"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
+                            <div v-else-if="box.catMajority===2" style="color: blue">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
-                            <div v-else>
-                                <div style="color: black"> 
-                                    {{box.cat}}-{{box.subcat}}
-                                </div>
+                            <div v-else style="color: black">
+                                {{box.cat}}-{{box.subcat}}
                             </div>
                         </div>
                     </v-col>
-                    <v-col cols="2" style="padding: 0px;">
+                    <v-col cols="2" style="padding: 0px; border-left: 1px solid black;">
                         <div v-for="(box, index) in image_box" :key="box.id" class="datarow">
+                            <div v-if="majority_list[index].cat && gt_to_cat(box.GTlabel).cat">
                             <div v-if="majority_list[index].cat === gt_to_cat(box.GTlabel).cat && majority_list[index].subcat === gt_to_cat(box.GTlabel).subcat">
                                 <div style="color: #4caf50">
                                     <b>{{gt_to_cat(box.GTlabel).cat}}-{{gt_to_cat(box.GTlabel).subcat}}</b>
+                                </div>
+                            </div>
+                            <div v-else-if="majority_list[index].cat === gt_to_cat(box.GTlabel).cat">
+                                <div style="color: orange">
+                                    {{gt_to_cat(box.GTlabel).cat}}-{{gt_to_cat(box.GTlabel).subcat}}
                                 </div>
                             </div>
                             <div v-else>
                                 <div style="color: black">
                                     {{gt_to_cat(box.GTlabel).cat}}-{{gt_to_cat(box.GTlabel).subcat}}
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </v-col>
@@ -117,6 +129,7 @@ export default {
             ],
             majority_list: [],
             cnt_correct: 0,
+            selected_workers: [],
         };
     },
 
@@ -142,6 +155,8 @@ export default {
         }
         }).then(function(res){
             var result = res.data.workerannots;
+            console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
+            /*
             const idx = res.data.workerannots.map(v => v.user).indexOf("A1DVKS3R9SLQ1H");
             if (idx > -1) {
                 result.splice(idx, 1);
@@ -150,12 +165,21 @@ export default {
             if (idx2 > -1) {
                 result.splice(idx2, 1);
             }
+            const idx3 = res.data.workerannots.map(v => v.user).indexOf("AZS1ZZRYENXVK");
+            if (idx3> -1) {
+                result.splice(idx3, 1);
+            }
+            */
             self.worker_annots = result
+            self.selected_workers = result.map(v => v.user).slice(0, 3)
             console.log(self.worker_annots);
             var majority = []
             for (var i in result[0].annotations) {
                 //console.log(res.data.workerannots[0].annotations[i])
-                majority.push(self.majority_three(result[0].annotations[i], result[1].annotations[i], result[2].annotations[i]))
+                var result_filter = result.filter(v => self.selected_workers.indexOf(v.user) > -1)
+                if (result_filter.length >= 3) {
+                    majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))
+                }
             }
             self.majority_list = majority
 
@@ -282,7 +306,8 @@ export default {
             newlabel = newlabel === 'menu.num' ? 'menu.id' : newlabel
             newlabel = newlabel === 'menu.nm' ? 'menu.name' : newlabel
             newlabel = newlabel === 'menu.cnt' ? 'menu.count' : newlabel
-            newlabel = (['menu.discountprice', 'menu.itemsubtotal', 'menu.vatyn', 'menu.etc'].indexOf(newlabel) > -1) ? 'menu.n/a' : newlabel
+            newlabel = (['menu.discountprice', 'menu.itemsubtotal', 'menu.vatyn', 'menu.etc', 
+            'menu.sub_nm', 'menu.sub_unitprice', 'menu.sub_cnt', 'menu.sub_price', 'menu.sub_etc'].indexOf(newlabel) > -1) ? 'menu.n/a' : newlabel
 
             newlabel = newlabel === 'sub_total.subtotal_price' ? 'subtotal.price' : newlabel
             newlabel = newlabel === 'total.menutype_cnt' ? 'subtotal.menu count' : newlabel
@@ -307,13 +332,13 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['image_no'])
+        ...mapGetters(['image_no']),
     },
 
     watch: {
         image_no: {
             deep: true,
-            handler(){
+            handler() {
                 const self=this;
                 axios.get(self.$store.state.server_url+'/api/get-worker-annotations/',{
                 params:{
@@ -322,6 +347,8 @@ export default {
                 }
                 }).then(function(res){
                     var result = res.data.workerannots;
+                    console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
+                    /*
                     const idx = res.data.workerannots.map(v => v.user).indexOf("A1DVKS3R9SLQ1H");
                     if (idx > -1) {
                         result.splice(idx, 1);
@@ -330,12 +357,19 @@ export default {
                     if (idx2 > -1) {
                         result.splice(idx2, 1);
                     }
+                    const idx3 = res.data.workerannots.map(v => v.user).indexOf("AZS1ZZRYENXVK");
+                    if (idx3> -1) {
+                        result.splice(idx3, 1);
+                    }
+                    */
                     self.worker_annots = result
+                    self.selected_workers = result.map(v => v.user).slice(0, 3)
                     console.log(self.worker_annots);
                     var majority = []
                     for (var i in result[0].annotations) {
                         //console.log(res.data.workerannots[0].annotations[i])
-                        majority.push(self.majority_three(result[0].annotations[i], result[1].annotations[i], result[2].annotations[i]))
+                        var result_filter = result.filter(v => self.selected_workers.indexOf(v.user) > -1)
+                        majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))                 
                     }
                     self.majority_list = majority
                     
@@ -347,9 +381,36 @@ export default {
                     }
                     self.cnt_correct = tempcnt
                 });
+            }
+        },
+        selected_workers: {
+            deep: true,
+            handler() {
+                console.log("CHANGEDDDD")
+                const self = this;
+                var majority = []
+                var result_filter = self.worker_annots.filter(v => self.selected_workers.indexOf(v.user) > -1)
+                for (var i in result_filter[0].annotations) {
+                    //console.log(res.data.workerannots[0].annotations[i])
+                    if (result_filter.length >= 3) {
+                        majority.push(self.majority_three(result_filter[0].annotations[i], result_filter[1].annotations[i], result_filter[2].annotations[i]))
+                        console.log("NEW MAJORITY")
+                    } else {
+                        majority.push({cat: "none", subcat: "none", box_id: i})
+                    } 
                 }
+                self.majority_list = majority
+                
+                var tempcnt = 0
+                for (var j in majority) {
+                    if (self.gt_to_cat(self.image_box[j].GTlabel).cat === majority[j].cat && self.gt_to_cat(self.image_box[j].GTlabel).subcat === majority[j].subcat) {
+                        tempcnt += 1
+                    }
+                }
+                self.cnt_correct = tempcnt
             }
         }
+    }
 }
 </script>
 
