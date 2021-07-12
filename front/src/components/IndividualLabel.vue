@@ -9,8 +9,8 @@
             <v-card-text>
                 <v-container fluid>
                 <v-row>
-                <v-col v-for="(userannot, index) in worker_annots" :key="index">
-                    <v-checkbox v-model="selected_workers" :label="userannot.user" :value="userannot.user">
+                <v-col v-for="(userannot, index) in worker_annots" :key="index" style="padding: 5px;">
+                    <v-checkbox v-model="selected_workers" :label="userannot.user" :value="userannot.user" style="margin: 2px;">
                     </v-checkbox>
                 </v-col>
                 </v-row>
@@ -21,16 +21,16 @@
             <v-card-title style="border-bottom: 0px solid black; background-color: lightgrey;">
                 <v-row>
                     <v-col cols="2">
-                        <h4>Boxes</h4>
+                        <h5>Boxes</h5>
                     </v-col>
                     <v-col v-for="(userannot, index) in worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)" :key="index">
-                        <h4>Worker {{index+1}} - {{worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)[index].user}}</h4>
+                        <h5>Worker {{index+1}} - {{worker_annots.filter(v => selected_workers.indexOf(v.user) > -1)[index].user}}</h5>
                     </v-col>
                     <v-col cols="2">
-                        <h4>Majority <br> (<span style="color: #4caf50">Green</span> if all same)</h4>
+                        <h5>Majority <br> (<span style="color: #4caf50">Green</span> if all same)</h5>
                     </v-col>
                     <v-col cols="2">
-                        <h4>GT <br> (<span style="color: #4caf50">Green</span> if GT == majority)</h4>
+                        <h5>GT <br> (<span style="color: #4caf50">Green</span> if GT == majority)</h5>
                     </v-col>
                 </v-row>
             </v-card-title>
