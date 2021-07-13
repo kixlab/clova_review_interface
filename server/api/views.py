@@ -351,6 +351,7 @@ def getWorkerAnnotations(request):
         }
         return JsonResponse(response)
 
+
 def getLastAnnotations(jsonlist):
     result=[]
     result.append(jsonlist[0])

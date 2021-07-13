@@ -28,6 +28,7 @@ urlpatterns = [
     path('get-status/', views.getStatus),
     path('submit/', views.submit),
     path('get-worker-annotations/', views.getWorkerAnnotations),
+    path('get-annotations-by-worker', views.getAnnotationsByWorker),
     path(r'image/<image_id>/', views.getImage, name='image_id'),
     path(r'upload_image/', views.uploadImage),
     path(r'json/<json_id>/', views.getJson, name='json_id'),
