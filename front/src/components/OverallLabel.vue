@@ -40,18 +40,18 @@ export default {
         }
         }).then(function(res){
             console.log('res',res);
-            self.worker_list = res.data;
-            console.log('worker list', res.data);
+            self.worker_list = res.data.worker;
+            console.log('worker list', res.data.worker);
         })
 
-      /*   setTimeout( function(){
+        setTimeout( function(){
         axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker',{
         params:{
             mturk_id: self.worker
         }
         }).then(function(res){
             console.log('annotation by worker', res.data);
-        })},500); */
+        })},500);
     },
 
     methods: {
