@@ -39,8 +39,8 @@ export default {
             doctype: 'receipt' //self.$route.params.docType
         }
         }).then(function(res){
-            self.worker_list = JSON.parse(res.data);
-            console.log('worker list', res.data);
+            self.worker_list = JSON.parse(JSON.stringify(res.data));
+            console.log('worker list', self.worker_list);
         })
 
         setTimeout( function(){
@@ -49,8 +49,8 @@ export default {
             mturk_id: self.worker
         }
         }).then(function(res){
-            self.worker_detail = JSON.parse(res.data);
-            console.log('annotation by worker', res.data);
+            self.worker_detail = JSON.parse(JSON.stringify(res.data))
+            console.log('annotation by worker', self.worker_detail);
         })},500);
 
         axios.get(self.$store.state.server_url+'/api/get-every-annotations',{
