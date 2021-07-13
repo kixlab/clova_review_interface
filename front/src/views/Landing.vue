@@ -116,6 +116,7 @@ export default {
       const self = this;
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
+      console.log(self.$store.state.server_url)
       axios.post(self.$store.state.server_url + '/api/signup/', {
         username: self.$store.state.mturk_id,
       }).then( function(res){
