@@ -34,19 +34,18 @@ export default {
     mounted() {
         const self = this;
 
-        setTimeout( function(){
-        axios.get(self.$store.state.server_url+'/api/get-workers',{
+        axios.get(self.$store.state.server_url+'/api/get-workers/',{
         params:{
-            doctype: self.$route.params.docType
+            doctype: 'receipt' //self.$route.params.docType
         }
         }).then(function(res){
             console.log('res',res);
             self.worker_list = res.data;
             console.log('worker list', res.data);
-        })},500);
+        })
 
         setTimeout( function(){
-        axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker',{
+        axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker/',{
         params:{
             mturk_id: self.worker
         }
