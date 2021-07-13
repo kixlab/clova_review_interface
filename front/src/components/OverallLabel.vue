@@ -41,7 +41,7 @@ export default {
         }
         }).then(function(res){
             self.worker_list = res.data;
-            console.log(res.data);
+            console.log('worker list', res.data);
         })},500);
 
         setTimeout( function(){
@@ -50,7 +50,7 @@ export default {
             mturk_id: self.worker
         }
         }).then(function(res){
-            console.log(res.data);
+            console.log('annotation by worker', res.data);
         })},500);
     },
 
