@@ -39,7 +39,7 @@ export default {
             doctype: 'receipt' //self.$route.params.docType
         }
         }).then(function(res){
-            self.worker_list = res.data;
+            self.worker_list = JSON.parse(res.data);
             console.log('worker list', res.data);
         })
 
@@ -49,7 +49,7 @@ export default {
             mturk_id: self.worker
         }
         }).then(function(res){
-            self.worker_detail = res.data;
+            self.worker_detail = JSON.parse(res.data);
             console.log('annotation by worker', res.data);
         })},500);
 
