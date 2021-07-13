@@ -39,9 +39,8 @@ export default {
             doctype: 'receipt' //self.$route.params.docType
         }
         }).then(function(res){
-            console.log('res',res);
-            self.worker_list = res.data.worker;
-            console.log('worker list', res.data.worker);
+            self.worker_list = res.data;
+            console.log('worker list', res.data);
         })
 
         setTimeout( function(){
