@@ -146,7 +146,7 @@ export default {
         }})
 
         setTimeout( function(){
-        axios.get(self.$store.state.server_url+'/api/get-every-annotations/',{
+        axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker',{
         params:{
             doctype: self.$route.params.docType,
             image_id: self.$store.state.image_order + self.$store.state.start_image_no
