@@ -44,14 +44,14 @@ export default {
             console.log('worker list', res.data);
         })
 
-        setTimeout( function(){
+      /*   setTimeout( function(){
         axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker',{
         params:{
             mturk_id: self.worker
         }
         }).then(function(res){
             console.log('annotation by worker', res.data);
-        })},500);
+        })},500); */
     },
 
     methods: {
