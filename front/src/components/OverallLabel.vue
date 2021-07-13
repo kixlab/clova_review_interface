@@ -49,8 +49,20 @@ export default {
             mturk_id: self.worker
         }
         }).then(function(res){
+            worker_detail = res.data;
             console.log('annotation by worker', res.data);
         })},500);
+
+        axios.get(self.$store.state.server_url+'/api/get-every-annotations',{
+        params:{
+            doctype: 'receipt' //self.$route.params.docType
+        }
+        }).then(function(res){
+            self.every_annotations= res.data;
+            console.log('all annotations', res.data);
+        })
+
+
     },
 
     methods: {
