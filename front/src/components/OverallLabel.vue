@@ -40,6 +40,7 @@ export default {
             doctype: self.$route.params.docType
         }
         }).then(function(res){
+            console.log('res',res);
             self.worker_list = res.data;
             console.log('worker list', res.data);
         })},500);
