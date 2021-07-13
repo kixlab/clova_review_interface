@@ -34,7 +34,7 @@ export default {
     mounted() {
         const self = this;
 
-        axios.get(self.$store.state.server_url+'/api/get-workers/',{
+        axios.get(self.$store.state.server_url+'/api/get-workers',{
         params:{
             doctype: 'receipt' //self.$route.params.docType
         }
@@ -45,7 +45,7 @@ export default {
         })
 
         setTimeout( function(){
-        axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker/',{
+        axios.get(self.$store.state.server_url+'/api/get-annotations-by-worker',{
         params:{
             mturk_id: self.worker
         }
