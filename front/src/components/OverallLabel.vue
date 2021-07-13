@@ -49,7 +49,7 @@ export default {
             mturk_id: self.worker
         }
         }).then(function(res){
-            worker_detail = res.data;
+            self.worker_detail = res.data;
             console.log('annotation by worker', res.data);
         })},500);
 
