@@ -53,12 +53,23 @@
                             <v-col cols="4">
                                 <h2>Distribution of the labels</h2>
                                 <h3 style="margin-top: 15px">
+                                    N/A labels: {{add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}} <b style="color:blue">({{(add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))/total_annotation_no*100).toFixed(2)}}%)</b> / ({{add_all(gt_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}})
+                                    <!--
                                     Top 5 labels: {{label_distribution.filter(v => v.count >= 10).map(v => v.label).sort((a, b) => b.count - a.count).slice(0, 5)}}
+                                    -->
                                 </h3>
+                                <h3 style="margin-top: 10px">
+                                    Distribution MSE: <b style="color:blue">{{calc_mse(label_distribution, gt_distribution)}}</b>
+                                </h3>
+                                <h3 style="margin-top: 10px">(purple threshold: >= {{(total_annotation_no/14).toFixed(0)}})</h3>
                                 <div style="overflow: scroll; max-height: 70vh; margin-top: 10px">
-                                    {{add_all(label_distribution.map(v => v.count))}}
                                     <div v-for="(label, index) in label_distribution" :key="label.no" class="datarow">
-                                        #{{label.no}}: {{label.label}} - {{label.count}} ({{gt_distribution[index].count}})
+                                        <div v-if="label.count >= (total_annotation_no/14).toFixed(0) && label.count > 0">
+                                            #{{label.no}}: <b style="color:purple">{{label.label}} - {{label.count}}</b> ({{gt_distribution[index].count}})
+                                        </div>
+                                        <div v-else>
+                                            #{{label.no}}: <b>{{label.label}} - {{label.count}}</b> ({{gt_distribution[index].count}})
+                                        </div>
                                     </div>
                                     
                                 </div>
@@ -93,7 +104,8 @@ export default {
             {'no': 12, 'label': 'total-price', 'count': 0}, {'no': 13, 'label': 'total-n/a', 'count': 0},
             {'no': 14, 'label': 'payment-cash', 'count': 0}, {'no': 15, 'label': 'payment-change', 'count': 0}, {'no': 16, 'label': 'payment-credit card', 'count': 0}, {'no': 17, 'label': 'payment-n/a', 'count': 0},
             {'no': 18, 'label': 'n/a-n/a', 'count': 0},],
-            has_gt_dist: false,
+            //has_gt_dist: false,
+            gt_all_label: [],
             
             correct_labels: [],
             exactly_labels: [],
@@ -249,6 +261,14 @@ export default {
 
         add_all(list) {
             return list.reduce((a, b) => a + b, 0)
+        },
+
+        calc_mse(list1, list2) {
+            var se = 0
+            for (var i in list1) {
+                se += Math.pow((list1[i].count - list2[i].count), 2)
+            }
+            return (se/list1.length).toFixed(2)
         }
     },
 
@@ -263,11 +283,15 @@ export default {
                 const self = this;
                 if (self.gt_label.length === 21) {
                     var image_no = Array.from({length: 21}, (_, i) => i + self.worker_detail.start_image_no)
+
+                    // Initialize the statistics for each worker
                     self.correct_labels = []
                     self.exactly_labels = []
                     for (var l in self.label_distribution) {
                         self.label_distribution[l].count = 0
+                        self.gt_distribution[l].count = 0
                     }
+
                     for (var i in image_no) {
                         
                         for (var j in self.worker_annotation[i].annotations) {
@@ -283,10 +307,8 @@ export default {
                             var find = self.label_distribution.filter(v => v.label === temp_annotation.cat+"-"+temp_annotation.subcat)
                             find[0].count += 1
 
-                            if (!self.has_gt_dist) {
-                                var find2 = self.gt_distribution.filter(v => v.label === temp_annotation.gt_cat+"-"+temp_annotation.gt_subcat)
-                                find2[0].count += 1
-                            }
+                            var find2 = self.gt_distribution.filter(v => v.label === temp_annotation.gt_cat+"-"+temp_annotation.gt_subcat)
+                            find2[0].count += 1
                             
                         }
                         //console.log(self.worker_annotation[i].annotations)
