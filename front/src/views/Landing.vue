@@ -104,7 +104,7 @@ export default {
           self.$router.push('/instruction/')
         } else{
           if(res.data.status=='annotation'){
-            self.$store.commit('set_start_image_no', res.data.user_order*7);
+            self.$store.commit('set_start_image_no', 0);
             self.$router.push('/resolution/'+res.data.doctype+'/image/')
           }else{
             self.$store.commit('update_status', new Array(300).fill(false));
@@ -125,7 +125,7 @@ export default {
           self.$router.push('/instruction/')
         } else{
           if(res.data.status=='annotation'){
-            self.$store.commit('set_start_image_no', res.data.user_order*7);
+            self.$store.commit('set_start_image_no', 0);
             self.$router.push('/resolution/'+res.data.doctype+'/overall/')
           }else{
             self.$store.commit('update_status', new Array(300).fill(false));

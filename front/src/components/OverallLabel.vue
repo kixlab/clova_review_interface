@@ -4,11 +4,18 @@
             <v-card-title>
                 <h4>Overall interface</h4>
             </v-card-title>
-            <v-text >
-                <div style="min-height: 80vh; max-height: 90vh; overflow: scroll; padding: 0; margin-top: 6px;">
-                    Still brainstorming layout
-                </div>
-            </v-text>
+            <v-card-text>
+                <v-row style="min-height: 80vh; max-height: 90vh; overflow: scroll; padding: 0; margin-top: 6px;">
+                    <v-col cols="3">
+                        
+                        {{this.worker_list.map(v => v.username)}}
+                    </v-col>
+
+                    <v-col cols="9">
+                    
+                    </v-col>
+                </v-row>
+            </v-card-text>
         </v-card>
     </v-col>
 </template>

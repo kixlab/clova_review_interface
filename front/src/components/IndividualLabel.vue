@@ -4,7 +4,7 @@
             <v-card-title>
                 <h4 style="marginRight: 10px;">Filter with MTurk ids --- </h4>
                 <h5> <b style="color: red;">{{this.cnt_correct}}</b> out of <b style="color: blue">{{this.$store.getters.getImageBoxes.length}}</b> boxes 
-                ({{(this.cnt_correct/this.$store.getters.getImageBoxes.length).toFixed(4)*100}}%) have majority labels equal to GT labels</h5>
+                (<b style="color: blue">{{(this.cnt_correct/this.$store.getters.getImageBoxes.length*100).toFixed(2)}}%</b>) have majority labels equal to GT labels</h5>
             </v-card-title>
             <v-card-text>
                 <v-container fluid>
@@ -77,8 +77,8 @@
                         </div>
                     </v-col>
                     <v-col cols="2" style="padding: 0px; border-left: 1px solid black;">
-                        <div v-for="(box, index) in image_box" :key="box.id" class="datarow">
-                            <div v-if="majority_list[index].cat && gt_to_cat(box.GTlabel).cat">
+                        <div v-for="(box, index) in image_box" :key="box.box_id" class="datarow">
+                            <div v-if="image_box.length > 0">
                             <div v-if="majority_list[index].cat === gt_to_cat(box.GTlabel).cat && majority_list[index].subcat === gt_to_cat(box.GTlabel).subcat">
                                 <div style="color: #4caf50">
                                     <b>{{gt_to_cat(box.GTlabel).cat}}-{{gt_to_cat(box.GTlabel).subcat}}</b>
@@ -95,6 +95,7 @@
                                 </div>
                             </div>
                             </div>
+                            
                         </div>
                     </v-col>
                 </v-row>
@@ -149,7 +150,7 @@ export default {
         axios.get(self.$store.state.server_url+'/api/get-annotations-by-image',{
         params:{
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no
+            image_id: self.$store.state.image_order
         }
         }).then(function(res){
             var result = res.data.workerannots;
@@ -225,7 +226,7 @@ export default {
 
         majority_three(label1, label2, label3) {
             if (label1 === undefined || label2 === undefined || label3 === undefined) {
-                return {cat: "none", subcat: "none", box_id: label1.box_id}
+                return {cat: "undef", subcat: "undef", box_id: "undef"}
             }
             var conf = true
             var box_id = label1.box_id
@@ -322,13 +323,14 @@ export default {
             deep: true,
             handler() {
                 const self=this;
-                axios.get(self.$store.state.server_url+'/api/get-every-annotations/',{
+                axios.get(self.$store.state.server_url+'/api/get-annotations-by-image',{
                 params:{
                     doctype: self.$route.params.docType,
-                    image_id: self.$store.state.image_order + self.$store.state.start_image_no
+                    image_id: self.$store.state.image_order
                 }
                 }).then(function(res){
                     var result = res.data.workerannots;
+                    //console.log(res.data.workerannots)
                     //console.log("RESULT FROM SERVER ---", res.data.workerannots.map(v => v.user))
                     self.worker_annots = result
                     self.selected_workers = result.map(v => v.user).slice(0, 3)
@@ -371,6 +373,9 @@ export default {
                 
                 var tempcnt = 0
                 for (var j in majority) {
+                    //if (self.image_box[j].GTlabel === undefined) {
+                    //console.log("?? - ", self.gt_to_cat(self.image_box[j].GTlabel), majority[j])
+                    //}
                     if (self.gt_to_cat(self.image_box[j].GTlabel).cat === majority[j].cat && self.gt_to_cat(self.image_box[j].GTlabel).subcat === majority[j].subcat) {
                         tempcnt += 1
                     }
