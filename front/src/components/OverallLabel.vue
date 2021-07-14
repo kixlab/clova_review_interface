@@ -62,7 +62,7 @@
                                     Distribution MSE: <b style="color:blue">{{calc_mse(label_distribution, gt_distribution)}}</b>
                                 </h3>
                                 <h3 style="margin-top: 10px">(purple threshold: >= {{(total_annotation_no/14).toFixed(0)}})</h3>
-                                <div style="overflow: scroll; max-height: 70vh; margin-top: 10px">
+                                <div style="overflow: scroll; max-height: 60vh; margin-top: 10px">
                                     <div v-for="(label, index) in label_distribution" :key="label.no" class="datarow">
                                         <div v-if="label.count >= (total_annotation_no/14).toFixed(0) && label.count > 0">
                                             #{{label.no}}: <b style="color:purple">{{label.label}} - {{label.count}}</b> ({{gt_distribution[index].count}})
