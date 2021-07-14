@@ -20,14 +20,14 @@
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
-        <v-col cols="2">
+        <v-col cols="1">
           <v-row dense>
             <image-panel/>
           </v-row>
         </v-col>
 
         <!-- COL2 - ANNOTATION UI -->
-        <v-col cols="10">
+        <v-col cols="11">
           <v-row dense>
             <overall-label/>
             <!--<box-selection-status/>
