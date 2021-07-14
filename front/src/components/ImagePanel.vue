@@ -150,7 +150,7 @@ export default {
       });
     },
     newSize: function() {
-      console.log("here------")
+      //console.log("here------")
       const cont_pos = this.$refs.img_container.getBoundingClientRect()
       const width = cont_pos.right-cont_pos.left
       const height = cont_pos.bottom-cont_pos.top
@@ -178,7 +178,7 @@ export default {
         temp.x_len = (temp.quad.x2-temp.quad.x1)/ratio
         temp.y_len = (temp.quad.y3-temp.quad.y2)/ratio
       }
-      console.log("***", padding_x, padding_y)
+      //console.log("***", padding_x, padding_y)
       this.updateImageBoxes(temp_image_box)
     },
 

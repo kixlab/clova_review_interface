@@ -15,19 +15,23 @@
 
     <v-main>
       <v-container fluid fill-height>
+        <!--
         <v-row>
           <Progress style="paddingBottom: 20px"/>
         </v-row>
+        -->
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
+        <!--
         <v-col cols="1">
           <v-row dense>
             <image-panel/>
           </v-row>
         </v-col>
+        -->
 
         <!-- COL2 - ANNOTATION UI -->
-        <v-col cols="11">
+        <v-col cols="12">
           <v-row dense>
             <overall-label/>
             <!--<box-selection-status/>
@@ -44,22 +48,22 @@
 
 <script>
 // @ is an alias to /src
-import ImagePanel from '@/components/ImagePanel.vue'
+//import ImagePanel from '@/components/ImagePanel.vue'
 //import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
 //import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
 //import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 //import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
-import Progress from '@/components/Progress.vue'
+//import Progress from '@/components/Progress.vue'
 import axios from 'axios'
 //import SubmitButton from '../components/SubmitButton.vue'
 import OverallLabel from '@/components/OverallLabel.vue'
 export default {
   name: 'Home',
   components: {
-    Progress,
-    ImagePanel,
+    //Progress,
+    //ImagePanel,
     //DeferredAnnotationStatus,
     SubmitButton,
     //InstructionButton,
