@@ -53,7 +53,7 @@
                             <v-col cols="4">
                                 <h2>Distribution of the labels</h2>
                                 <h3 style="margin-top: 15px">
-                                    N/A labels: {{add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}} <b style="color:blue">({{(add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))/total_annotation_no*100).toFixed(2)}}%)</b> / ({{add_all(gt_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}})
+                                    N/A labels: {{add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}} <b style="color:blue">({{(add_all(label_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))/total_annotation_no*100).toFixed(2)}}%)</b> / ({{add_all(gt_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))}}, <b>{{(add_all(gt_distribution.filter(v => v.label.indexOf('n/a') > -1).map(v => v.count))/total_annotation_no*100).toFixed(2)}}%</b>)
                                     <!--
                                     Top 5 labels: {{label_distribution.filter(v => v.count >= 10).map(v => v.label).sort((a, b) => b.count - a.count).slice(0, 5)}}
                                     -->
