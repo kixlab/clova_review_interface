@@ -2,35 +2,19 @@
 <v-container>
   <v-row justify="center" align-content="center" align="center" class="up_margin">
     <div style="width: 80%;">
-    <h1> Resolution Interface </h1>
-    Thank you for your participation!<br><br>
+    <h1> Resolution Dashboard Interface </h1>
+    Welcome to the resolution stage dashboard interface!<br><br>
 
     This task is conducted as a part of a research project in which we try to re-design the machine learning dataset generation process with crowdsourcing. 
-    In this task, you will be asked to label text boxes on a receipt image with a given label set.<br>
+    In this task, you will be asked to finalize the label set you made previously and resolve conflicts in the annotation phase.<br>
 
-    <br><v-divider/><br>
+    <br/>
 
-    <h3 style="color:red;"> CAUTIONS </h3>
-    <ul>
-      <li> <b>An MTurk user can participate in this task only once.</b> </li>
-      <li> This task is expected to take 60 minutes at maximum.</li>
-      <li> You will be provided with a token after completing the task. You <b>MUST</b> submit this token to the Amazon MTurk website to get rewards. </li>
-      <li> If majority of your annotations are found to not follow the instructions, you may not be rewarded.</li>
-      <li> It is strongly recommended that you use <a target="_blank" rel="noopener noreferrer" href="https://www.google.com/chrome/">chrome</a> browser in your desktop/laptop for the task. 
-      Other browsers or mobile devices may show unexpected behaviors.</li>
-    </ul>
-    <br>
+    You can either choose to ~~~.
 
-    <h3> STEPS </h3>
-    <ol>
-      <li> Read instruction </li>
-      <li> Annotate 21 receipt images </li>
-      <li> Do a simple survey and submit a token to Amazon MTurk webpage</li>
-    </ol>
-    <br>
-
-    <h4>For any questions, please contact : <a>jeongeonpark1@gmail.com</a> </h4> <br/>
-    <h4>Fill in the blank with your MTurk ID and click the button below to proceed to the next step.</h4>
+    <br/> <br/>
+    
+    <h4>Please enter your name to begin label set and annotation finalization.</h4>
     <v-form
       ref="form"
       v-model="valid"
@@ -39,7 +23,7 @@
     <v-text-field
       v-model="turk_id"
       :rules="idRules"
-      label="MTurk ID"
+      label="Name"
       required
     ></v-text-field>
     </v-form>
@@ -47,24 +31,23 @@
     </div>
   </v-row>
 
-  <v-row justify="space-around" align="start" class="up_margin">
+  <v-row justify="center" align="start" class="up_margin">
     <v-btn
       :disabled="!valid"
       @click="onClickNext"
       
-      color="indigo lighten-1"
+      color="indigo lighten-2"
       class="mr-4"
     >
       Image level
     </v-btn>
-  </v-row>
-  <v-row justify="space-around" align="start" class="up_margin">
+  
     <v-btn
-      style="marginTop: 10px"
+      style="marginTop: 0px"
       :disabled="!valid"
       @click="onClickNext2"
       
-      color="indigo lighten-1"
+      color="indigo lighten-2"
       class="mr-4"
     >
       Worker level
