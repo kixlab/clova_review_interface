@@ -11,6 +11,7 @@ import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
 import ResolutionImage from '../views/ResolutionImage.vue'
 import ResolutionOverall from '../views/ResolutionOverall.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 //import Resolution from '../views/Annotation.vue'
 
@@ -31,6 +32,11 @@ Vue.use(VueRouter)
     path: '/resolution/:docType/overall',
     name: 'ResolutionOverall',
     component: ResolutionOverall
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   },
   {
     path: '/landing',

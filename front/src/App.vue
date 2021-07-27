@@ -10,7 +10,7 @@
         dark
         dense
         fixed>
-        <v-toolbar-title>Image Annotation {{id_field}}</v-toolbar-title>
+        <v-toolbar-title>Resolution Interface {{id_field}}</v-toolbar-title>
       </v-app-bar>
       
       <v-main>

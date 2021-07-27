@@ -39,18 +39,10 @@
       color="indigo lighten-2"
       class="mr-4"
     >
-      Image level
-    </v-btn>
-  
-    <v-btn
-      style="marginTop: 0px"
-      :disabled="!valid"
-      @click="onClickNext2"
-      
-      color="indigo lighten-2"
-      class="mr-4"
-    >
-      Worker level
+      Begin 
+      <v-icon>
+        mdi-arrow-right
+      </v-icon>
     </v-btn>
   </v-row>
 </v-container>
@@ -60,7 +52,7 @@
 <script>
 // @ is an alias to /src
 import { mapState } from "vuex";
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'Landing',
@@ -68,13 +60,14 @@ export default {
     valid: true,
     turk_id: '',
     idRules: [
-      v => !!v || 'MTurk ID is required',
+      v => !!v || 'Please enter a valid name',
     ]
   }),
   computed: {
     ...mapState(['mturk_id'])
   },
   methods: {
+    /* Got from the mturk interface
     onClickNext: function () {
       const self = this;
       self.$refs.form.validate()
@@ -95,26 +88,13 @@ export default {
         }
       });
     },
-    onClickNext2: function () {
+    */
+
+    onClickNext: function() {
       const self = this;
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
-      console.log(self.$store.state.server_url)
-      axios.post(self.$store.state.server_url + '/api/signup/', {
-        username: self.$store.state.mturk_id,
-      }).then( function(res){
-//        self.$store.commit('set_mturk_id', self.turk_id.trim())
-        if(res.data.status=='instruction'){
-          self.$router.push('/instruction/')
-        } else{
-          if(res.data.status=='annotation'){
-            self.$store.commit('set_start_image_no', 0);
-            self.$router.push('/resolution/'+res.data.doctype+'/overall/')
-          }else{
-            self.$store.commit('update_status', new Array(300).fill(false));
-            self.$router.push('../informed-consent/')                    }
-        }
-      });
+      self.$router.push('../dashboard/')     
     }
     
   },
