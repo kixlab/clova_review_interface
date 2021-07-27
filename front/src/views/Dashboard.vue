@@ -20,11 +20,12 @@
                     <close-to-resolution/>
                 </template>
                 <template v-else>
-                    <h2 style="margin: 20px 0;">Please select one of the two resolutions to begin.</h2>
+                    <h2>Please select one of the two resolution buttons ☝️ to begin.</h2>
                 </template>
             </v-col>
             <v-col cols="3" style="border: 1px solid black;">
-                Resulting label set & annotation
+                <h2>Final label set & annotation</h2>
+                <final-dataset/>
             </v-col>
         </v-row>
 
@@ -34,12 +35,16 @@
 <script>
 import NaResolution from '@/components/NaResolution.vue'
 import CloseToResolution from '@/components/CloseToResolution.vue'
+import FinalDataset from '@/components/FinalDataset.vue'
+
 export default {
     name: "Dashboard",
     components: {
         NaResolution,
-        CloseToResolution
+        CloseToResolution,
+        FinalDataset,
     },
+
     data() {
         return {
             toggle_exclusive: null,
@@ -49,5 +54,7 @@ export default {
 </script>
 
 <style scoped>
-
+h2 {
+    margin: 10px 0 20px;
+}
 </style>

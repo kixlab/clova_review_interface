@@ -1,8 +1,8 @@
 <template>
     <v-container fluid fill-height style="padding: 0">
-        <v-row class="fill-height" style="height: 100vh;">
-            <v-col cols="4" style="border: 0.5px solid red;"> 
-                <h2 style="padding-bottom: 20px;">label set</h2>
+        <v-row class="fill-height" style="height: 85vh;">
+            <v-col cols="4" style="border: 1px solid red;"> 
+                <h2>label set</h2>
                 <v-row dense>
                     <v-col :cols="4" style="text-align:left;">
                         <h4>Category</h4>
@@ -30,10 +30,21 @@
                 </v-row>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
-                <h2 style="padding-bottom: 20px;">checkbox and annotations w/ images</h2>
-                <h4>
-                    *{{sel_cat}} - {{sel_subcat}}* selected
-                </h4>
+                <h2>corresponding annotations w/ images</h2>
+                <div style="height: 60vh; border: 1px solid black">
+                    <h4>*{{sel_cat}} - {{sel_subcat}}* selected</h4>
+                </div>
+                <v-row justify="center" align="start" class="up_margin" no-gutters style="padding-top: 20px;">
+                    <v-btn :disabled="disabled" @click="approve()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
+                        Approve
+                    </v-btn>
+                    <v-btn :disabled="disabled" @click="addAsNew()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
+                        Add as new
+                    </v-btn>
+                    <v-btn :disabled="disabled" @click="ignore()" color="error" class="mr-4 white--text" depressed small>
+                        Ignore
+                    </v-btn>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
@@ -83,6 +94,27 @@ export default {
             console.log(cat.cat, cat.subcat, '-', cat.description)
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
+        },
+
+
+        approve() {
+            console.log('approve clicked')
+        },
+
+        addAsNew() {
+            console.log('add as new clicked')
+        },
+
+        ignore() {
+            console.log('ignore clicked')
+        },
+
+
+    },
+
+    computed: {
+        disabled() {
+            return false;
         }
     }
 
@@ -90,5 +122,7 @@ export default {
 </script>
 
 <style scoped>
-
+h2 {
+    margin: 10px 0 20px;
+}
 </style>
