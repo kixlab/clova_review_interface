@@ -45,6 +45,21 @@
                         Ignore
                     </v-btn>
                 </v-row>
+                <v-row justify="center">
+                    <v-spacer/>
+                    <template v-if="clicked === 'addasnew'">
+                        <v-select
+                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px"
+                        ></v-select>
+                        <v-text-field
+                            label="Sub-category" placeholder="Enter new subcategory" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
+                        ></v-text-field>
+                        <v-btn
+                            small @click="saveLabels" :disabled="disableSave" style="margin: 5px 0 0 7px;"
+                        >save as new</v-btn>
+                    </template>
+                    <v-spacer/>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
@@ -67,6 +82,18 @@ export default {
 
             sel_cat: '',
             sel_subcat: '',
+
+
+
+            categories: ['Menu', 'Subtotal', 'Total', 'Payment'],
+            subcategories: [], 
+
+            clicked: '',
+
+            // Selected data to save
+            cat: '',
+            subcat: '',
+            selectedBoxes: [], // Not yet linked!
         }
     },
 
@@ -102,7 +129,8 @@ export default {
         },
 
         addAsNew() {
-            console.log('add as new clicked')
+            //console.log('add as new clicked')
+            this.clicked = this.clicked === 'addasnew' ? '' : 'addasnew'
         },
 
         ignore() {
@@ -110,11 +138,27 @@ export default {
         },
 
 
+        saveLabels() {
+            console.log(this.cat, "-", this.subcat)
+
+            // TODO
+            // api call to save
+            // use this.cat & this.subcat to indicate labels
+
+            this.cat = ''
+            this.subcat = ''
+        }
+
+
     },
 
     computed: {
         disabled() {
             return false;
+        },
+
+        disableSave() {
+            return this.subcat === '' || this.cat === ''
         }
     }
 
