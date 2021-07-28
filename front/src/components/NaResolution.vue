@@ -30,9 +30,17 @@ export default {
     name: 'NaResolution',
     data() {
         return {
-
+            suggestions:[]
         }
     },
+    mounted: function () {
+    const self = this;
+
+    axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
+    }).then(function(res){
+        console.log(res.data);
+      })
+      },
 
     methods: {
         
