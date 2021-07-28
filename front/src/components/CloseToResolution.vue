@@ -76,7 +76,7 @@ export default {
  axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
     }).then(function(res){
         console.log(res.data);
-        self.suggestions=res.data.closeto_suggestions;
+        self.suggestions=res.data.close_to_suggestions;
 
       })
       },
