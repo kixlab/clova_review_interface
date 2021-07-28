@@ -201,7 +201,7 @@ export default {
 
                 // GT Json 가져오기
                 var three_digit_id = ("00" + image_no[i]).slice(-3);
-                const server_url = 'http://13.125.191.49:8000'
+                const server_url = 'http://15.165.236.102:8000'
                 const docType = "receipt"
                 var json_url = server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
                 await fetch(json_url)
