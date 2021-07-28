@@ -52,7 +52,7 @@
 <script>
 // @ is an alias to /src
 import { mapState } from "vuex";
-//import axios from 'axios';
+import axios from 'axios';
 
 export default {
   name: 'Landing',
@@ -94,6 +94,10 @@ export default {
       const self = this;
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
+
+      axios.post(self.$store.state.server_url + '/api/signup/', {
+        username: self.$store.state.mturk_id,
+      })
       self.$router.push('../dashboard/')     
     }
     
