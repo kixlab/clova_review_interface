@@ -58,12 +58,14 @@ export default {
     name: 'NaResolution',
     data() {
         return {
+
+            // Save selection list
             categories: [],
             subcategories_all: [], 
             subcategories_show: [],
 
+            // Show / hide save inputs
             clicked: '',
-
 
             // Selected data to save
             cat: '',

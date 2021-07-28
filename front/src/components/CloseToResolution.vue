@@ -30,9 +30,41 @@
                 </v-row>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
-                <h2>corresponding annotations w/ images</h2>
-                <div style="height: 60vh; border: 1px solid black">
-                    <h4>*{{sel_cat}} - {{sel_subcat}}* selected</h4>
+                <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
+                <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
+                <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
+                    
+                    <div v-for="s in suggestions_show" :key="s.suggestion_pk">
+                        <h4 class="suggestion">
+                            Suggestion: <span style="color: blue;">{{s.suggestion_text}}</span> 
+                            
+                        </h4>
+                        <div style="margin-bottom: 10px">
+                            <v-btn style="margin-left: 30px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
+                        </div>
+                        
+                        <div v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin-left: 30px">
+                            <v-checkbox
+                                v-model="selectedBoxes"
+                                :label="'#'+annot.image_no"
+                                :value="annot"
+                            ></v-checkbox>
+                            #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
+                        </div>
+                    </div>
+                    <div v-if="suggestions_show.length === 0 && sel_cat === '' && sel_subcat === ''">
+                        <h4 class="suggestion">Please select a label from left to see <br/>"Close to" annotations & suggestions</h4>
+                    </div>
+                    <div v-else-if="suggestions_show.length === 0 && sel_cat !== '' && sel_subcat !== ''"> 
+                        <h4 class="suggestion">No suggested label for this label</h4>
+                    </div>
+
+                    <!--
+                    <div v-for="s in suggestions_show" :key="s.suggestion_pk+'/'">
+                        {{s}} //
+                    </div>
+                    -->
                 </div>
                 <v-row justify="center" align="start" class="up_margin" no-gutters style="padding-top: 20px;">
                     <v-btn :disabled="disabled" @click="approve()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
@@ -85,16 +117,19 @@ export default {
 
 
 
-            categories: ['Menu', 'Subtotal', 'Total', 'Payment'],
-            subcategories: [], 
-
+            // Save selection list
+            categories: [],
+            
+            // Show / hide save inputs
             clicked: '',
 
             // Selected data to save
             cat: '',
             subcat: '',
             selectedBoxes: [], // Not yet linked!
-            suggestions:[],
+
+            suggestions_all:[],
+            suggestions_show: [],
         }
     },
 
@@ -103,8 +138,8 @@ export default {
         axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
         })
         .then(function(res){
-            console.log(res.data);
-            self.suggestions=res.data.close_to_suggestions;
+            //console.log(res.data);
+            self.suggestions_all=res.data.close_to_suggestions;
         })
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
@@ -113,6 +148,8 @@ export default {
             self.cats=res.data.cats;
             self.subcats=res.data.subcats;
             self.category=self.cats[0];
+
+            self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
         })
     },
 
@@ -123,9 +160,11 @@ export default {
         },
 
         selectSubcat(cat) {
-            console.log(cat.cat, cat.subcat, '-', cat.description)
+            //console.log(cat.cat, cat.subcat, '-', cat.description)
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
+
+            this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_subcat === this.sel_subcat)
         },
 
 
@@ -152,9 +191,32 @@ export default {
 
             this.cat = ''
             this.subcat = ''
+        },
+
+        selectAll(annots) {
+            var tempbox = this.selectedBoxes
+            for (var a in annots) {
+                tempbox.push(annots[a])
+            }
+        },
+
+        unselectAll(annots) {
+            var tempbox = this.selectedBoxes
+            for (var a in annots) {
+                tempbox.splice(tempbox.indexOf(annots[a]), 1)
+            }
+        },
+
+
+    },
+
+    watch: {
+        selectedBoxes: {
+            deep: true,
+            handler() {
+                console.log(this.selectedBoxes)
+            }
         }
-
-
     },
 
     computed: {
@@ -173,5 +235,9 @@ export default {
 <style scoped>
 h2 {
     margin: 10px 0 20px;
+}
+
+.suggestion {
+    margin: 15px 0 5px 15px;
 }
 </style>
