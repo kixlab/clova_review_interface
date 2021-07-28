@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 
 export default {
     name: "FinalDataset",
@@ -46,7 +46,8 @@ export default {
 
     mounted: function() {
         const self = this;
-        axios.get(self.$store.state.server_url + "/api/get-cats", {
+        console.log(self);
+/*         axios.get(self.$store.state.server_url + "/dashboard/get-cats", {
             params: {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.doctype
@@ -55,7 +56,7 @@ export default {
             self.cats = res.data.cats;
             self.subcats = res.data.subcats;
             self.category = self.cats[0];
-        })
+        }) */
     },
 
     methods: {

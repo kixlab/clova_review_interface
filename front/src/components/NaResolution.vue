@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: 'NaResolution',
     data() {
@@ -67,8 +69,17 @@ export default {
             subcat: '',
             selectedBoxes: [], // Not yet linked!
 
+            suggestions:[]
         }
     },
+    mounted: function () {
+    const self = this;
+
+    axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
+    }).then(function(res){
+        self.suggestions=res.data.na_suggestions;
+      })
+      },
 
     mounted: function()  {
 
