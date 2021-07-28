@@ -38,7 +38,7 @@
                             :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px"
                         ></v-select>
                         <v-select
-                            :items="categories" label="Sub-category" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
+                            :items="subcategories_show" label="Sub-category" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
                         ></v-select>
                         <v-btn
                             small @click="saveLabels" :disabled="disableSave" style="margin: 5px 0 0 7px;"
@@ -58,8 +58,9 @@ export default {
     name: 'NaResolution',
     data() {
         return {
-            categories: ['Menu', 'Subtotal', 'Total', 'Payment'],
-            subcategories: [], 
+            categories: [],
+            subcategories_all: [], 
+            subcategories_show: [],
 
             clicked: '',
 
@@ -81,6 +82,14 @@ export default {
         .then(function(res){
             self.suggestions=res.data.na_suggestions;
         })
+
+
+        axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+        })
+        .then(function(res){
+            self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
+            self.subcategories_all = res.data.subcats.filter( v => v.subcat !== 'n/a' && v.cat !== 'n/a')
+        })
     },
 
 
@@ -91,15 +100,12 @@ export default {
         },
 
         addAsNew() {
-            //console.log('add as new clicked')
             this.clicked = this.clicked === 'addasnew' ? '' : 'addasnew'
         },
 
         addToExisting() {
-            //console.log('add to existing clicked')
             this.clicked = this.clicked === 'addtoexisting' ? '' : 'addtoexisting'
         },
-
 
         saveLabels() {
             console.log(this.cat, "-", this.subcat)
@@ -113,6 +119,15 @@ export default {
         }
 
 
+    },
+
+    watch: {
+        cat: {
+            deep: true,
+            handler(){
+                this.subcategories_show = this.subcategories_all.filter(v => v.cat === this.cat).map(v => v.subcat)
+            }
+        }
     },
 
     computed: {
