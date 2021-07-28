@@ -72,18 +72,17 @@ export default {
             suggestions:[]
         }
     },
+
     mounted: function () {
-    const self = this;
+        const self = this;
 
-    axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
-    }).then(function(res){
-        self.suggestions=res.data.na_suggestions;
-      })
-      },
-
-    mounted: function()  {
-
+        axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
+        })
+        .then(function(res){
+            self.suggestions=res.data.na_suggestions;
+        })
     },
+
 
     methods: {
         

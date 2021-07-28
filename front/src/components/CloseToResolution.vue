@@ -101,19 +101,20 @@ export default {
     mounted: function() {
         const self = this;
         axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
-    }).then(function(res){
-        console.log(res.data);
-        self.suggestions=res.data.close_to_suggestions;
+        })
+        .then(function(res){
+            console.log(res.data);
+            self.suggestions=res.data.close_to_suggestions;
+        })
 
-      })
-
-    axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
-    }).then(function(res){
-      self.cats=res.data.cats;
-      self.subcats=res.data.subcats;
-      self.category=self.cats[0];
-      })
-      },
+        axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+        })
+        .then(function(res){
+            self.cats=res.data.cats;
+            self.subcats=res.data.subcats;
+            self.category=self.cats[0];
+        })
+    },
 
     methods: {
         selectCategory(selectedCategory){
