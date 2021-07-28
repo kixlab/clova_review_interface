@@ -3,9 +3,20 @@
         <v-row class="fill-height" style="height: 100vh;">
             <v-col cols="4" style="border: 1px solid red;">
                 <h2>n/a suggestions</h2>
+                <v-data-table
+                    dense
+                    :headers="headers"
+                    :items="suggestions"
+                    item-key="name"
+                    class="elevation-1"
+                    @click:row="tableClicked"
+                >
+                    <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }}-{{ sugg.suggestion_text }}</template>
+                </v-data-table>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
-                <h2>corresponding annotations w/ images</h2>
+                <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
+                <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
                 <div style="height: 60vh; border: 1px solid black">
                     <h4>placeholder for images and boxes</h4>
                 </div>
@@ -58,6 +69,15 @@ export default {
     name: 'NaResolution',
     data() {
         return {
+            headers: [
+                { text: 'Suggested label', align: 'start', sortable: false, value: 'suggestion_text', },
+                { text: '# workers', value: 'n_workers' },
+                { text: '# images', value: 'n_images' },
+                { text: '# boxes', value: 'n_boxes' },
+            ],
+
+            sel_cat: '',
+            sel_subcat: '',
 
             // Save selection list
             categories: [],
@@ -119,6 +139,13 @@ export default {
 
             this.cat = ''
             this.subcat = ''
+        },
+
+        tableClicked(value) {
+            console.log('dd', value)
+
+            this.sel_cat = value.suggestion_cat
+            this.sel_subcat = value.suggestion_text
         }
 
 

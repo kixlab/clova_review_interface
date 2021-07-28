@@ -28,6 +28,9 @@
                         </v-list>
                     </v-col>
                 </v-row>
+                
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/>(need to be fixed according to # of annotations)</h3>
+                
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
@@ -40,19 +43,43 @@
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 30px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.suggested_boxes, s.workers)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers)">unselect all</v-btn>
                         </div>
-                        
-                        <div v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin-left: 30px">
-                            <v-checkbox
-                                v-model="selectedBoxes"
-                                :label="'#'+annot.image_no"
-                                :value="annot"
-                            ></v-checkbox>
-                            #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
-                        </div>
+                        <v-row>
+                            <v-col cols="6" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
+                                <v-checkbox hide-details
+                                    style="margin: 0;"
+                                    v-model="selectedBoxes"
+                                    :label="'Image #'+annot.image_no"
+                                    :value="annot"
+                                    @click="check(annot, s.workers[idx])"
+                                ></v-checkbox>
+                                <!--{{imageNo2Json(annot.image_no)}}-->
+                                <v-img :src="imageNo2Url(annot.image_no)" width="250">
+                                        <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
+                                            <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
+                                                <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+                                            </div>
+                                            <div v-else>
+                                                ddjksflj
+                                            </div>
+                                        </div>
+                                </v-img>
+                                #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
+                                <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
+                                    <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
+                                        {{box.text}}
+                                    </div>
+                                    <div v-else>
+                                    </div>
+                                </div>
+                            </v-col>
+                            
+                        </v-row>
                     </div>
+
+                    <!-- For cases where there are no suggestions -->
                     <div v-if="suggestions_show.length === 0 && sel_cat === '' && sel_subcat === ''">
                         <h4 class="suggestion">Please select a label from left to see <br/>"Close to" annotations & suggestions</h4>
                     </div>
@@ -99,9 +126,14 @@
 
 <script>
 import axios from "axios";
+import BoundingBox from '@/components/BoundingBox.vue'
+
 
 export default {
     name: 'CloseToResolution',
+    components: {
+        BoundingBox,
+    },
     data() {
         return {
             cats: ['menu', 'subtotal', 'total', 'payment'],
@@ -126,10 +158,13 @@ export default {
             // Selected data to save
             cat: '',
             subcat: '',
-            selectedBoxes: [], // Not yet linked!
+            selectedBoxes: [], 
+            selectedBoxes_full: [],
 
             suggestions_all:[],
             suggestions_show: [],
+
+            done: false,
         }
     },
 
@@ -138,7 +173,7 @@ export default {
         axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
         })
         .then(function(res){
-            //console.log(res.data);
+            console.log(res.data);
             self.suggestions_all=res.data.close_to_suggestions;
         })
 
@@ -165,11 +200,20 @@ export default {
             this.sel_subcat = cat.subcat
 
             this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_subcat === this.sel_subcat)
+            
+            // 새로운 label 누를 때 다 초기화 시키기 위해..
+            this.selectedBoxes = []
+            this.selectedBoxes_full = []
         },
 
 
         approve() {
             console.log('approve clicked')
+            /*
+            axios.get(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+
+            })
+            */
         },
 
         addAsNew() {
@@ -193,18 +237,122 @@ export default {
             this.subcat = ''
         },
 
-        selectAll(annots) {
+        selectAll(annots, workers) {
             var tempbox = this.selectedBoxes
+            var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
                 tempbox.push(annots[a])
+                annots[a].worker_id = workers[a]
+                annots[a].cat = this.sel_cat
+                annots[a].subcat = this.sel_subcat
+                tempbox_full.push(annots[a])
             }
         },
 
-        unselectAll(annots) {
+        unselectAll(annots, workers) {
             var tempbox = this.selectedBoxes
+            var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
                 tempbox.splice(tempbox.indexOf(annots[a]), 1)
+                annots[a].worker_id = workers[a]
+                annots[a].cat = this.sel_cat
+                annots[a].subcat = this.sel_subcat
+                tempbox_full.splice(tempbox_full.indexOf(annots[a]))
             }
+        },
+
+        check(annot, worker) {
+            var tempbox_full = this.selectedBoxes_full
+            if (this.selectedBoxes.indexOf(annot) > -1) {
+                annot.worker_id = worker
+                annot.cat = this.sel_cat
+                annot.subcat = this.sel_subcat
+                tempbox_full.push(annot)
+            }
+            else {
+                annot.worker_id = worker
+                annot.cat = this.sel_cat
+                annot.subcat = this.sel_subcat
+                tempbox_full.splice(tempbox_full.indexOf(annot))
+            }
+        },
+        
+        
+
+        setImageBoxes(json) {
+            //console.log("NEW JSON --------\n" , json)
+            const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].meta.image_size === undefined? json[0].meta.imageSize.width:json[0].meta.image_size.width)
+            const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].meta.image_size === undefined? json[0].meta.imageSize.height:json[0].meta.image_size.height)
+            var ratio = 1
+            var padding_x = 0
+            var padding_y = 0
+            if (img_w/json[1] >= img_h/json[2]) {
+                ratio = img_w/json[1]
+                padding_y = 0//(json[2]-(img_h/ratio))/2
+            } else {
+                ratio = img_h/json[2]
+                padding_x = (json[1]-(img_w/ratio))/2
+            }
+
+            //commit('setImageRatio', ratio)
+            
+            const validData=json[0].valid_line.map(v => v.words).flat(1)
+
+            //const newValidData = []
+            for (var d in json[0].valid_line) {
+                var word = json[0].valid_line[d].words
+                var cat = json[0].valid_line[d].category
+                for (var w in word) {
+                    word[w]["GTlabel"] = cat
+                    //newValidData.push(word[w])
+                }
+            }
+            //console.log("VALIDDATA", validData)
+            const processedData = validData.map(function(i, idx) {
+                return {box_id: idx,
+                        text: i.text,
+                        x_pos: i.quad.x1/ratio+padding_x, 
+                        y_pos: i.quad.y1/ratio+padding_y, 
+                        x_len: (i.quad.x2-i.quad.x1)/ratio, 
+                        y_len: (i.quad.y3-i.quad.y2)/ratio, 
+                        selected: false, 
+                        annotated: false, 
+                        hover: false,
+                        quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
+                        label: "",
+                        GTlabel: i.GTlabel,
+                    }
+            })
+            return processedData
+        },
+
+        imageNo2Url(no) {
+            var docType= 'receipt'
+            var three_digit_id = ("00" + no).slice(-3);
+            return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
+        },
+
+        imageNo2Json(no) {
+            const self = this;
+            var docType= 'receipt'
+            var three_digit_id = ("00" + no).slice(-3);
+            const json_url = this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
+            
+            axios.get(json_url).then(function(res) {
+                var json = res.data;
+                var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
+                var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
+
+                const width = 250;//cont_pos.right-cont_pos.left
+                //const height = cont_pos.bottom-cont_pos.top
+
+                const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
+                //self.original_box = json;
+
+                console.log(resbox)
+                //self.$forceUpdate();
+                return resbox
+            })
         },
 
 
@@ -214,9 +362,15 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                console.log(this.selectedBoxes)
+                //console.log(this.selectedBoxes)
             }
-        }
+        },
+        selectedBoxes_full: {
+            deep: true,
+            handler() {
+                //console.log("full", this.selectedBoxes_full)
+            }
+        },
     },
 
     computed: {
