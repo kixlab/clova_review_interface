@@ -46,7 +46,7 @@ export default {
 
     mounted: function() {
         const self = this;
-        axios.get(self.$store.state.server_url + "/api/get-cats", {
+        axios.get(self.$store.state.server_url + "/dashboard/get-cats", {
             params: {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.doctype
