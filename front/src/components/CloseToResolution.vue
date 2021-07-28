@@ -67,23 +67,19 @@ export default {
 
             sel_cat: '',
             sel_subcat: '',
+            suggestions:[],
         }
     },
 
     mounted: function() {
         const self = this;
-        console.log(self);
-/*         axios.get(self.$store.state.server_url + "/dashboard/get-cats", {
-            params: {
-                mturk_id: self.$store.state.mturk_id,
-                doctype: self.$route.params.doctype
-            }
-        }).then(function(res) {
-            self.cats = res.data.cats;
-            self.subcats = res.data.subcats;
-            self.category = self.cats[0];
-        })
- */    },
+ axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
+    }).then(function(res){
+        console.log(res.data);
+        self.suggestions=res.data.closeto_suggestions;
+
+      })
+      },
 
     methods: {
         selectCategory(selectedCategory){
