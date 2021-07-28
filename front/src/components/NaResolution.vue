@@ -40,7 +40,7 @@ export default {
 
     axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
     }).then(function(res){
-        console.log(res.data);
+        self.suggestions=res.data.na_suggestions;
       })
       },
 
