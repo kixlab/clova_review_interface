@@ -43,8 +43,8 @@
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.suggested_boxes, s.workers)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="6" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
@@ -53,7 +53,7 @@
                                     v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, s.workers[idx])"
+                                    @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
@@ -208,12 +208,24 @@ export default {
 
 
         approve() {
-            console.log('approve clicked')
-            /*
-            axios.get(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+            //console.log('approve clicked')
+            
+            var selectedBoxes_final = []
+            for (var b in this.selectedBoxes_full) {
+                var temp = this.selectedBoxes_full[b]
+                temp.cat = this.selectedBoxes_full[b].suggested_cat
+                temp.subcat = this.selectedBoxes_full[b].suggested_subcat
+                selectedBoxes_final.push(temp)
+            }
+            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
+            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            }).then(function (res) {
+                console.log(res)
+                this.selectedBoxes = []
+                this.selectedBoxes_full = []
             })
-            */
         },
 
         addAsNew() {
@@ -222,49 +234,77 @@ export default {
         },
 
         ignore() {
-            console.log('ignore clicked')
+            //console.log('ignore clicked')
+            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full})
+            
+            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
+                expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full
+            }).then(function (res) {
+                console.log(res)
+                this.selectedBoxes = []
+                this.selectedBoxes_full = []
+            })
         },
 
 
         saveLabels() {
-            console.log(this.cat, "-", this.subcat)
+            //console.log(this.cat, "-", this.subcat)
+            var selectedBoxes_final = []
+            for (var b in this.selectedBoxes_full) {
+                var temp = this.selectedBoxes_full[b]
+                temp.cat = this.cat
+                temp.subcat = this.subcat
+                selectedBoxes_final.push(temp)
+            }
+            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            // TODO
-            // api call to save
-            // use this.cat & this.subcat to indicate labels
+            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-new/', {
+                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            }).then(function (res) {
+                console.log(res)
+                this.cat = ''
+                this.subcat = ''
+                this.selectedBoxes = []
+                this.selectedBoxes_full = []
+            })
 
-            this.cat = ''
-            this.subcat = ''
+            
         },
 
-        selectAll(annots, workers) {
+        selectAll(annots, workers, sugg_cat, sugg_subcat) {
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
                 tempbox.push(annots[a])
                 annots[a].worker_id = workers[a]
+                annots[a].suggested_cat = sugg_cat
+                annots[a].suggested_subcat = sugg_subcat
                 annots[a].cat = this.sel_cat
                 annots[a].subcat = this.sel_subcat
                 tempbox_full.push(annots[a])
             }
         },
 
-        unselectAll(annots, workers) {
+        unselectAll(annots, workers, sugg_cat, sugg_subcat) {
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
                 tempbox.splice(tempbox.indexOf(annots[a]), 1)
                 annots[a].worker_id = workers[a]
+                annots[a].suggested_cat = sugg_cat
+                annots[a].suggested_subcat = sugg_subcat
                 annots[a].cat = this.sel_cat
                 annots[a].subcat = this.sel_subcat
                 tempbox_full.splice(tempbox_full.indexOf(annots[a]))
             }
         },
 
-        check(annot, worker) {
+        check(annot, worker, sugg_cat, sugg_subcat) {
             var tempbox_full = this.selectedBoxes_full
             if (this.selectedBoxes.indexOf(annot) > -1) {
                 annot.worker_id = worker
+                annot.suggested_cat = sugg_cat
+                annot.suggested_subcat = sugg_subcat
                 annot.cat = this.sel_cat
                 annot.subcat = this.sel_subcat
                 tempbox_full.push(annot)
@@ -368,14 +408,14 @@ export default {
         selectedBoxes_full: {
             deep: true,
             handler() {
-                //console.log("full", this.selectedBoxes_full)
+                console.log("full", this.selectedBoxes_full)
             }
         },
     },
 
     computed: {
         disabled() {
-            return false;
+            return this.selectedBoxes_full.length === 0;
         },
 
         disableSave() {
