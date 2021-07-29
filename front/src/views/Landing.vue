@@ -95,7 +95,7 @@ export default {
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
 
-      axios.post(self.$store.state.server_url + '/api/signup/', {
+      axios.post(self.$store.state.server_url + '/dashboard/signup/', {
         username: self.$store.state.mturk_id,
       })
       self.$router.push('../dashboard/')     
