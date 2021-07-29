@@ -57,12 +57,14 @@ export default {
     mounted: function(){
         const self=this;
         axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
+            mturk_id: self.$store.state.mturk_id
         })
         .then(function(res){
             console.log('curr', res.data);
             self.curr_distribution=res.data.distribution;
         });
         axios.get(self.$store.state.server_url + "/dashboard/get-raw-distribution/",{
+            mturk_id: self.$store.state.mturk_id
         })
         .then(function(res){
             console.log('raw', res.data);
