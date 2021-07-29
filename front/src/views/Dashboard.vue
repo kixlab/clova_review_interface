@@ -56,17 +56,20 @@ export default {
     },
     mounted: function(){
         const self=this;
-        console.log(self.$store.state);
-        axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
-            params:{
-          mturk_id: self.$store.state.mturk_id }
-        })
-        .then(function(res){
-            console.log('curr', res.data);
-            self.curr_distribution=res.data.distribution;
 
-            self.updateDistribution(res.data.distribution)
-        });
+        setTimeout(
+          function(){
+                axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
+                    params:{
+                mturk_id: self.$store.state.mturk_id }
+                })
+                .then(function(res){
+                    console.log('curr', res.data);
+                    self.curr_distribution=res.data.distribution;
+
+                    self.updateDistribution(res.data.distribution)
+                });
+          },1000);
         axios.get(self.$store.state.server_url + "/dashboard/get-raw-distribution/",{
              params:{
           mturk_id: self.$store.state.mturk_id }
