@@ -19,17 +19,25 @@
                         <h4>Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
-                            <v-list-item v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" @click="selectSubcat(subcat)">
-                                <span class='subcat-div'>
-                                    <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
+                            <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
+                                <v-list-item v-if="subcat_show_list.indexOf(subcat.subcat) > -1" @click="selectSubcat(subcat)">
+                                    <span class='subcat-div'>
+                                        <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
+                                    </span>
+                                </v-list-item>
+                                
+                            </div>
+                            <template v-if="subcat_show_list.length === 0">
+                                <span style="margin: 5px 5px 0 0; padding: 5px 0">
+                                    No suggestion available
                                 </span>
-                            </v-list-item>
+                            </template>
                         </v-list-item-group>
                         </v-list>
                     </v-col>
                 </v-row>
                 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/> <!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.n_boxes).reduce((a, b) => a + b, 0)}} boxes )<!--(need to be fixed according to # of annotations)--></h3>
                 
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
@@ -142,6 +150,8 @@ export default {
             category: '',
             subcategory: '',
 
+            subcat_show_list: [],
+
             sel_category: 0, 
             sel_subcategory: 0,
 
@@ -198,6 +208,9 @@ export default {
         selectCategory(selectedCategory){
             this.category=selectedCategory;
             this.addsubcat=false;
+
+
+            this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
         },
 
         selectSubcat(cat) {
@@ -211,6 +224,7 @@ export default {
             this.selectedBoxes = []
             this.selectedBoxes_full = []
         },
+
 
 
         approve() {

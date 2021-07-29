@@ -14,7 +14,7 @@
                     <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }} - {{ sugg.suggestion_text }}</template>
                 </v-data-table>
 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/><!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining<br/> ( = {{suggestions_all.map(v => v.n_boxes).reduce((a, b) => a + b, 0)}} boxes )<!--(need to be fixed according to # of annotations)--></h3>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
@@ -215,7 +215,7 @@ export default {
             }
             console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
+            axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
                 expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 //console.log(res)

@@ -9,12 +9,14 @@
     In this task, you will be asked to finalize the label set you made previously and resolve conflicts in the annotation phase.<br>
 
     <br/>
-
+    <!--
     You can either choose to ~~~.
 
-    <br/> <br/>
+    <br/>
+    -->
+    <br/>
     
-    <h4>Please enter your name to begin label set and annotation finalization.</h4>
+    <h4>Please enter your name to begin label set finalization.</h4>
     <v-form
       ref="form"
       v-model="valid"

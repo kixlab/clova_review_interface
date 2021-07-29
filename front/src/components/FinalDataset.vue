@@ -67,6 +67,7 @@ export default {
         self.$store.subscribeAction({after: (action) => {
             if (action.type === 'updateDistribution') {
                 self.distribution = self.$store.getters.getDistribution
+                console.log(self.distribution)
             }
         }})
     },
