@@ -36,6 +36,8 @@
 import NaResolution from '@/components/NaResolution.vue'
 import CloseToResolution from '@/components/CloseToResolution.vue'
 import FinalDataset from '@/components/FinalDataset.vue'
+import axios from "axios";
+
 
 export default {
     name: "Dashboard",
@@ -48,8 +50,27 @@ export default {
     data() {
         return {
             toggle_exclusive: null,
+            raw_distribution:[],
+            curr_distribution:[]
         }
     },
+    mounted: function(){
+        axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
+        })
+        .then(function(res){
+            console.log('curr', res.data);
+            self.curr_distribution=res.data.distribution;
+        });
+        axios.get(self.$store.state.server_url + "/dashboard/get-raw-distribution/",{
+        })
+        .then(function(res){
+            console.log('raw', res.data);
+            self.raw_distribution=res.data.distribution;
+        })
+
+    }
+
+    }
 }
 </script>
 
