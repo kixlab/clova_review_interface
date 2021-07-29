@@ -5,8 +5,8 @@
                 <h4>Category</h4>
                 <v-list >
                 <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
-                    <v-list-item v-for="category in cats.filter(v => v.cat !== 'n/a')" :key='category.pk' @click="selectCategory(category)">
-                        <b>{{category.cat}} (140) </b>
+                    <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
+                        <b>{{category}} ({{distribution.filter(v => v.cat === category)[0].cat_count}}) </b>
                     </v-list-item>
                 </v-list-item-group>
                 </v-list>
@@ -16,11 +16,13 @@
                 <h4>Sub-category</h4>
                 <v-list>
                 <v-list-item-group color="indigo"> 
-                    <v-list-item v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk">
+                    <template v-if="distribution.filter(e => e.cat === category)[0] !== undefined">
+                    <v-list-item v-for="subcat in distribution.filter(e => e.cat === category)[0].subcat_distn" :key="subcat.pk">
                         <span class='subcat-div'>
-                            <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span> <b>(43)</b>
+                            <b>{{subcat.subcat}}</b> <b>({{subcat.count}})</b>
                         </span>
                     </v-list-item>
+                    </template>
                 </v-list-item-group>
                 </v-list>
             </v-col>
@@ -35,18 +37,20 @@ export default {
     name: "FinalDataset",
     data() {
         return {
-            cats: ['menu', 'subtotal', 'total', 'payment'],
+            cats: ['menu', 'subtotal', 'total', 'payment', 'n/a'],
             subcats: [],
-            category: '',
+            category: 'menu',
             subcategory: '',
 
             sel_category: null,
+
+            distribution: this.$store.getters.getDistribution,
         }
     },
 
     mounted: function() {
         const self = this;
-        console.log(self);
+        //console.log(self);
         /*         
         axios.get(self.$store.state.server_url + "/dashboard/get-cats", {
             params: {
@@ -59,7 +63,12 @@ export default {
             self.category = self.cats[0];
         }) 
         */
-        
+        self.distribution = self.$store.getters.getDistribution
+        self.$store.subscribeAction({after: (action) => {
+            if (action.type === 'updateDistribution') {
+                self.distribution = self.$store.getters.getDistribution
+            }
+        }})
     },
 
     methods: {
@@ -67,6 +76,8 @@ export default {
             this.category=selectedCategory;
             this.addsubcat=false;
         },
+
+
     }
 }
 </script>

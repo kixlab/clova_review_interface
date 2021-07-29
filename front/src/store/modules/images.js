@@ -6,6 +6,8 @@ const state = {
     imageRatio: '',
     selectedBoxes: [],
     annotatedBoxes: [],
+
+    distribution: [],
 }
 
 const getters = {
@@ -20,7 +22,9 @@ const getters = {
             return false
         }
         return state.imageBoxes.every(box => box.annotated === true)
-    }
+    },
+
+    getDistribution: (state) => state.distribution,
 }
 
 const actions = {
@@ -35,6 +39,10 @@ const actions = {
         commit('setCurrImage', name.toString())
     },
  */
+    updateDistribution({ commit }, newdist) {
+        commit('setDistribution', newdist)
+    },
+
     setImage({ commit },docType, id) {
         const imageFile = docType+'/'+docType+"_"+ id.toString() + ".png"
         commit('setCurrImage', imageFile)
@@ -183,6 +191,11 @@ const mutations = {
         state.annotatedBoxes = annotatedBoxes
         // console.log(state.annotatedBoxes)
     },
+
+    setDistribution: (state, distribution) => {
+        state.distribution = distribution
+        console.log('new distribution --', state.distribution)
+    }
 }
 
 export default {

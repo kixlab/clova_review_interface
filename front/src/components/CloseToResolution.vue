@@ -29,7 +29,7 @@
                     </v-col>
                 </v-row>
                 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/>(need to be fixed according to # of annotations)</h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/> <!--(need to be fixed according to # of annotations)--></h3>
                 
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
@@ -127,6 +127,7 @@
 <script>
 import axios from "axios";
 import BoundingBox from '@/components/BoundingBox.vue'
+import {mapActions} from 'vuex';
 
 
 export default {
@@ -192,6 +193,8 @@ export default {
     },
 
     methods: {
+        ...mapActions(['updateDistribution']),
+
         selectCategory(selectedCategory){
             this.category=selectedCategory;
             this.addsubcat=false;
@@ -212,22 +215,26 @@ export default {
 
         approve() {
             //console.log('approve clicked')
+            const self = this;
             
             var selectedBoxes_final = []
-            for (var b in this.selectedBoxes_full) {
-                var temp = this.selectedBoxes_full[b]
-                temp.cat = this.selectedBoxes_full[b].suggested_cat
-                temp.subcat = this.selectedBoxes_full[b].suggested_subcat
+            for (var b in self.selectedBoxes_full) {
+                var temp = self.selectedBoxes_full[b]
+                temp.cat = self.selectedBoxes_full[b].suggested_cat
+                temp.subcat = self.selectedBoxes_full[b].suggested_subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.post(this.$store.state.server_url + '/dashboard/save-close-to-approve/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
-                console.log(res)
-                this.selectedBoxes = []
-                this.selectedBoxes_full = []
+                //console.log(res.data)
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.close_to_suggestions;
+                self.updateDistribution(res.data.distribution)
             })
         },
 
@@ -237,38 +244,47 @@ export default {
         },
 
         ignore() {
+            const self = this;
+
             //console.log('ignore clicked')
-            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full})
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full
+                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full
             }).then(function (res) {
-                console.log(res)
-                this.selectedBoxes = []
-                this.selectedBoxes_full = []
+                //console.log(res)
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.close_to_suggestions;
+                self.updateDistribution(res.data.distribution)
             })
         },
 
 
         saveLabels() {
+            const self = this;
             //console.log(this.cat, "-", this.subcat)
             var selectedBoxes_final = []
-            for (var b in this.selectedBoxes_full) {
-                var temp = this.selectedBoxes_full[b]
-                temp.cat = this.cat
-                temp.subcat = this.subcat
+            for (var b in self.selectedBoxes_full) {
+                var temp = self.selectedBoxes_full[b]
+                temp.cat = self.cat
+                temp.subcat = self.subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.post(this.$store.state.server_url + '/dashboard/save-close-to-new/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-new/', {
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
-                console.log(res)
-                this.cat = ''
-                this.subcat = ''
-                this.selectedBoxes = []
-                this.selectedBoxes_full = []
+                //console.log(res)
+                self.cat = ''
+                self.subcat = ''
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.close_to_suggestions;
+                self.updateDistribution(res.data.distribution)
             })
 
             
@@ -392,7 +408,7 @@ export default {
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
                 //self.original_box = json;
 
-                console.log(resbox)
+                //console.log(resbox) TO FIX LATER
                 //self.$forceUpdate();
                 return resbox
             })

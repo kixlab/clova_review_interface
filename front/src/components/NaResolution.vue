@@ -14,7 +14,7 @@
                     <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }} - {{ sugg.suggestion_text }}</template>
                 </v-data-table>
 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/>(need to be fixed according to # of annotations)</h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/><!--(need to be fixed according to # of annotations)--></h3>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
@@ -23,7 +23,7 @@
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }}-{{s.suggestion_text}}</span> 
+                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }} - {{s.suggestion_text}}</span> 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
@@ -108,13 +108,15 @@
 
 <script>
 import axios from "axios";
+import {mapActions} from 'vuex';
 
 export default {
     name: 'NaResolution',
     data() {
         return {
             headers: [
-                { text: 'Suggested label', align: 'start', sortable: false, value: 'suggestion_text', },
+                { text: 'Category', align: 'start',  value: 'suggestion_cat', },
+                { text: 'Suggested label', sortable: false, value: 'suggestion_text', },
                 { text: '# workers', value: 'n_workers' },
                 { text: '# images', value: 'n_images' },
                 { text: '# boxes', value: 'n_boxes' },
@@ -166,25 +168,30 @@ export default {
 
 
     methods: {
+        ...mapActions(['updateDistribution']),
         
         approve() {
+            const self = this;
             //console.log('approve clicked')
 
             var selectedBoxes_final = []
-            for (var b in this.selectedBoxes_full) {
-                var temp = this.selectedBoxes_full[b]
-                temp.cat = this.selectedBoxes_full[b].suggested_cat
-                temp.subcat = this.selectedBoxes_full[b].suggested_subcat
+            for (var b in self.selectedBoxes_full) {
+                var temp = self.selectedBoxes_full[b]
+                temp.cat = self.selectedBoxes_full[b].suggested_cat
+                temp.subcat = self.selectedBoxes_full[b].suggested_subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.push(this.$store.state.server_url + '/dashboard/save-na-approve/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
-                console.log(res)
-                this.selectedBoxes = []
-                this.selectedBoxes_full = []
+                //console.log(res)
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.na_suggestions;
+                self.updateDistribution(res.data.distribution)
             })
         },
 
@@ -197,24 +204,28 @@ export default {
         },
 
         saveLabels(dest) {
+            const self = this;
             //console.log(this.cat, "-", this.subcat)
             var selectedBoxes_final = []
-            for (var b in this.selectedBoxes_full) {
-                var temp = this.selectedBoxes_full[b]
-                temp.cat = this.cat
-                temp.subcat = this.subcat
+            for (var b in self.selectedBoxes_full) {
+                var temp = self.selectedBoxes_full[b]
+                temp.cat = self.cat
+                temp.subcat = self.subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.push(this.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
-                console.log(res)
-                this.cat = ''
-                this.subcat = ''
-                this.selectedBoxes = []
-                this.selectedBoxes_full = []
+                //console.log(res)
+                self.cat = ''
+                self.subcat = ''
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.na_suggestions;
+                self.updateDistribution(res.data.distribution)
             })
 
             

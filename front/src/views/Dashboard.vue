@@ -37,7 +37,7 @@ import NaResolution from '@/components/NaResolution.vue'
 import CloseToResolution from '@/components/CloseToResolution.vue'
 import FinalDataset from '@/components/FinalDataset.vue'
 import axios from "axios";
-
+import {mapActions} from 'vuex';
 
 export default {
     name: "Dashboard",
@@ -64,6 +64,8 @@ export default {
         .then(function(res){
             console.log('curr', res.data);
             self.curr_distribution=res.data.distribution;
+
+            self.updateDistribution(res.data.distribution)
         });
         axios.get(self.$store.state.server_url + "/dashboard/get-raw-distribution/",{
              params:{
@@ -74,6 +76,10 @@ export default {
             self.raw_distribution=res.data.distribution;
         })
 
+    },
+
+    methods: {
+        ...mapActions(['updateDistribution'])
     }
 }
 </script>
