@@ -40,17 +40,21 @@
                                     @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
-                                <v-img :src="imageNo2Url(annot.image_no)" width="250">
-                                        <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
-                                            <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
-                                                <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
-                                            </div>
-                                            <div v-else>
-                                                ddjksflj
-                                            </div>
+                                <v-img :src="imageNo2Url(annot.image_no)" width="300">
+                                    <div v-for="box in imageNo2Json(annot.image_no, annot.boxes_id, annot)" :key="box.box_id" >
+                                        <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
+                                            <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
                                         </div>
+                                        <div v-else>
+                                            ddjksflj
+                                        </div>
+                                    </div>
+                                    <span style="color: blue; background-color: white; margin-left: 1px;">Boxes: <b> {{annot.boxes_text}}</b></span>
                                 </v-img>
+                                {{done}}
+                                <!--
                                 #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
+                                -->
                                 <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
                                     <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
                                         {{box.text}}
@@ -141,6 +145,8 @@ export default {
 
             suggestions_all: [],
             suggestions_show: [],
+
+            done: false,
         }
     },
 
@@ -347,13 +353,13 @@ export default {
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
 
-        imageNo2Json(no) {
+        imageNo2Json(no, box_id, annot) {
             const self = this;
             var docType= 'receipt'
             var three_digit_id = ("00" + no).slice(-3);
             const json_url = this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
             
-            axios.get(json_url).then(function(res) {
+            return axios.get(json_url).then(function(res) {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
@@ -366,6 +372,22 @@ export default {
 
                 console.log(resbox)
                 //self.$forceUpdate();
+                self.done = ''
+                //console.log(box_id)
+                var texts = []
+                if (resbox && box_id) {
+                    for (var b in resbox) {
+                        if (box_id.indexOf(resbox[b].box_id) > -1) {
+                            //console.log(resbox[b].text)
+                            texts.push(resbox[b].text)
+                        }
+                    }
+                }
+                if (annot) {
+                    annot.boxes_text = texts
+                }
+
+
                 return resbox
             })
         },
