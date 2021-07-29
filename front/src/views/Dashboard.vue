@@ -55,6 +55,7 @@ export default {
         }
     },
     mounted: function(){
+        const self=this;
         axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
         })
         .then(function(res){
