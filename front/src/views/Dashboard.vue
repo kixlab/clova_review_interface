@@ -56,6 +56,7 @@ export default {
     },
     mounted: function(){
         const self=this;
+        console.log(self.$store.state);
         axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
             mturk_id: self.$store.state.mturk_id
         })
