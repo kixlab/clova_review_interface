@@ -250,6 +250,8 @@ export default {
 
                 self.suggestions_all=res.data.close_to_suggestions;
                 self.updateDistribution(res.data.distribution)
+
+                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
             })
         },
 
@@ -273,6 +275,8 @@ export default {
 
                 self.suggestions_all=res.data.close_to_suggestions;
                 self.updateDistribution(res.data.distribution)
+
+                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
             })
         },
 
@@ -302,6 +306,8 @@ export default {
 
                 self.suggestions_all=res.data.close_to_suggestions;
                 self.updateDistribution(res.data.distribution)
+
+                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
             })
 
             
