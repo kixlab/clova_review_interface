@@ -66,7 +66,6 @@ export default {
                 .then(function(res){
                     console.log('curr', res.data);
                     self.curr_distribution=res.data.distribution;
-
                     self.updateDistribution(res.data.distribution)
                 });
           },1000);
