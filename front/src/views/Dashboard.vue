@@ -2,10 +2,10 @@
     <v-container fluid fill-height>
         <v-row justify="center">
             <v-btn-toggle v-model="toggle_exclusive" class="py-2" color="indigo">
-                <v-btn depressed style="margin: 0 0px; text-transform: lowercase">
+                <v-btn depressed style="margin: 0 0px; text-transform: lowercase" @click="clickTab"> 
                     <span><b><b>N/A</b></b> resolution</span>
                 </v-btn>
-                <v-btn depressed style="margin: 0 0px; text-transform: lowercase">
+                <v-btn depressed style="margin: 0 0px; text-transform: lowercase" @click="clickTab">
                     <span><b><b>Close to</b></b> resolution</span>
                 </v-btn>
             </v-btn-toggle>
@@ -81,7 +81,20 @@ export default {
     },
 
     methods: {
-        ...mapActions(['updateDistribution'])
+        ...mapActions(['updateDistribution', 'updateDistribution']),
+
+        clickTab() {
+            axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
+                params:{
+            mturk_id: self.$store.state.mturk_id }
+            })
+            .then(function(res){
+                //console.log('curr', res.data);
+                self.curr_distribution=res.data.distribution;
+
+                self.updateDistribution(res.data.distribution)
+            });
+        }
     }
 }
 </script>
