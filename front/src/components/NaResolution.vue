@@ -224,6 +224,8 @@ export default {
                 self.selectedBoxes = []
                 self.selectedBoxes_full = []
 
+                self.clicked = ''
+
                 self.suggestions_all=res.data.na_suggestions;
                 self.updateDistribution(res.data.distribution)
             })
