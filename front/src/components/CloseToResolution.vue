@@ -171,6 +171,9 @@ export default {
     mounted: function() {
         const self = this;
         axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
+        params:{
+          mturk_id: self.$store.state.mturk_id }
+
         })
         .then(function(res){
             console.log(res.data);
