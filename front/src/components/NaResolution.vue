@@ -152,7 +152,6 @@ export default {
 
     mounted: function () {
         const self = this;
-        console.log('get na suggestions')
 
         axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
         params:{
@@ -161,9 +160,9 @@ export default {
         })
         .then(function(res){
             console.log(res.data);
+            window.alert('na suggestions loaded!')
             self.suggestions_all=res.data.na_suggestions;
         })
-        console.log('got na suggestions')
 
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
