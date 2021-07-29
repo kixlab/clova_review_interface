@@ -11,7 +11,7 @@
                     class="elevation-1"
                     @click:row="selectSuggestion"
                 >
-                    <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }}-{{ sugg.suggestion_text }}</template>
+                    <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }} - {{ sugg.suggestion_text }}</template>
                 </v-data-table>
 
                 <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions <br/>(need to be fixed according to # of annotations)</h3>
@@ -19,11 +19,11 @@
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
                 <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
-                <div style="height: 60vh; border: 1px solid black">
+                <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll;">
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{s.suggestion_text}}</span> 
+                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }}-{{s.suggestion_text}}</span> 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
@@ -179,7 +179,7 @@ export default {
             }
             console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.get(this.$store.state.server_url + '/dashboard/save-na-approve/', {
+            axios.push(this.$store.state.server_url + '/dashboard/save-na-approve/', {
                 expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 console.log(res)
@@ -207,7 +207,7 @@ export default {
             }
             console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
+            axios.push(this.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
                 expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 console.log(res)
@@ -226,8 +226,9 @@ export default {
             this.sel_cat = value.suggestion_cat
             this.sel_subcat = value.suggestion_text
 
-            this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_subcat === this.sel_subcat)
+            this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_text === this.sel_subcat)
 
+            console.log(this.suggestions_show)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
             this.selectedBoxes_full = []            
@@ -365,7 +366,13 @@ export default {
             handler(){
                 this.subcategories_show = this.subcategories_all.filter(v => v.cat === this.cat).map(v => v.subcat)
             }
-        }
+        },
+        selectedBoxes: {
+            deep: true,
+            handler() {
+                //console.log(this.selectedBoxes)
+            }
+        },
     },
 
     computed: {
@@ -384,5 +391,9 @@ export default {
 <style scoped>
 h2 {
     margin: 10px 0 20px;
+}
+
+.suggestion {
+    margin: 15px 0 5px 15px;
 }
 </style>

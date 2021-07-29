@@ -222,7 +222,7 @@ export default {
             }
             console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+            axios.post(this.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                 expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 console.log(res)
@@ -240,7 +240,7 @@ export default {
             //console.log('ignore clicked')
             console.log({expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full})
             
-            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
+            axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
                 expert_id: this.$store.state.mturk_id, saved_boxes: this.selectedBoxes_full
             }).then(function (res) {
                 console.log(res)
@@ -261,7 +261,7 @@ export default {
             }
             console.log({expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.get(this.$store.state.server_url + '/dashboard/save-close-to-new/', {
+            axios.post(this.$store.state.server_url + '/dashboard/save-close-to-new/', {
                 expert_id: this.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 console.log(res)
