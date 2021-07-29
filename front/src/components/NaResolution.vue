@@ -160,6 +160,7 @@ export default {
         })
         .then(function(res){
             console.log(res.data);
+            window.alert('na suggestions loaded!')
             self.suggestions_all=res.data.na_suggestions;
         })
 
