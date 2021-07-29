@@ -55,7 +55,7 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="6" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
                                     v-model="selectedBoxes"
@@ -64,7 +64,7 @@
                                     @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
-                                <v-img :src="imageNo2Url(annot.image_no)" width="300">
+                                <v-img :src="imageNo2Url(annot.image_no)" width="250">
                                     <div v-for="box in imageNo2Json(annot.image_no, annot.boxes_id, annot)" :key="box.box_id" >
                                         <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
                                             <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
@@ -81,8 +81,6 @@
                                 <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
                                     <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
                                         {{box.text}}
-                                    </div>
-                                    <div v-else>
                                     </div>
                                 </div>
                             </v-col>
