@@ -408,7 +408,7 @@ export default {
         selectedBoxes_full: {
             deep: true,
             handler() {
-                console.log("full", this.selectedBoxes_full)
+                //console.log("full", this.selectedBoxes_full)
             }
         },
     },
