@@ -41,25 +41,22 @@
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
-                                    <div v-for="box in imageNo2Json(annot.image_no, annot.boxes_id, annot)" :key="box.box_id" >
-                                        <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
-                                            <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
-                                        </div>
-                                        <div v-else>
-                                            ddjksflj
+                                    <div v-if="annot_boxes[annot.image_no]">
+                                        <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">{{annot_boxes[annot.image_no].map(v=>v.text)}}</div>
+                                        <div v-for="box in annot_boxes[annot.image_no]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                            <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                                         </div>
                                     </div>
-                                    <span style="color: blue; background-color: white; margin-left: 1px;">Boxes: <b> {{annot.boxes_text}}</b></span>
+                                    <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id)}}</div>
                                 </v-img>
-                                {{done}}
                                 <!--
                                 #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
-                                -->
+                                
                                 <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
                                     <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
                                         {{box.text}}
                                     </div>
-                                </div>
+                                </div>-->
                             </v-col>
                             
                         </v-row>
@@ -110,10 +107,14 @@
 
 <script>
 import axios from "axios";
+import BoundingBox from '@/components/BoundingBox.vue'
 import {mapActions} from 'vuex';
 
 export default {
     name: 'NaResolution',
+    components: {
+        BoundingBox
+    },
     data() {
         return {
             headers: [
@@ -145,6 +146,8 @@ export default {
             suggestions_show: [],
 
             done: false,
+
+            annot_boxes: {},
         }
     },
 
@@ -243,7 +246,7 @@ export default {
         },
 
         selectSuggestion(value) {
-            console.log('dd', value)
+            //console.log('dd', value)
 
             this.sel_cat = value.suggestion_cat
             this.sel_subcat = value.suggestion_text
@@ -356,7 +359,7 @@ export default {
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
 
-        imageNo2Json(no, box_id, annot) {
+        imageNo2Json(no, box_id) {
             const self = this;
             var docType= 'receipt'
             var three_digit_id = ("00" + no).slice(-3);
@@ -376,23 +379,28 @@ export default {
                 //console.log(resbox)
                 //self.$forceUpdate();
                 self.done = ''
-                //console.log(box_id)
-                var texts = []
-                if (resbox && box_id) {
-                    for (var b in resbox) {
-                        if (box_id.indexOf(resbox[b].box_id) > -1) {
-                            //console.log(resbox[b].text)
-                            texts.push(resbox[b].text)
-                        }
-                    }
-                }
-                if (annot) {
-                    annot.boxes_text = texts
-                }
+                
+                var boxes = []
+
+                //console.log(no, box_id, annot, resbox)
+                boxes = resbox.filter(v => box_id.includes(v.box_id))
+                //var texts = boxes.map(v => v.text)
+                
+                
 
 
-                return resbox
+                return boxes
             })
+        },
+
+        async waitForJson(no, box_id) {
+            //console.log(no, box_id)
+            const response = await this.imageNo2Json(no, box_id)
+            //console.log(response)
+            if (this.annot_boxes[no] === undefined) {
+                this.$set(this.annot_boxes, no, response)
+            }
+            return response
         },
 
 

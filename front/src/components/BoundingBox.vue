@@ -1,6 +1,5 @@
 <template>
   <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-    <text x="0" y="30">ddd</text>
     <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1;" :x="x" :y="y" :width="w" :height="h"/>
   </svg>
 </template>

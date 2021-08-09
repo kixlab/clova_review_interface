@@ -5,7 +5,7 @@
                 <h2>label set</h2>
                 <v-row dense>
                     <v-col :cols="4" style="text-align:left;">
-                        <h4>Category</h4>
+                        <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
                         <v-list >
                         <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
                             <v-list-item v-for="category in cats.filter(v => v.cat !== 'n/a')" :key='category.pk' @click="selectCategory(category)">
@@ -16,7 +16,7 @@
                     </v-col>
 
                     <v-col :cols="8" style="text-align:left;">
-                        <h4>Sub-category</h4>
+                        <h4 style="background-color: #3F51B5; color: #E8EAF6">Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
                             <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
@@ -29,7 +29,7 @@
                             </div>
                             <template v-if="subcat_show_list.length === 0">
                                 <span style="margin: 5px 5px 0 0; padding: 5px 0">
-                                    No suggestion available
+                                    No suggestion available for "{{category.cat}}" category
                                 </span>
                             </template>
                         </v-list-item-group>
@@ -45,9 +45,9 @@
                 <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
                     
-                    <div v-for="s in suggestions_show" :key="s.suggestion_pk">
+                    <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{s.suggestion_text}}</span> 
+                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggestion_text}}</span> 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
@@ -65,24 +65,14 @@
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
-                                    <div v-for="box in imageNo2Json(annot.image_no, annot.boxes_id, annot)" :key="box.box_id" >
-                                        <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
-                                            <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
-                                        </div>
-                                        <div v-else>
-                                            ddjksflj
+                                    <div v-if="annot_boxes[annot.image_no]">
+                                        <div style="margin: 0; background: gray; color: white; font-size: 90%">{{annot_boxes[annot.image_no].map(v=>v.text)}}</div>
+                                        <div v-for="box in annot_boxes[annot.image_no]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                            <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                                         </div>
                                     </div>
-                                    <span style="color: blue; background-color: white; margin-left: 1px;">Boxes: <b> {{annot.boxes_text}}</b></span>
+                                    <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id)}}</div>
                                 </v-img>
-                                
-                                {{done}}<!--
-                                #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.boxes_text}}-->
-                                <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
-                                    <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
-                                        {{box.text}}
-                                    </div>
-                                </div>
                             </v-col>
                             
                         </v-row>
@@ -154,7 +144,7 @@ export default {
             subcat_show_list: [],
 
             sel_category: 0, 
-            sel_subcategory: 0,
+            sel_subcategory: null,
 
             sel_cat: '',
             sel_subcat: '',
@@ -177,6 +167,8 @@ export default {
             suggestions_show: [],
 
             done: false,
+
+            annot_boxes: {},
         }
     },
 
@@ -190,6 +182,8 @@ export default {
         .then(function(res){
             console.log(res.data);
             self.suggestions_all=res.data.close_to_suggestions;
+            self.sel_category = 0;
+            self.subcat_show_list = self.suggestions_all.filter(v => v.suggestion_cat === self.categories[0]).map(v => v.suggestion_subcat)
         })
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
@@ -200,6 +194,7 @@ export default {
             self.category=self.cats[0];
 
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
+            self.sel_category = 0;
         })
     },
 
@@ -414,7 +409,7 @@ export default {
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
 
-        imageNo2Json(no, box_id, annot) {
+        imageNo2Json(no, box_id) {
             const self = this;
             var docType= 'receipt'
             var three_digit_id = ("00" + no).slice(-3);
@@ -429,28 +424,25 @@ export default {
                 //const height = cont_pos.bottom-cont_pos.top
 
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
-                //self.original_box = json;
 
-                //console.log(resbox) TO FIX LATER
-                //self.$forceUpdate();
                 self.done = ''
-                //console.log(box_id)
-                var texts = []
-                if (resbox && box_id) {
-                    for (var b in resbox) {
-                        if (box_id.indexOf(resbox[b].box_id) > -1) {
-                            //console.log(resbox[b].text)
-                            texts.push(resbox[b].text)
-                        }
-                    }
-                }
-                if (annot) {
-                    annot.boxes_text = texts
-                }
-                
-                
-                return resbox
+                var boxes = []
+
+                boxes = resbox.filter(v => box_id.includes(v.box_id))
+                //var texts = boxes.map(v => v.text)
+
+
+                return boxes
             })
+        },
+
+        async waitForJson(no, box_id) {
+            const response = await this.imageNo2Json(no, box_id)
+            if (this.annot_boxes[no] === undefined) {
+                this.$set(this.annot_boxes, no, response)
+                //console.log("ANNOT BOXES", this.annot_boxes)
+            }
+            return response
         },
 
 

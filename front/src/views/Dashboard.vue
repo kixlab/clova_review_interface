@@ -84,6 +84,7 @@ export default {
         ...mapActions(['updateDistribution', 'updateDistribution']),
 
         clickTab() {
+            const self = this
             axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
                 params:{
             mturk_id: self.$store.state.mturk_id }
