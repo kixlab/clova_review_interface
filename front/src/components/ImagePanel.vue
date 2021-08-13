@@ -7,8 +7,13 @@
     <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
     -->
       <v-card-title >
-        <h4 style="margin:auto;">Image #{{this.$store.state.image_order+1}} <br></h4> 
+        <h4 style="margin:auto;">{{this.$router.currentRoute.params.docType}} #{{this.$store.state.image_order+1}} <br></h4> 
         <!--<h5 style="margin:auto;">Found trollers - A1DVKS3R9SLQ1H & A3JN18TC8GL3IH</h5>-->
+        <h5 style="margin: auto;">
+          <template v-if="image_box">
+            {{image_box.length}} boxes
+          </template>
+        </h5>
       </v-card-title>
       <v-row>
         <v-col>

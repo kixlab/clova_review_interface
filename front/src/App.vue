@@ -12,8 +12,14 @@
         fixed>
         <v-toolbar-title>Resolution Dashboard {{id_field}}</v-toolbar-title>
         <v-spacer/>
-        <v-btn depressed outlined style="margin-right: 5px">Receipt</v-btn>
-        <v-btn depressed outlined>Event flyer</v-btn>
+        <v-btn depressed outlined style="margin-right: 5px" @click="newLink('receipt')" 
+        :disabled="this.$router.currentRoute.params.docType === 'receipt'">
+          Receipt
+        </v-btn>
+        <v-btn depressed outlined @click="newLink('event')"
+        :disabled="this.$router.currentRoute.params.docType === 'event'">
+          Event flyer
+        </v-btn>
       </v-app-bar>
       
       <v-main>
@@ -41,7 +47,18 @@ export default {
         return '(ID : ' + mturk_id + ')'
       }
     }
-  }
+  },
+  methods: {
+    newLink: function(type) {
+      const self = this;
+      console.log(self.$router.currentRoute.params.docType)
+      if (self.$router.currentRoute.params.docType !== type) {
+        self.$router.push('../imageview/'+type)
+      }
+      
+    }
+  },
+
 }
 </script>
 
