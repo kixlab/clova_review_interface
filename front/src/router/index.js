@@ -12,6 +12,7 @@ import Review from '../views/Review.vue'
 import ResolutionImage from '../views/ResolutionImage.vue'
 import ResolutionOverall from '../views/ResolutionOverall.vue'
 import Dashboard from '../views/Dashboard.vue'
+import ImageView from '../views/ImageView.vue'
 
 //import Resolution from '../views/Annotation.vue'
 
@@ -37,6 +38,11 @@ Vue.use(VueRouter)
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard
+  },
+  {
+    path: '/imageview/:docType',
+    name: 'ImageView',
+    component: ImageView
   },
   {
     path: '/landing',

@@ -2,8 +2,10 @@
     <v-container fluid fill-height >
         <v-row>
             <v-col style="padding: 0; margin-bottom: 20px">
+                <template v-if="distribution.length > 0">
                 <h3>{{distribution.map(v => v.subcat_distn.length).reduce((a, b) => a+b)}} labels & </h3>
                 <h3>{{distribution.map(v => v.cat_count).reduce((a, b) => a+b)}} annotations in total</h3>
+                </template>
             </v-col>
         </v-row>
         <v-row dense class="fill-height" style="margin-top: 0;">
@@ -69,17 +71,21 @@ export default {
             self.category = self.cats[0];
         }) 
         */
-        self.distribution = self.$store.getters.getDistribution
-        self.cats = self.distribution.map(v => v.cat)
-        self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
+        setTimeout(
+            function() {
+                self.distribution = self.$store.getters.getDistribution
+                self.cats = self.distribution.map(v => v.cat)
+                self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
 
+            }
+        , 1000)
 
         self.$store.subscribeAction({after: (action) => {
             if (action.type === 'updateDistribution') {
                 self.distribution = self.$store.getters.getDistribution
                 self.cats = self.distribution.map(v => v.cat)
                 self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
-                console.log(self.distribution)
+                //console.log("UPDATE DISTRIBUTION JUST CALLED", self.distribution)
             }
         }})
     },

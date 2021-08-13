@@ -45,7 +45,7 @@ export default {
     return {
       image_box: this.$store.getters.getImageBoxes,
       img_temp: this.$store.getters.get_curr_image,
-      stats: new Array(300).fill(false)
+      stats: new Array(500).fill(false)
     };
   },
   mounted() {

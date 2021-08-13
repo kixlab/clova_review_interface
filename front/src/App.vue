@@ -10,7 +10,10 @@
         dark
         dense
         fixed>
-        <v-toolbar-title>Resolution Interface {{id_field}}</v-toolbar-title>
+        <v-toolbar-title>Resolution Dashboard {{id_field}}</v-toolbar-title>
+        <v-spacer/>
+        <v-btn depressed outlined style="margin-right: 5px">Receipt</v-btn>
+        <v-btn depressed outlined>Event flyer</v-btn>
       </v-app-bar>
       
       <v-main>
@@ -26,7 +29,7 @@
 export default {
   name: 'app',
   created () {
-      document.title = "Annotation";
+      document.title = "Resolution Dashboard";
   },
   computed: {
     id_field: function () {

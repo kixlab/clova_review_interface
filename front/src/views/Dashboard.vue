@@ -68,7 +68,7 @@ export default {
                     self.curr_distribution=res.data.distribution;
                     self.updateDistribution(res.data.distribution)
                 });
-          },1000);
+          }, 500);
         axios.get(self.$store.state.server_url + "/dashboard/get-raw-distribution/",{
              params:{
           mturk_id: self.$store.state.mturk_id }
@@ -92,7 +92,6 @@ export default {
             .then(function(res){
                 //console.log('curr', res.data);
                 self.curr_distribution=res.data.distribution;
-
                 self.updateDistribution(res.data.distribution)
             });
         }

@@ -8,7 +8,7 @@
     -->
       <v-card-title >
         <h4 style="margin:auto;">Image #{{this.$store.state.image_order+1}} <br></h4> 
-        <h5 style="margin:auto;">Found trollers - A1DVKS3R9SLQ1H & A3JN18TC8GL3IH</h5>
+        <!--<h5 style="margin:auto;">Found trollers - A1DVKS3R9SLQ1H & A3JN18TC8GL3IH</h5>-->
       </v-card-title>
       <v-row>
         <v-col>

@@ -7,7 +7,7 @@
       dense
       fixed
     >
-      <v-toolbar-title>Resolution Interface (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
+      <v-toolbar-title>Resolution Dashboard (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
       <v-spacer/>
       <!--<instruction-button/>-->
       <submit-button/>
