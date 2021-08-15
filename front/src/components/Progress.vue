@@ -1,6 +1,37 @@
 <template>
-<div class='center'>
-  <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
+<div class='center' style="border: 1px solid black; background-color: white;">
+  <h2 style="margin-bottom: 5px;">Images </h2>
+  <div style="height: 80vh; overflow-x: hidden; overflow-y: scroll; position: relative; white-space: nowrap;">
+      <div v-for="(status, index) in stats" :key="index"> 
+        <template v-if="index===img_temp">
+          <template v-if="status===true">
+            <button class="curr done status" v-on:click="goTo(index);" :key='index' >
+            <b>#{{index+1}}</b>
+            </button>
+          </template>
+          <template v-else>
+            <button class="curr yet status" v-on:click="goTo(index);" :key='index'>
+            <b>#{{index+1}}</b>
+            </button>
+          </template>
+        </template>
+        <template v-else>
+          <template v-if="status===true">
+            <button class="done status" v-on:click="goTo(index);" :key='index' >
+            <b>#{{index+1}}</b>
+            </button>
+          </template>
+          <template v-else>
+            <button class="yet status" v-on:click="goTo(index);" :key='index' >
+            <b>#{{index+1}}</b>
+            </button>
+          </template>
+        </template>
+      </div>
+
+  </div>
+  <!--
+  <div style="height: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats"> 
         <template v-if="index===img_temp">
           <template v-if="status===true">
@@ -29,10 +60,8 @@
       </template>
 
   </div>
-<!--  <div>
-  {{stats}}
- </div>
- --></div>
+  -->
+</div>
 </template>
 
 
@@ -45,7 +74,7 @@ export default {
     return {
       image_box: this.$store.getters.getImageBoxes,
       img_temp: this.$store.getters.get_curr_image,
-      stats: new Array(500).fill(false)
+      stats: new Array(1000).fill(false)
     };
   },
   mounted() {
@@ -90,21 +119,22 @@ table{
   overflow-x: scroll;
 }
 .status{
-  margin: 1px;
-  border: 1px solid grey;
+  margin: 2px;
+  border: 0px solid grey;
   border-radius: 2% !important;
-  width: 4%!important;
+  padding: 3px;
   cursor:pointer !important;
-  
+  height: 30px; 
+  width: 90%;
 }
 .yet{
-  background-color: rgba(180, 180, 180, 0.548);
+  background-color: #A6C3EB;
 }
 .done{
   background-color: rgba(79, 192, 79, 0.548) !important;
 }
 
 .curr{
-  border: 2px solid red !important;
+  border: 3px solid red !important;
 }
 </style>

@@ -1,14 +1,16 @@
 <template>
     <v-container fluid fill-height>
-        <v-row>
-            <Progress style="padding: 3px;"/>
-        </v-row>
         <v-row align-content="start">
-            <v-col cols="4">
+            <v-col cols="1">
             </v-col>
-            <v-col cols="4">
+            <v-col cols="2">
+                <Progress style="padding: 3px;"/>
+            </v-col>
+            <v-col cols="2">
+            </v-col>
+            <v-col cols="5">
                
-                    <image-panel/>
+                <image-panel/>
                 
             </v-col>
         </v-row>

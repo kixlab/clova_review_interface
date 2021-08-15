@@ -11,10 +11,13 @@
         <!--<h5 style="margin:auto;">Found trollers - A1DVKS3R9SLQ1H & A3JN18TC8GL3IH</h5>-->
         <h5 style="margin: auto;">
           <template v-if="image_box">
-            {{image_box.length}} boxes
+            {{image_box.length}} boxes total
           </template>
         </h5>
       </v-card-title>
+      <v-card-subtitle>
+        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showBoxes = !showBoxes">Show/hide all boxes</v-btn>
+      </v-card-subtitle>
       <v-row>
         <v-col>
           
@@ -23,24 +26,26 @@
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
-              <div v-if="image_box" ref="img_box">
-                <div v-for="box in image_box" :key="box.id" >
-                  <div v-if="box.selected === true">
-                    <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
-                  </div>
-                  <!--
-                  <div v-else-if="box.annotated === true && box.hover === false">
-                    <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
-                  </div>
-                  -->
-                  <div v-else-if="box.hover === true">
-                    <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
-                  </div>
-                  <div v-else>
-                    <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+              <template v-if="showBoxes">
+                <div v-if="image_box" ref="img_box">
+                  <div v-for="box in image_box" :key="box.id" >
+                    <div v-if="box.selected === true">
+                      <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                    </div>
+                    <!--
+                    <div v-else-if="box.annotated === true && box.hover === false">
+                      <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
+                    </div>
+                    -->
+                    <div v-else-if="box.hover === true">
+                      <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
+                    </div>
+                    <div v-else>
+                      <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </template>
 
               </template>
             </drag-select-container>
@@ -78,6 +83,8 @@ export default {
       original_box: [],
       width: 0,
       height: 0,
+
+      showBoxes: true,
     };
   },
 
