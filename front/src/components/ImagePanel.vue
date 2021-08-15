@@ -92,7 +92,7 @@ export default {
       height: 0,
 
       showBoxes: true,
-      showText: false,
+      showText: true,
     };
   },
 

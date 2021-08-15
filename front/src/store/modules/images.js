@@ -69,13 +69,14 @@ const actions = {
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
             const processedData = validData.map(function(i) {
                 if(i.box_id==undefined){
+                    console.log(i.boundingBox)
                     return {
                         box_id: i.id, 
                         text:i.text, 
-                        x_pos: i.boundingBox[0][0]/ratio + padding_x, 
-                        y_pos: i.boundingBox[0][1]/ratio + padding_y,
-                        x_len: (i.boundingBox[1][0]-i.boundingBox[0][0])/ratio, 
-                        y_len: Math.max((i.boundingBox[2][1]-i.boundingBox[0][1])/ratio, 0),
+                        x_pos: Math.min(i.boundingBox[0][0], i.boundingBox[1][0], i.boundingBox[2][0], i.boundingBox[3][0])/ratio + padding_x, 
+                        y_pos: Math.min(i.boundingBox[0][1], i.boundingBox[1][1], i.boundingBox[2][1], i.boundingBox[3][1])/ratio + padding_y,
+                        x_len: (Math.max(i.boundingBox[0][0], i.boundingBox[1][0], i.boundingBox[2][0], i.boundingBox[3][0]) - Math.min(i.boundingBox[0][0], i.boundingBox[1][0], i.boundingBox[2][0], i.boundingBox[3][0]))/ratio, 
+                        y_len: (Math.max(i.boundingBox[0][1], i.boundingBox[1][1], i.boundingBox[2][1], i.boundingBox[3][1])-Math.min(i.boundingBox[0][1], i.boundingBox[1][1], i.boundingBox[2][1], i.boundingBox[3][1]))/ratio,//Math.max((i.boundingBox[2][1]-i.boundingBox[0][1])/ratio, 0),
                         selected: false, 
                         annotated: false, 
                         hover: false,
