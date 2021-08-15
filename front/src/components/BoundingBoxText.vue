@@ -5,7 +5,8 @@
     
       
     <!--<rect id="box" class="bnd" style="background-color: red; " :x="x" :y="y-h" :width="w" :height="h"/>-->
-
+    <text :x="x" :y="y" style="font-size: 90%;">{{box_info.text}}</text>
+    <text :x="x" :y="y" color="white" style="font-size: 90%; font-color: white">{{box_info.text}}</text>
 
 
   </svg>

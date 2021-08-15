@@ -16,7 +16,8 @@
         </h5>
       </v-card-title>
       <v-card-subtitle>
-        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showBoxes = !showBoxes">Show/hide all boxes</v-btn>
+        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showBoxes = !showBoxes">Show/hide boxes</v-btn>
+        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showText = !showText" :disabled="showBoxes===false">Show/hide text</v-btn>
       </v-card-subtitle>
       <v-row>
         <v-col>
@@ -29,20 +30,24 @@
               <template v-if="showBoxes">
                 <div v-if="image_box" ref="img_box">
                   <div v-for="box in image_box" :key="box.id" >
-                    <div v-if="box.selected === true">
-                      <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                    <div v-if="showText === false">
+                      <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.0;" :box_info="box"/>
+                    </div>
+                    <div v-else>
+                      <bounding-box-text circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.0;" :box_info="box"/>
                     </div>
                     <!--
                     <div v-else-if="box.annotated === true && box.hover === false">
                       <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
                     </div>
-                    -->
+                    
                     <div v-else-if="box.hover === true">
                       <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
                     </div>
                     <div v-else>
                       <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
                     </div>
+                    -->
                   </div>
                 </div>
               </template>
@@ -66,11 +71,13 @@ import axios from "axios";
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
 import BoundingBox from '@/components/BoundingBox.vue'
+import BoundingBoxText from '@/components/BoundingBoxText.vue'
 
 export default {
   name: "ImagePanel",
   components: {
     BoundingBox,
+    BoundingBoxText,
     'drag-select-container': DragSelect
   },
   data() {
@@ -85,6 +92,7 @@ export default {
       height: 0,
 
       showBoxes: true,
+      showText: false,
     };
   },
 
