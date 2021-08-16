@@ -51,8 +51,10 @@ export default {
   methods: {
     newLink: function(type) {
       const self = this;
-      //console.log(self.$router.currentRoute.params.docType)
-      if (self.$router.currentRoute.params.docType !== type) {
+      if (self.$router.currentRoute.fullPath.indexOf('dashboard') > -1 && self.$router.currentRoute.params.docType !== type) {
+        self.$router.push('../../imageview/'+type)
+      }
+      else if (self.$router.currentRoute.params.docType !== type) {
         self.$router.push('../imageview/'+type)
       }
       
