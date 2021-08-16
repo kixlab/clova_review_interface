@@ -29,22 +29,17 @@
       required
     ></v-text-field>
     </v-form>
-  <v-divider/>
+  
     </div>
   </v-row>
+  
 
   <v-row justify="center" align="start" class="up_margin">
-    <v-btn
-      :disabled="!valid"
-      @click="onClickNext"
-      
-      color="indigo lighten-2"
-      class="mr-4"
-    >
-      Begin 
-      <v-icon>
-        mdi-arrow-right
-      </v-icon>
+    <v-btn :disabled="!valid" @click="onClickNext('receipt')" color="indigo lighten-3" class="mr-4">
+      Begin (receipt) <v-icon>mdi-arrow-right</v-icon>
+    </v-btn>
+    <v-btn :disabled="!valid" @click="onClickNext('event')" color="indigo lighten-3" class="mr-4">
+      Begin (event flyer) <v-icon>mdi-arrow-right</v-icon>
     </v-btn>
   </v-row>
 </v-container>
@@ -92,7 +87,7 @@ export default {
     },
     */
 
-    onClickNext: function() {
+    onClickNext: function(doctype) {
       const self = this;
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
@@ -100,7 +95,7 @@ export default {
       axios.post(self.$store.state.server_url + '/dashboard/signup/', {
         username: self.$store.state.mturk_id,
       })
-      self.$router.push('../dashboard/')     
+      self.$router.push('../dashboard/'+doctype+'/')     
     }
     
   },
