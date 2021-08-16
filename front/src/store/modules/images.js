@@ -69,7 +69,7 @@ const actions = {
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
             const processedData = validData.map(function(i) {
                 if(i.box_id==undefined){
-                    console.log(i.boundingBox)
+                    //console.log(i.boundingBox)
                     return {
                         box_id: i.id, 
                         text:i.text, 
