@@ -97,8 +97,8 @@ export default {
   },
 
   mounted() {
-    this.loadImageID(function(self) {
-
+    //this.loadImageID(function(self) {
+    const self = this;
     self.image = self.$store.getters.getImage;
     self.image_box = self.$store.getters.getImageBoxes;
     self.getInitialPosition();
@@ -116,7 +116,7 @@ export default {
       }
     }})
     */
-    })
+    //})
   },
 
   watch:{
@@ -135,7 +135,8 @@ export default {
     highlight(item) { item.hover = true; console.log(item.text) },
     undoHighlight(item) { item.hover = false },
 
-    loadImageID: function (callback) {
+    loadImageID: function () {
+      /*
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
         params: {
@@ -153,6 +154,7 @@ export default {
       }).catch(function(err) {
         alert('Please refresh this page.\nIf this error repeats, please contact us via jeongeonpark1@gmail.com \n' + err);
       });
+      */
     },
     loadNewImage: function() {
       const self = this;
