@@ -6,9 +6,9 @@
             <v-col cols="2">
                 <Progress style="padding: 3px;"/>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="1">
             </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
                
                 <image-panel/>
                 
