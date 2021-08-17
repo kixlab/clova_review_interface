@@ -74,7 +74,7 @@ export default {
     return {
       image_box: this.$store.getters.getImageBoxes,
       img_temp: this.$store.getters.get_curr_image,
-      stats: new Array(800).fill(false)
+      stats: new Array(820).fill(false)
     };
   },
   mounted() {
