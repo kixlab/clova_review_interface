@@ -16,8 +16,8 @@
         </h5>
       </v-card-title>
       <v-card-subtitle>
-        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showBoxes = !showBoxes">Show/hide boxes</v-btn>
-        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" @click="showText = !showText" :disabled="showBoxes===false">Show/hide text</v-btn>
+        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" class="mr-4 white--text" @click="showBoxes = !showBoxes">Show/hide boxes</v-btn>
+        <v-btn depressed small style="margin: 10px;" color="indigo lighten-1" class="mr-4 white--text" @click="showText = !showText" :disabled="showBoxes===false">Show/hide text</v-btn>
       </v-card-subtitle>
       <v-row>
         <v-col>
