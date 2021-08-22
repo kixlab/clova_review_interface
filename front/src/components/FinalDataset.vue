@@ -1,20 +1,29 @@
 <template>
     <v-container fluid fill-height >
         <v-row>
-            <v-col style="padding: 0; margin-bottom: 20px">
+            <v-col style="padding: 0;">
                 <template v-if="distribution.length > 0">
                 <h3>{{distribution.map(v => v.subcat_distn.length).reduce((a, b) => a+b)}} labels & </h3>
                 <h3>{{distribution.map(v => v.cat_count).reduce((a, b) => a+b)}} annotations in total</h3>
                 </template>
             </v-col>
         </v-row>
-        <v-row dense class="fill-height" style="margin-top: 0;">
+        <v-row> 
+            <v-switch
+            v-model="sort_bool"
+            :label="`Sort with frequency: ${sort_bool? 'yes': 'no'}`"
+            ></v-switch>
+        </v-row>
+        <v-row class="fill-height" style="margin-top: 0; overflow-y: scroll">
             <v-col :cols="4" style="text-align:left;">
                 <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
                 <v-list >
                 <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
-                    <v-list-item v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
+                    <v-list-item dense v-for="category in cats" :key='category.pk' @click="selectCategory(category)">
                         <b>{{category}} ({{distribution.filter(v => v.cat === category)[0].cat_count}}) </b>
+                        <v-btn icon color="indigo" x-small @click='editcat'>
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
                     </v-list-item>
                 </v-list-item-group>
                 </v-list>
@@ -25,11 +34,26 @@
                 <v-list>
                 <v-list-item-group color="indigo"> 
                     <template v-if="distribution.filter(e => e.cat === category)[0] !== undefined">
-                    <v-list-item v-for="subcat in subcats" :key="subcat.pk">
-                        <span class='subcat-div'>
-                            <b>{{subcat.subcat}}</b> <b>({{subcat.count}})</b>: <span style="color: gray">{{subcat.description}}</span>
-                        </span>
-                    </v-list-item>
+                        <template v-if="sort_bool">
+                            <v-list-item dense v-for="subcat in subcats_sorted" :key="subcat.pk" @mouseover="seeexamples(subcat)" @mouseout="unseeexamples">
+                                <span class='subcat-div'>
+                                    <b>{{subcat.subcat}}</b> <b>({{subcat.count}})</b>: <span style="color: gray; font-size: 85%">{{subcat.description}}</span>
+                                    <v-btn icon color="indigo" x-small @click='editsubcat'>
+                                        <v-icon>mdi-pencil</v-icon>
+                                    </v-btn>
+                                </span>
+                            </v-list-item>
+                        </template>
+                        <template v-if="sort_bool === false">
+                            <v-list-item dense v-for="subcat in subcats" :key="subcat.pk" @mouseover="seeexamples(subcat)" @mouseout="unseeexamples">
+                                <span class='subcat-div'>
+                                    <b>{{subcat.subcat}}</b> <b>({{subcat.count}})</b>: <span style="color: gray; font-size: 85%">{{subcat.description}}</span>
+                                    <v-btn icon color="indigo" x-small @click='editsubcat'>
+                                        <v-icon>mdi-pencil</v-icon>
+                                    </v-btn>
+                                </span>
+                            </v-list-item>
+                        </template>
                     </template>
                 </v-list-item-group>
                 </v-list>
@@ -40,22 +64,22 @@
 
 <script>
 //import axios from "axios";
-
 export default {
     name: "FinalDataset",
     data() {
         return {
             cats: [],
             subcats: [],
+            subcats_sorted: [],
+            
+            //selected category
             category: 'menu',
             subcategory: '',
-
             sel_category: 0,
-
             distribution: this.$store.getters.getDistribution,
+            sort_bool: false,
         }
     },
-
     mounted: function() {
         const self = this;
         //console.log(self);
@@ -75,30 +99,45 @@ export default {
             function() {
                 self.distribution = self.$store.getters.getDistribution
                 self.cats = self.distribution.map(v => v.cat)
-                self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
-
+                self.category = self.cats[0]
+                if(self.distribution.filter(e => e.cat === self.category)[0]){
+                    self.subcats = self.distribution.filter(e => e.cat === self.category)[0].subcat_distn
+                    self.subcats_sorted = [...this.subcats].sort((a, b) => b.count - a.count)
+                }
             }
         , 1000)
-
         self.$store.subscribeAction({after: (action) => {
             if (action.type === 'updateDistribution') {
                 self.distribution = self.$store.getters.getDistribution
                 self.cats = self.distribution.map(v => v.cat)
-                self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
+                if(this.distribution.filter(e => e.cat === this.category)[0]){
+                    self.subcats = self.distribution.filter(e => e.cat === this.category)[0].subcat_distn
+                    self.subcats_sorted = [...this.subcats].sort((a, b) => b.count - a.count)
                 //console.log("UPDATE DISTRIBUTION JUST CALLED", self.distribution)
+                }
             }
         }})
     },
-
     methods: {
         selectCategory(selectedCategory){
             this.category=selectedCategory;
-            this.subcats = this.distribution.filter(e => e.cat === this.category)[0].subcat_distn.sort((a, b) => b.count - a.count)
-            //console.log(this.subcats)
+            if(this.distribution.filter(e => e.cat === this.category)[0]){
+                this.subcats = this.distribution.filter(e => e.cat === this.category)[0].subcat_distn
+                this.subcats_sorted = [...this.subcats].sort((a, b) => b.count - a.count)
+                //console.log(this.subcats.map(v=>v.subcat+" "+v.count), this.subcats_sorted.map(v=>v.subcat+" "+v.count))
+        }
             this.addsubcat=false;
         },
-
-
+        editcat() {
+        },
+        editsubcat() {
+        },
+        seeexamples(subcat) {
+            console.log(this.category, subcat.subcat)
+        },
+        unseeexamples() {
+            
+        },
     }
 }
 </script>
