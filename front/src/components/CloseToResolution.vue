@@ -20,7 +20,7 @@
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
                             <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
-                                <v-list-item v-if="subcat_show_list.indexOf(subcat.subcat) > -1" @click="selectSubcat(subcat)">
+                                <v-list-item @click="selectSubcat(subcat)">
                                     <span class='subcat-div'>
                                         <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
                                     </span>
