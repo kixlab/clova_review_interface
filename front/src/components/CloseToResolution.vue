@@ -99,6 +99,9 @@
                     <v-btn :disabled="disabled" @click="addAsNew()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
                         Add as new
                     </v-btn>
+                    <v-btn :disabled="disabled" @click="addToExisting()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
+                        Add to existing
+                    </v-btn>
                     <v-btn :disabled="disabled" @click="ignore()" color="error" class="mr-4 white--text" depressed small>
                         Ignore
                     </v-btn>
@@ -106,15 +109,26 @@
                 <v-row justify="center">
                     <v-spacer/>
                     <template v-if="clicked === 'addasnew'">
-                        <v-select
-                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px"
-                        ></v-select>
+                        <v-combobox
+                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px" :search-input.sync="search"
+                        ></v-combobox>
                         <v-text-field
                             label="Sub-category" placeholder="Enter new subcategory" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
                         ></v-text-field>
                         <v-btn
-                            small @click="saveLabels" :disabled="disableSave" style="margin: 5px 0 0 7px;"
+                            small @click="saveLabels('new')" :disabled="disableSave" style="margin: 5px 0 0 7px;"
                         >save as new</v-btn>
+                    </template>
+                    <template v-if="clicked === 'addtoexisting'">
+                        <v-select
+                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px"
+                        ></v-select>
+                        <v-select
+                            :items="subcategories_show" label="Sub-category" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
+                        ></v-select>
+                        <v-btn
+                            small @click="saveLabels('existing')" :disabled="disableSave" style="margin: 5px 0 0 7px;"
+                        >save to existing</v-btn>
                     </template>
                     <v-spacer/>
                 </v-row>
@@ -150,6 +164,9 @@ export default {
             sel_subcat: '',
 
 
+            search: null,
+
+
 
             // Save selection list
             categories: [],
@@ -176,7 +193,7 @@ export default {
         const self = this;
         axios.get(self.$store.state.server_url + "/dashboard/get-closeto-suggestions/",{
         params:{
-          mturk_id: self.$store.state.mturk_id }
+          mturk_id: self.$store.state.mturk_id, doctype: self.$route.params.docType }
 
         })
         .then(function(res){
@@ -187,6 +204,9 @@ export default {
         })
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+            params: {
+                doctype: self.$route.params.docType
+            }
         })
         .then(function(res){
             self.cats=res.data.cats;
@@ -237,7 +257,8 @@ export default {
             console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final, 
+                doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res.data)
                 self.selectedBoxes = []
@@ -255,6 +276,10 @@ export default {
             this.clicked = this.clicked === 'addasnew' ? '' : 'addasnew'
         },
 
+        addToExisting() {
+            this.clicked = this.clicked === 'addtoexisting' ? '' : 'addtoexisting'
+        },
+
         ignore() {
             const self = this;
 
@@ -262,7 +287,8 @@ export default {
             console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full
+                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full,
+                doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.selectedBoxes = []
@@ -276,7 +302,7 @@ export default {
         },
 
 
-        saveLabels() {
+        saveLabels(dest) {
             const self = this;
             //console.log(this.cat, "-", this.subcat)
             var selectedBoxes_final = []
@@ -288,8 +314,9 @@ export default {
             }
             console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
-            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-new/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final,
+                doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.cat = ''

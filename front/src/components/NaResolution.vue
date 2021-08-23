@@ -73,13 +73,16 @@
                     <v-btn :disabled="disabled" @click="addToExisting()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
                         Add to existing
                     </v-btn>
+                    <v-btn :disabled="disabled" @click="ignore()" color="error" class="mr-4 white--text" depressed small>
+                        Ignore
+                    </v-btn>
                 </v-row>
                 <v-row justify="center">
                     <v-spacer/>
                     <template v-if="clicked === 'addasnew'">
-                        <v-select
-                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px"
-                        ></v-select>
+                        <v-combobox
+                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px" :search-input.sync="search"
+                        ></v-combobox>
                         <v-text-field
                             label="Sub-category" placeholder="Enter new subcategory" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
                         ></v-text-field>
@@ -128,6 +131,8 @@ export default {
             sel_cat: '',
             sel_subcat: '',
 
+            search: null,
+
             // Save selection list
             categories: [],
             subcategories_all: [], 
@@ -156,8 +161,9 @@ export default {
 
         axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
         params:{
-          mturk_id: self.$store.state.mturk_id }
-
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+            }
         })
         .then(function(res){
             console.log(res.data);
@@ -167,6 +173,9 @@ export default {
 
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+            params: {
+                doctype: self.$route.params.docType
+            }
         })
         .then(function(res){
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
@@ -192,7 +201,8 @@ export default {
             console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
 
             axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final,
+                doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.selectedBoxes = []
@@ -211,6 +221,27 @@ export default {
 
         addToExisting() {
             this.clicked = this.clicked === 'addtoexisting' ? '' : 'addtoexisting'
+        },
+
+        ignore() {
+            const self = this;
+
+            //console.log('ignore clicked')
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
+            
+            axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
+                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full,
+                doctype: self.$route.params.docType
+            }).then(function (res) {
+                //console.log(res)
+                self.selectedBoxes = []
+                self.selectedBoxes_full = []
+
+                self.suggestions_all=res.data.na_suggestions;
+                self.updateDistribution(res.data.distribution)
+
+                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+            })
         },
 
         saveLabels(dest) {
