@@ -94,6 +94,7 @@ export default {
 
       axios.post(self.$store.state.server_url + '/dashboard/signup/', {
         username: self.$store.state.mturk_id,
+        doctype: doctype
       })
       self.$router.push('../dashboard/'+doctype+'/')     
     }
