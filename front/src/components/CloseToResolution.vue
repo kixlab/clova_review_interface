@@ -8,7 +8,7 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
                         <v-list >
                         <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
-                            <v-list-item v-for="category in cats.filter(v => v.cat !== 'n/a')" :key='category.pk' @click="selectCategory(category)">
+                            <v-list-item v-for="category in close_to_suggestion" :key='category.pk' @click="selectCategory(category)">
                                 <b>{{category.cat}}</b>
                             </v-list-item>
                         </v-list-item-group>
@@ -19,7 +19,7 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
-                            <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
+                            <div v-for="subcat in sel_category.subcat" :key="subcat.pk" >
                                 <v-list-item v-if="subcat_show_list.indexOf(subcat.subcat) > -1" @click="selectSubcat(subcat)">
                                     <span class='subcat-div'>
                                         <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
@@ -45,7 +45,7 @@
                 <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
                     
-                    <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
+                    <div v-for="s in sel_subcategory.suggestions" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
                             Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggestion_text}}</span> 
                             
