@@ -172,7 +172,7 @@ export default {
         })
 
 
-        axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+        /* axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
             params: {
                 doctype: self.$route.params.docType
             }
@@ -180,7 +180,7 @@ export default {
         .then(function(res){
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
             self.subcategories_all = res.data.subcats.filter( v => v.subcat !== 'n/a' && v.cat !== 'n/a')
-        })
+        }) */
     },
 
 
