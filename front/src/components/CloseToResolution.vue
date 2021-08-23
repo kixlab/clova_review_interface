@@ -8,7 +8,7 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
                         <v-list >
                         <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
-                            <v-list-item v-for="category in close_to_suggestions" :key='category.pk' @click="selectCategory(category)">
+                            <v-list-item v-for="category in cats.filter(v => v.cat !== 'n/a')" :key='category.pk' @click="selectCategory(category)">
                                 <b>{{category.cat}}</b>
                             </v-list-item>
                         </v-list-item-group>
@@ -19,7 +19,7 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
-                            <div v-for="subcat in sel_category.subcat" :key="subcat.pk" >
+                            <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
                                 <v-list-item v-if="subcat_show_list.indexOf(subcat.subcat) > -1" @click="selectSubcat(subcat)">
                                     <span class='subcat-div'>
                                         <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
@@ -45,7 +45,7 @@
                 <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
                     
-                    <div v-for="s in sel_subcategory.suggestions" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
+                    <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
                             Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggestion_text}}</span> 
                             
@@ -157,8 +157,6 @@ export default {
 
             subcat_show_list: [],
 
-            close_to_suggestions: [],
-
             sel_category: 0, 
             sel_subcategory: null,
 
@@ -200,8 +198,6 @@ export default {
         })
         .then(function(res){
             console.log(res.data);
-            self.close_to_suggestions=res.data.close_to_suggestions;
-
             self.suggestions_all=res.data.close_to_suggestions;
             self.sel_category = 0;
             self.subcat_show_list = self.suggestions_all.filter(v => v.suggestion_cat === self.categories[0]).map(v => v.suggestion_subcat)
@@ -238,7 +234,7 @@ export default {
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
 
-            this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_subcat === this.sel_subcat)
+            this.suggestions_show = this.suggestions_all.filter(v => v.cat === this.sel_cat).subcat.filter(v => v.subcat === this.sel_subcat).suggestions;
             
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
