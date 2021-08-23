@@ -8,7 +8,7 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
                         <v-list >
                         <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
-                            <v-list-item v-for="category in close_to_suggestion" :key='category.pk' @click="selectCategory(category)">
+                            <v-list-item v-for="category in close_to_suggestions" :key='category.pk' @click="selectCategory(category)">
                                 <b>{{category.cat}}</b>
                             </v-list-item>
                         </v-list-item-group>
@@ -198,6 +198,8 @@ export default {
         })
         .then(function(res){
             console.log(res.data);
+            self.close_to_suggestions=res.data.close_to_suggestions;
+
             self.suggestions_all=res.data.close_to_suggestions;
             self.sel_category = 0;
             self.subcat_show_list = self.suggestions_all.filter(v => v.suggestion_cat === self.categories[0]).map(v => v.suggestion_subcat)
