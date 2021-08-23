@@ -234,7 +234,7 @@ export default {
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
 
-            this.suggestions_show = this.suggestions_all.filter(v => v.cat === this.sel_cat)[0].subcat.filter(v => v.subcat === this.sel_subcat)[0].suggestions;
+            this.suggestions_show = this.suggestions_all.get(v => v.cat === this.sel_cat).subcat.get(v => v.subcat === this.sel_subcat).suggestions;
             
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
