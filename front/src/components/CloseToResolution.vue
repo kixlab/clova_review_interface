@@ -234,7 +234,7 @@ export default {
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
 
-            this.suggestions_show = this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
+            this.suggestions_show = this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions.filter(v=> v.n_annotations>0);
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat)
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat))
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
