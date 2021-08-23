@@ -157,6 +157,8 @@ export default {
 
             subcat_show_list: [],
 
+            close_to_suggestions: [],
+
             sel_category: 0, 
             sel_subcategory: null,
 
