@@ -125,7 +125,7 @@ export default {
                 { text: 'Suggested label', sortable: false, value: 'suggestion_text', },
                 { text: '# workers', value: 'n_workers' },
                 { text: '# images', value: 'n_images' },
-                { text: '# boxes', value: 'n_boxes' },
+                { text: '# boxes', value: 'n_annotations' },
             ],
 
             sel_cat: '',
