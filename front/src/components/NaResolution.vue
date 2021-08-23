@@ -31,7 +31,7 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
                                     v-model="selectedBoxes"
