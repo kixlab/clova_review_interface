@@ -34,7 +34,7 @@
                             <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
-                                    v-model="selectedBoxes"
+                                    v-model="selectedAnnotations"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
                                     @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
