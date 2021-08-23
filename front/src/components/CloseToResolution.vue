@@ -237,7 +237,7 @@ export default {
             this.suggestions_show = this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat)
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat))
-            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).subcat)
+            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
             this.selectedBoxes_full = []
