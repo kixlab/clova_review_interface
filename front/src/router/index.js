@@ -35,7 +35,7 @@ Vue.use(VueRouter)
     component: ResolutionOverall
   },
   {
-    path: '/dashboard/:doctype',
+    path: '/dashboard/:docType',
     name: 'Dashboard',
     component: Dashboard
   },

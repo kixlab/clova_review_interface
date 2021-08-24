@@ -20,7 +20,7 @@
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
                             <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
-                                <v-list-item v-if="subcat_show_list.indexOf(subcat.subcat) > -1" @click="selectSubcat(subcat)">
+                                <v-list-item @click="selectSubcat(subcat)">
                                     <span class='subcat-div'>
                                         <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
                                     </span>
@@ -47,7 +47,7 @@
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggestion_text}}</span> 
+                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span> 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
@@ -55,7 +55,7 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
                                     v-model="selectedBoxes"
@@ -234,8 +234,10 @@ export default {
             this.sel_cat = cat.cat
             this.sel_subcat = cat.subcat
 
-            this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_subcat === this.sel_subcat)
-            
+            this.suggestions_show = this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
+            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat)
+            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat))
+            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
             this.selectedBoxes_full = []

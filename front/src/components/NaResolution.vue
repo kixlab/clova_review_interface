@@ -31,10 +31,10 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot, idx) in s.suggested_boxes" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
-                                    v-model="selectedBoxes"
+                                    v-model="selectedAnnotations"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
                                     @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
@@ -125,7 +125,7 @@ export default {
                 { text: 'Suggested label', sortable: false, value: 'suggestion_text', },
                 { text: '# workers', value: 'n_workers' },
                 { text: '# images', value: 'n_images' },
-                { text: '# boxes', value: 'n_boxes' },
+                { text: '# boxes', value: 'n_annotations' },
             ],
 
             sel_cat: '',
