@@ -107,7 +107,7 @@ export default {
     mounted: function(){
         const self=this;
 
-        self.setServerURL('http://15.165.236.102:8000')
+        self.setServerURL('http://15.165.235.3:8000') // change to 'http://3.38.105.16:8000' later
         
         setTimeout(
           function(){
