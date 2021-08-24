@@ -68,7 +68,7 @@
                 </template>
             </v-col>
             <v-col cols="3" style="border: 1px solid black;">
-                <h2>Final label set & annotation</h2>
+                <h2>Final dataset</h2>
                 <final-dataset/>
             </v-col>
         </v-row>
@@ -107,7 +107,7 @@ export default {
     mounted: function(){
         const self=this;
 
-        self.setServerURL('http://15.165.235.3:8000') // change to 'http://3.38.105.16:8000' later
+        self.setServerURL('http://3.38.105.16:8000') // change to 'http://3.38.105.16:8000' later
         
         setTimeout(
           function(){
