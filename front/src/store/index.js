@@ -38,6 +38,9 @@ export default new Vuex.Store({
     set_curr_image(state, curr_image) {
       state.curr_image = curr_image
     },
+    set_server_url(state, server_url) {
+      state.server_url = server_url
+    },
     
   },
   getters: {
@@ -71,6 +74,9 @@ export default new Vuex.Store({
   actions:{
     setCurrImage({commit}, newidx) {
       commit('set_curr_image', newidx)
+    },
+    setServerURL({commit}, newURL) {
+      commit('set_server_url', newURL)
     },
     
   },

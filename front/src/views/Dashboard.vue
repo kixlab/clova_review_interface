@@ -23,7 +23,9 @@
                                 Worker ID - {{v.worker_id}}
                             </v-card-title>
                             <v-card-text>
-                                {{v.memo}}
+                                <div v-for="(m, idx) in v.memo.split('\n')" :key="idx">
+                                    {{m}} <br>
+                                </div>
                             </v-card-text>
                         </v-card>
                     </div>
@@ -105,6 +107,8 @@ export default {
     mounted: function(){
         const self=this;
 
+        self.setServerURL('http://15.165.236.102:8000')
+        
         setTimeout(
           function(){
                 axios.get(self.$store.state.server_url + "/dashboard/get-curr-distribution/",{
@@ -126,12 +130,12 @@ export default {
             self.raw_distribution=res.data.distribution;
         })
 
-        this.getmemo()
+        self.getmemo()
 
     },
 
     methods: {
-        ...mapActions(['updateDistribution', 'updateDistribution']),
+        ...mapActions(['updateDistribution', 'updateDistribution', 'setServerURL']),
 
         clickTab() {
             const self = this
