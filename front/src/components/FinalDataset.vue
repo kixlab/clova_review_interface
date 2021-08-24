@@ -572,6 +572,7 @@ export default {
         },
 
         seeexamples(subcat) {
+            this.annot_boxes = {}
             if (this.edit_bool === false) {
                 //console.log(this.category, subcat.subcat)
                 const self = this
@@ -586,7 +587,7 @@ export default {
                     }
                 })
                 .then(function(res){
-                    //console.log('results', res.data);
+                    //console.log('results', res.data.examples.map(v => v.image_no + "-" + v.boxes_id));
                     self.examples_toshow = res.data.examples
                     
                 });
