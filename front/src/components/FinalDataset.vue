@@ -4,7 +4,7 @@
             <v-col style="padding: 0;">
                 <template v-if="distribution.length > 0">
                 <h3>{{distribution.map(v => v.subcat_distn.length).reduce((a, b) => a+b)}} labels & </h3>
-                <h3>{{distribution.map(v => v.cat_count).reduce((a, b) => a+b)}} annotations in total</h3>
+                <h3>{{distribution.map(v => v.cat_count).reduce((a, b) => a+b)}} boxes in total</h3>
                 </template>
             </v-col>
         </v-row>
