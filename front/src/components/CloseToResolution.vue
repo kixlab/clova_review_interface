@@ -176,6 +176,8 @@ export default {
 
             // Save selection list
             categories: [],
+            subcategories_all: [], 
+            subcategories_show: [],
             
             // Show / hide save inputs
             clicked: '',
@@ -212,6 +214,7 @@ export default {
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
             params: {
+                mturk_id: self.$store.state.mturk_id, 
                 doctype: self.$route.params.docType
             }
         })
@@ -219,8 +222,10 @@ export default {
             self.cats=res.data.cats;
             self.subcats=res.data.subcats;
             self.category=self.cats[0];
+            
 
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
+            self.subcategories_all = res.data.subcats
             self.sel_category = 0;
         })
 
@@ -293,7 +298,7 @@ export default {
             }*/
 
             
-             console.log({expert_id: self.$store.state.mturk_id, 
+             console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
@@ -303,7 +308,7 @@ export default {
             
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
-               expert_id: self.$store.state.mturk_id, 
+                mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
@@ -319,6 +324,8 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = []
+
+                self.getFinalCat()
 
                 //self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.)
 
@@ -338,8 +345,8 @@ export default {
             const self = this;
 
             //console.log('ignore clicked')
-            //console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
-            console.log({expert_id: this.$store.state.mturk_id, 
+
+            console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
@@ -350,6 +357,7 @@ export default {
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+                mturk_id: self.$store.state.mturk_id, 
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
                 description: '',//self.description,
@@ -362,6 +370,10 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
+
+                self.suggestions_show = []
+
+                self.getFinalCat()
 
             })
         },
@@ -388,7 +400,7 @@ export default {
             })
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
-                expert_id: self.$store.state.mturk_id, 
+                mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
@@ -406,6 +418,9 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
+                self.suggestions_show = []
+
+                self.getFinalCat()
             })
 
             
@@ -566,6 +581,12 @@ export default {
             deep: true,
             handler() {
                 //console.log("full", this.selectedBoxes_full)
+            }
+        },
+        cat: {
+            deep: true,
+            handler(){
+                this.subcategories_show = this.subcategories_all.filter(v => v.cat === this.cat).map(v => v.subcat)
             }
         },
     },

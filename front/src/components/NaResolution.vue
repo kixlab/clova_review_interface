@@ -179,11 +179,33 @@ export default {
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
             self.subcategories_all = res.data.subcats.filter( v => v.subcat !== 'n/a' && v.cat !== 'n/a')
         })
+
+        // final label set 이 바뀌면 바뀐 label set 을 가지고 있기 위해
+        self.$store.subscribeAction({after: (action) => {
+            if (action.type === 'updateDistribution') {
+                self.getFinalCat()
+            }
+        }})
     },
 
 
     methods: {
         ...mapActions(['updateDistribution']),
+
+        getFinalCat() {
+            const self = this;
+            axios.get(self.$store.state.server_url + "/dashboard/get-final-cats",{
+                params: {
+                    doctype: self.$route.params.docType,
+                    mturk_id: self.$store.state.mturk_id,
+                }
+            })
+            .then(function(res){
+                //console.log(res.data)
+                self.categories = res.data.final_cats.map(v => v.cat).filter(v => v !== 'n/a')
+                self.subcategories_all = res.data.final_subcats
+            }) 
+        },
         
         approve() {
             const self = this;
@@ -220,6 +242,8 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+
+                self.suggestions_show = []
             })
             
         },
@@ -259,6 +283,8 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+
+                self.getFinalCat()
             })
         },
 
@@ -300,6 +326,8 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+
+                self.suggestions_show = []
             })
 
             
