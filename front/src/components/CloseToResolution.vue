@@ -19,9 +19,10 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
-                            <div v-for="subcat in subcats.filter(e => e.cat == category.cat && e.subcat !== 'n/a')" :key="subcat.pk" >
+                            <div v-for="subcat in subcat_show_list" :key="subcat.pk" >
                                 <v-list-item @click="selectSubcat(subcat)">
                                     <span class='subcat-div'>
+                                        {{subcat.subcat}}
                                         <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
                                     </span>
                                 </v-list-item>
@@ -37,7 +38,7 @@
                     </v-col>
                 </v-row>
                 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.n_boxes).reduce((a, b) => a + b, 0)}} boxes )<!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.subcat.suggestions).reduce((a, b) => a + b, 0)}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
                 
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
@@ -197,10 +198,11 @@ export default {
 
         })
         .then(function(res){
-            console.log(res.data);
+            console.log("CLOSE TO ---", res.data);
             self.suggestions_all=res.data.close_to_suggestions;
             self.sel_category = 0;
-            self.subcat_show_list = self.suggestions_all.filter(v => v.suggestion_cat === self.categories[0]).map(v => v.suggestion_subcat)
+            self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.categories[0]).map(v => v.subcat)
+            console.log(self.subcat_show_list)
         })
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
@@ -225,8 +227,10 @@ export default {
             this.category=selectedCategory;
             this.addsubcat=false;
 
+            this.subcat_show_list = this.suggestions_all.filter(v => v.cat === selectedCategory.cat).map(v => v.subcat)
+            console.log(this.subcat_show_list)
 
-            this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
+            //this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
         },
 
         selectSubcat(cat) {
@@ -457,7 +461,7 @@ export default {
                 self.done = ''
                 var boxes = []
 
-                boxes = resbox.filter(v => box_id.includes(v.box_id))
+                boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
                 //var texts = boxes.map(v => v.text)
 
 

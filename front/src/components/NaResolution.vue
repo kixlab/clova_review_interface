@@ -14,7 +14,7 @@
                     <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }} - {{ sugg.suggestion_text }}</template>
                 </v-data-table>
 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining<br/> ( = {{suggestions_all.map(v => v.n_boxes).reduce((a, b) => a + b, 0)}} boxes )<!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining<br/> ( = {{suggestions_all.map(v => v.n_annotations).reduce((a, b) => a + b, 0)}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
@@ -31,32 +31,29 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
-                                    v-model="selectedAnnotations"
+                                    v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
+                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggestion_text)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
-                                    <div v-if="annot_boxes[annot.image_no]">
-                                        <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">{{annot_boxes[annot.image_no].map(v=>v.text)}}</div>
-                                        <div v-for="box in annot_boxes[annot.image_no]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                    <div v-if="annot_boxes[annot.annotation_pk]">
+                                        <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">
+                                            {{annot_boxes[annot.annotation_pk].map(v=>v.text)}}
+                                        </div>
+                                        <div v-for="box in annot_boxes[annot.annotation_pk]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
                                             <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                                         </div>
                                     </div>
-                                    <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id)}}</div>
+                                    <div style="opacity: 0.0;">{{waitForJson(annot.annotation_pk, annot.image_no, annot.boxes_id)}}</div>
                                 </v-img>
-                                <!--
-                                #{{idx+1}} - {{annot.image_no}} & {{annot.boxes_id}} & {{annot.worker}}
-                                
-                                <div v-for="box in imageNo2Json(annot.image_no)" :key="box.box_id" >
-                                    <div v-if="annot.boxes_id.indexOf(box.box_id) > -1">
-                                        {{box.text}}
-                                    </div>
-                                </div>-->
+                                <div style="width: 250px;">
+                                Reason: {{annot.reason}}
+                                </div>
                             </v-col>
                             
                         </v-row>
@@ -146,6 +143,7 @@ export default {
             subcat: '',
             selectedBoxes: [], // Not yet linked!
             selectedBoxes_full: [],
+            selectedAnnotations: [],
 
             suggestions_all: [],
             suggestions_show: [],
@@ -190,6 +188,7 @@ export default {
         approve() {
             const self = this;
             //console.log('approve clicked')
+            console.log(self.selectedBoxes_full)
 
             var selectedBoxes_final = []
             for (var b in self.selectedBoxes_full) {
@@ -198,10 +197,19 @@ export default {
                 temp.subcat = self.selectedBoxes_full[b].suggested_subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
-
+            console.log({expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType})
+            
             axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final,
+                expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
@@ -213,6 +221,7 @@ export default {
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
             })
+            
         },
 
         addAsNew() {
@@ -227,10 +236,19 @@ export default {
             const self = this;
 
             //console.log('ignore clicked')
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
+            console.log({expert_id: this.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:'n/a',
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType})
             
             axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full,
+                expert_id: this.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:'n/a',
+                description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
@@ -254,10 +272,20 @@ export default {
                 temp.subcat = self.subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            console.log({expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType})
 
             axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
+                expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.cat = ''
@@ -277,7 +305,7 @@ export default {
         },
 
         selectSuggestion(value) {
-            //console.log('dd', value)
+            console.log('dd', value)
 
             this.sel_cat = value.suggestion_cat
             this.sel_subcat = value.suggestion_text
@@ -319,6 +347,7 @@ export default {
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
+            console.log(annot, worker, sugg_cat, sugg_subcat)
             var tempbox_full = this.selectedBoxes_full
             if (this.selectedBoxes.indexOf(annot) > -1) {
                 annot.worker_id = worker
@@ -385,14 +414,13 @@ export default {
         },
 
         imageNo2Url(no) {
-            var docType= 'receipt'
+            var docType= this.$route.params.docType
             var three_digit_id = ("00" + no).slice(-3);
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
-
         imageNo2Json(no, box_id) {
             const self = this;
-            var docType= 'receipt'
+            var docType= this.$route.params.docType
             var three_digit_id = ("00" + no).slice(-3);
             const json_url = this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
             
@@ -400,36 +428,29 @@ export default {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
-
                 const width = 250;//cont_pos.right-cont_pos.left
                 //const height = cont_pos.bottom-cont_pos.top
-
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
                 //self.original_box = json;
-
                 //console.log(resbox)
                 //self.$forceUpdate();
                 self.done = ''
                 
                 var boxes = []
-
-                //console.log(no, box_id, annot, resbox)
-                boxes = resbox.filter(v => box_id.includes(v.box_id))
+                boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
                 //var texts = boxes.map(v => v.text)
                 
-                
-
-
                 return boxes
             })
         },
-
-        async waitForJson(no, box_id) {
+        async waitForJson(pk, no, box_id) {
+            //console.log(json)
             //console.log(no, box_id)
             const response = await this.imageNo2Json(no, box_id)
             //console.log(response)
-            if (this.annot_boxes[no] === undefined) {
-                this.$set(this.annot_boxes, no, response)
+            if (this.annot_boxes[pk] === undefined) {
+                this.$set(this.annot_boxes, pk, response)
+                //console.log("ANNOTBOXES", Object.keys(this.annot_boxes).length)
             }
             return response
         },
@@ -447,7 +468,7 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                //console.log(this.selectedBoxes)
+                console.log("NEW SELECTEDBOXES", this.selectedBoxes)
             }
         },
     },
