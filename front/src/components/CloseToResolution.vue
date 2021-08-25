@@ -62,7 +62,7 @@
                                     v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggestion_text)"
+                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggested_subcat)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
@@ -306,12 +306,13 @@ export default {
                 doctype: self.$route.params.docType
             })
             
-
+            console.log('boxex', self.selectedBoxes);
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
-                subcategory:self.sel_subcat,
+                subcategory:self.selectedBoxes[0].suggested_subcat,
+                //subcategory:self.sel_subcat,
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
@@ -461,6 +462,9 @@ export default {
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
+            console.log('sugg_cat', sugg_cat);
+            console.log('sugg_subcat', sugg_subcat);
+            
             var tempbox_full = this.selectedBoxes_full
             if (this.selectedBoxes.indexOf(annot) > -1) {
                 annot.worker_id = worker
