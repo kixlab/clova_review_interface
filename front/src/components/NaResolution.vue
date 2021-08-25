@@ -260,6 +260,7 @@ export default {
             
             axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
                 mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:'n/a',
                 description: '',//self.description,

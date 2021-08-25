@@ -38,7 +38,7 @@
                     </v-col>
                 </v-row>
                 
-                <h3 style="margin-top: 20px">{{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).map(v => v.n_annotations).flat(1).length}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).map(v => v.annotations).flat(1).length}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
                 
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
@@ -322,8 +322,8 @@ export default {
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
 
                 self.updateDistribution(res.data.distribution)
-
-                self.suggestions_show = []
+                //console.log(self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
+                self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
 
                 self.getFinalCat()
 
@@ -371,7 +371,8 @@ export default {
 
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
 
-                self.suggestions_show = []
+                self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+
 
                 self.getFinalCat()
 
@@ -418,7 +419,8 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
-                self.suggestions_show = []
+                self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+
 
                 self.getFinalCat()
             })
