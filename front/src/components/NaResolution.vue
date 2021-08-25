@@ -333,7 +333,7 @@ export default {
         },
 
         unselectAll() {
-            this.selectedboxes = []
+            this.selectedBoxes = []
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
