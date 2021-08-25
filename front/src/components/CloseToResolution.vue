@@ -462,6 +462,9 @@ export default {
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
+            console.log('sugg_cat', sugg_cat);
+            console.log('sugg_subcat', sugg_subcat);
+            
             var tempbox_full = this.selectedBoxes_full
             if (this.selectedBoxes.indexOf(annot) > -1) {
                 annot.worker_id = worker
