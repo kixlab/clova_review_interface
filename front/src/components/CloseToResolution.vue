@@ -306,7 +306,7 @@ export default {
                 doctype: self.$route.params.docType
             })
             
-
+            console.log(self.selectedBoxes[0]);
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
