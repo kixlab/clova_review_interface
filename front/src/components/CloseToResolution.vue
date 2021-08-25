@@ -1,8 +1,9 @@
 <template>
-    <v-container fluid fill-height style="padding: 0">
-        <v-row class="fill-height" style="height: 85vh;">
-            <v-col cols="4" style="border: 1px solid red;"> 
+    <v-container fluid fill-height class="align-start" style="padding: 0; margin-top: 0px;">
+        <v-row class="fill-height" style="height: 85vh; margin-top: 0px;">
+            <v-col cols="4" style="border: 1px solid red; padding: 0"> 
                 <h2>label set</h2>
+                {{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).length}}
                 <v-row dense>
                     <v-col :cols="4" style="text-align:left;">
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
@@ -19,16 +20,15 @@
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Sub-category</h4>
                         <v-list>
                         <v-list-item-group v-model="sel_subcategory" color="indigo"> 
-                            <div v-for="subcat in subcat_show_list" :key="subcat.pk" >
-                                <v-list-item @click="selectSubcat(subcat)">
+                           
+                                
+                                <v-list-item v-for="sugg in subcat_show_list" :key="sugg.pk" @click="selectSubcat(sugg)">
                                     <span class='subcat-div'>
-                                        {{subcat.subcat}}
-                                        <b>{{subcat.subcat}}</b>: <span style="color: gray">{{subcat.description}}</span>
+                                        <b>{{sugg.subcat}}</b>: <span style="color: gray">{{sugg.subcat_description}}</span> ({{sugg.suggestions.length}})
                                     </span>
                                 </v-list-item>
                                 
-                            </div>
-                            <template v-if="subcat_show_list.length === 0">
+                            <template v-if="subcat_show_list === undefined">
                                 <span style="margin: 5px 5px 0 0; padding: 5px 0">
                                     No suggestion available for "{{category.cat}}" category
                                 </span>
@@ -43,12 +43,12 @@
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
-                <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
+                <h3>Suggestions from *<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* <span style="font-size: 80%">(total {{suggestions_show.length}} suggestions)</span></h3>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span> 
+                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span> ({{}})
                             
                         </h4>
                         <div style="margin-bottom: 10px">
@@ -56,24 +56,29 @@
                             <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
                         </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot, idx) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
                                     v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, s.workers[idx], s.suggestion_cat, s.suggestion_text)"
+                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggestion_text)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
-                                    <div v-if="annot_boxes[annot.image_no]">
-                                        <div style="margin: 0; background: gray; color: white; font-size: 90%">{{annot_boxes[annot.image_no].map(v=>v.text)}}</div>
-                                        <div v-for="box in annot_boxes[annot.image_no]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                    <div v-if="annot_boxes[annot.annotation_pk]">
+                                        <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">
+                                            {{annot_boxes[annot.annotation_pk].map(v=>v.text)}}
+                                        </div>
+                                        <div v-for="box in annot_boxes[annot.annotation_pk]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
                                             <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                                         </div>
                                     </div>
-                                    <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id)}}</div>
+                                    <div style="opacity: 0.0;">{{waitForJson(annot.annotation_pk, annot.image_no, annot.boxes_id)}}</div>
                                 </v-img>
+                                <div style="width: 250px;">
+                                Reason: {{annot.reason}}
+                                </div>
                             </v-col>
                             
                         </v-row>
@@ -201,7 +206,7 @@ export default {
             console.log("CLOSE TO ---", res.data);
             self.suggestions_all=res.data.close_to_suggestions;
             self.sel_category = 0;
-            self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.categories[0]).map(v => v.subcat)
+            self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.categories[0]).map(v => v.subcat)[0]
             console.log(self.subcat_show_list)
         })
 
@@ -227,7 +232,7 @@ export default {
             this.category=selectedCategory;
             this.addsubcat=false;
 
-            this.subcat_show_list = this.suggestions_all.filter(v => v.cat === selectedCategory.cat).map(v => v.subcat)
+            this.subcat_show_list = this.suggestions_all.filter(v => v.cat === selectedCategory.cat).map(v => v.subcat)[0]
             console.log(this.subcat_show_list)
 
             //this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
@@ -235,10 +240,14 @@ export default {
 
         selectSubcat(cat) {
             //console.log(cat.cat, cat.subcat, '-', cat.description)
-            this.sel_cat = cat.cat
+            this.sel_cat = this.category.cat
             this.sel_subcat = cat.subcat
 
-            this.suggestions_show = this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
+            console.log(this.category.cat, '-', cat.subcat)
+
+            this.suggestions_show = cat.suggestions
+            
+            //this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat)
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat))
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
@@ -252,18 +261,31 @@ export default {
         approve() {
             //console.log('approve clicked')
             const self = this;
-            
+            /*
             var selectedBoxes_final = []
             for (var b in self.selectedBoxes_full) {
                 var temp = self.selectedBoxes_full[b]
                 temp.cat = self.selectedBoxes_full[b].suggested_cat
                 temp.subcat = self.selectedBoxes_full[b].suggested_subcat
                 selectedBoxes_final.push(temp)
-            }
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            }*/
+
+            
+             console.log({expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType
+            })
+            
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final, 
+               expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res.data)
@@ -290,10 +312,21 @@ export default {
             const self = this;
 
             //console.log('ignore clicked')
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
+            //console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
+            console.log({expert_id: this.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType
+            })
+            
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
-                expert_id: this.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full,
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
@@ -311,6 +344,7 @@ export default {
         saveLabels(dest) {
             const self = this;
             //console.log(this.cat, "-", this.subcat)
+            /*
             var selectedBoxes_final = []
             for (var b in self.selectedBoxes_full) {
                 var temp = self.selectedBoxes_full[b]
@@ -318,10 +352,21 @@ export default {
                 temp.subcat = self.subcat
                 selectedBoxes_final.push(temp)
             }
-            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+            */
+            console.log({expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.sel_cat,
+                subcategory:self.sel_subcat,
+                description: 'manual description',//self.description,
+                doctype: self.$route.params.docType
+            })
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
-                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final,
+                expert_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                category:self.cat,
+                subcategory:self.subcat,
+                description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
@@ -437,14 +482,13 @@ export default {
         },
 
         imageNo2Url(no) {
-            var docType= 'receipt'
+            var docType= this.$route.params.docType
             var three_digit_id = ("00" + no).slice(-3);
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
-
         imageNo2Json(no, box_id) {
             const self = this;
-            var docType= 'receipt'
+            var docType= this.$route.params.docType
             var three_digit_id = ("00" + no).slice(-3);
             const json_url = this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
             
@@ -452,28 +496,29 @@ export default {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
-
                 const width = 250;//cont_pos.right-cont_pos.left
                 //const height = cont_pos.bottom-cont_pos.top
-
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
-
+                //self.original_box = json;
+                //console.log(resbox)
+                //self.$forceUpdate();
                 self.done = ''
+                
                 var boxes = []
-
                 boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
                 //var texts = boxes.map(v => v.text)
-
-
+                
                 return boxes
             })
         },
-
-        async waitForJson(no, box_id) {
+        async waitForJson(pk, no, box_id) {
+            //console.log(json)
+            //console.log(no, box_id)
             const response = await this.imageNo2Json(no, box_id)
-            if (this.annot_boxes[no] === undefined) {
-                this.$set(this.annot_boxes, no, response)
-                //console.log("ANNOT BOXES", this.annot_boxes)
+            //console.log(response)
+            if (this.annot_boxes[pk] === undefined) {
+                this.$set(this.annot_boxes, pk, response)
+                //console.log("ANNOTBOXES", Object.keys(this.annot_boxes).length)
             }
             return response
         },
@@ -485,7 +530,7 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                //console.log(this.selectedBoxes)
+                console.log(this.selectedBoxes)
             }
         },
         selectedBoxes_full: {

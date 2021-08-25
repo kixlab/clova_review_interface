@@ -56,7 +56,7 @@
         </v-row>
 
         <v-row style="border: 1px solid black; height: 85vh">
-            <v-col cols="9" style="border: 1px solid black;">
+            <v-col cols="9" style="border: 1px solid black; padding-top: 0">
                 <template v-if="toggle_exclusive === 0">
                     <na-resolution/>
                 </template>

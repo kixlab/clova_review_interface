@@ -274,16 +274,17 @@ export default {
             }
             console.log({expert_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:self.sel_subcat,
+                category:self.cat,
+                subcategory:self.subcat,
                 description: 'manual description',//self.description,
-                doctype: self.$route.params.docType})
+                doctype: self.$route.params.docType
+            })
 
             axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
                 expert_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:self.sel_subcat,
+                category:self.cat,
+                subcategory:self.subcat,
                 description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
