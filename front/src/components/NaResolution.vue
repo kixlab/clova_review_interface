@@ -23,12 +23,12 @@
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }} - {{s.suggestion_text}}</span> 
+                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }} - {{s.suggestion_text}}</span> <br/> ({{s.n_annotations}} annotations total, {{selectedBoxes.length}} selected) 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
                             <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll()">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
@@ -121,8 +121,8 @@ export default {
                 { text: 'Category', align: 'start',  value: 'suggestion_cat', },
                 { text: 'Suggested label', sortable: false, value: 'suggestion_text', },
                 { text: '# workers', value: 'n_workers' },
-                { text: '# images', value: 'n_images' },
-                { text: '# boxes', value: 'n_annotations' },
+                //{ text: '# images', value: 'n_images' },
+                { text: '# annotations', value: 'n_annotations' },
             ],
 
             sel_cat: '',
@@ -172,7 +172,8 @@ export default {
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
             params: {
-                doctype: self.$route.params.docType
+                doctype: self.$route.params.docType,
+                mturk_id: self.$store.state.mturk_id, 
             }
         })
         .then(function(res){
@@ -209,41 +210,31 @@ export default {
         
         approve() {
             const self = this;
-            //console.log('approve clicked')
-            console.log(self.selectedBoxes_full)
 
-            var selectedBoxes_final = []
-            for (var b in self.selectedBoxes_full) {
-                var temp = self.selectedBoxes_full[b]
-                temp.cat = self.selectedBoxes_full[b].suggested_cat
-                temp.subcat = self.selectedBoxes_full[b].suggested_subcat
-                selectedBoxes_final.push(temp)
-            }
-            console.log({expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+            console.log({mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType})
             
             axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
-                expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.suggestions_all=res.data.na_suggestions;
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
 
-                self.suggestions_show = []
+                self.getFinalCat()
             })
             
         },
@@ -260,24 +251,22 @@ export default {
             const self = this;
 
             //console.log('ignore clicked')
-            console.log({expert_id: this.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+            console.log({mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:'n/a',
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType})
             
             axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
-                expert_id: this.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                mturk_id: self.$store.state.mturk_id, 
                 category:self.sel_cat,
                 subcategory:'n/a',
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.suggestions_all=res.data.na_suggestions;
                 self.updateDistribution(res.data.distribution)
@@ -290,16 +279,9 @@ export default {
 
         saveLabels(dest) {
             const self = this;
-            //console.log(this.cat, "-", this.subcat)
-            var selectedBoxes_final = []
-            for (var b in self.selectedBoxes_full) {
-                var temp = self.selectedBoxes_full[b]
-                temp.cat = self.cat
-                temp.subcat = self.subcat
-                selectedBoxes_final.push(temp)
-            }
-            console.log({expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+
+            console.log({mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
                 description: 'manual description',//self.description,
@@ -307,8 +289,8 @@ export default {
             })
 
             axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
-                expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
                 description: 'manual description',//self.description,
@@ -318,7 +300,6 @@ export default {
                 self.cat = ''
                 self.subcat = ''
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.clicked = ''
 
@@ -327,7 +308,7 @@ export default {
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
 
-                self.suggestions_show = []
+                self.getFinalCat()
             })
 
             
@@ -344,35 +325,14 @@ export default {
             console.log(this.suggestions_show)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
-            this.selectedBoxes_full = []            
         },
 
-        selectAll(annots, workers, sugg_cat, sugg_subcat) {
-            var tempbox = this.selectedBoxes
-            var tempbox_full = this.selectedBoxes_full
-            for (var a in annots) {
-                tempbox.push(annots[a])
-                annots[a].worker_id = workers[a]
-                annots[a].suggested_cat = sugg_cat
-                annots[a].suggested_subcat = sugg_subcat
-                annots[a].cat = this.sel_cat
-                annots[a].subcat = this.sel_subcat
-                tempbox_full.push(annots[a])
-            }
+        selectAll(annots) {
+            this.selectedBoxes = annots
         },
 
-        unselectAll(annots, workers, sugg_cat, sugg_subcat) {
-            var tempbox = this.selectedBoxes
-            var tempbox_full = this.selectedBoxes_full
-            for (var a in annots) {
-                tempbox.splice(tempbox.indexOf(annots[a]), 1)
-                annots[a].worker_id = workers[a]
-                annots[a].suggested_cat = sugg_cat
-                annots[a].suggested_subcat = sugg_subcat
-                annots[a].cat = this.sel_cat
-                annots[a].subcat = this.sel_subcat
-                tempbox_full.splice(tempbox_full.indexOf(annots[a]))
-            }
+        unselectAll() {
+            this.selectedboxes = []
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
@@ -504,7 +464,7 @@ export default {
 
     computed: {
         disabled() {
-            return this.selectedBoxes_full.length === 0;
+            return this.selectedBoxes.length === 0;
         },
 
         disableSave() {
