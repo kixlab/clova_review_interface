@@ -52,8 +52,8 @@
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations, s.suggested_subcat)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll()">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
@@ -62,7 +62,7 @@
                                     v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggested_subcat)"
+                                    @click="check(annot, s.suggested_subcat)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
@@ -168,6 +168,8 @@ export default {
 
             sel_cat: '',
             sel_subcat: '',
+
+            sugg_subcat: '',
 
 
             search: null,
@@ -299,19 +301,22 @@ export default {
 
             
              console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
                 category:self.sel_cat,
-                subcategory:self.sel_subcat,
+                subcategory:self.selectedBoxes[0].suggested_subcat,
+                //subcategory:self.sugg_subcat,
                 description: '',//self.description,
-                doctype: self.$route.params.docType
+                doctype: self.$route.params.docType,
+                dd: self.selectedBoxes[0]
             })
+
+            /*
             
             console.log('boxex', self.selectedBoxes);
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
                 category:self.sel_cat,
-                subcategory:self.selectedBoxes[0].suggested_subcat,
                 //subcategory:self.sel_subcat,
                 description: '',//self.description,
                 doctype: self.$route.params.docType
@@ -331,6 +336,7 @@ export default {
                 //self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.)
 
             })
+            */
         },
 
         addAsNew() {
@@ -429,8 +435,9 @@ export default {
             
         },
 
-        selectAll(annots) {
+        selectAll(annots, sugg) {
             this.selectedBoxes = annots
+            this.sugg_subcat = sugg
             /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
@@ -447,6 +454,7 @@ export default {
 
         unselectAll() {
             this.selectedBoxes = []
+            this.sugg_subcat = ''
             /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
@@ -461,7 +469,11 @@ export default {
             }*/
         },
 
-        check(annot, worker, sugg_cat, sugg_subcat) {
+        check(annot, sugg_subcat) {
+            this.sugg_subcat = sugg_subcat
+            console.log(annot)
+
+            /*
             console.log('sugg_cat', sugg_cat);
             console.log('sugg_subcat', sugg_subcat);
             
@@ -480,6 +492,7 @@ export default {
                 annot.subcat = this.sel_subcat
                 tempbox_full.splice(tempbox_full.indexOf(annot))
             }
+            */
         },
         
         
@@ -581,6 +594,9 @@ export default {
             deep: true,
             handler() {
                 console.log(this.selectedBoxes)
+                if (this.selectedBoxes.length === 0) {
+                    this.sugg_subcat = ''
+                }
             }
         },
         selectedBoxes_full: {
