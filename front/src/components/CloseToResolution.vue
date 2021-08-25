@@ -24,7 +24,7 @@
                                 
                                 <v-list-item v-for="sugg in subcat_show_list" :key="sugg.pk" @click="selectSubcat(sugg)">
                                     <span class='subcat-div'>
-                                        <b>{{sugg.subcat}}</b>: <span style="color: gray">{{sugg.subcat_description}}</span> ({{sugg.suggestions.length}})
+                                        <b>{{sugg.subcat}}</b>: <span style="color: gray">{{sugg.subcat_description}}</span> ({{sugg.suggestions.length}} | {{sugg.suggestions.map(v => v.annotations).flat(1).length}})
                                     </span>
                                 </v-list-item>
                                 
