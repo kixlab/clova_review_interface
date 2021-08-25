@@ -3,7 +3,7 @@
         <v-row class="fill-height" style="height: 85vh; margin-top: 0px;">
             <v-col cols="4" style="border: 1px solid red; padding: 0"> 
                 <h2>label set</h2>
-                {{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).length}}
+                
                 <v-row dense>
                     <v-col :cols="4" style="text-align:left;">
                         <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
@@ -38,7 +38,7 @@
                     </v-col>
                 </v-row>
                 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.subcat.suggestions).reduce((a, b) => a + b, 0)}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).length}} suggestions remaining <br/> ( = {{suggestions_all.map(v => v.subcat).flat(1).map(v => v.suggestions).flat(1).map(v => v.n_annotations).flat(1).length}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
                 
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
@@ -48,12 +48,12 @@
                     
                     <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
                         <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span> ({{}})
+                            Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span><br/> ({{s.n_annotations}} annotations total, {{selectedBoxes.length}} selected) 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
@@ -223,10 +223,32 @@ export default {
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
             self.sel_category = 0;
         })
+
+        // final label set 이 바뀌면 바뀐 label set 을 가지고 있기 위해
+        self.$store.subscribeAction({after: (action) => {
+            if (action.type === 'updateDistribution') {
+                self.getFinalCat()
+            }
+        }})
     },
 
     methods: {
         ...mapActions(['updateDistribution']),
+
+        getFinalCat() {
+            const self = this;
+            axios.get(self.$store.state.server_url + "/dashboard/get-final-cats",{
+                params: {
+                    doctype: self.$route.params.docType,
+                    mturk_id: self.$store.state.mturk_id,
+                }
+            })
+            .then(function(res){
+                //console.log(res.data)
+                self.categories = res.data.final_cats.map(v => v.cat).filter(v => v !== 'n/a')
+                self.subcategories_all = res.data.final_subcats
+            }) 
+        },
 
         selectCategory(selectedCategory){
             this.category=selectedCategory;
@@ -253,7 +275,7 @@ export default {
             console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
-            this.selectedBoxes_full = []
+            //this.selectedBoxes_full = []
         },
 
 
@@ -272,30 +294,34 @@ export default {
 
             
              console.log({expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             })
             
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                //console.log(res.data)
+                console.log(res.data)
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.suggestions_all=res.data.close_to_suggestions;
+                self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
+
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+                self.suggestions_show = []
+
+                //self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.)
+
             })
         },
 
@@ -314,7 +340,7 @@ export default {
             //console.log('ignore clicked')
             //console.log({expert_id: self.$store.state.mturk_id, saved_boxes: self.selectedBoxes_full})
             console.log({expert_id: this.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
                 description: 'manual description',//self.description,
@@ -323,20 +349,20 @@ export default {
             
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                //console.log(res)
+                console.log(res.data)
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.suggestions_all=res.data.close_to_suggestions;
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+                self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
+
             })
         },
 
@@ -369,24 +395,25 @@ export default {
                 description: 'manual description',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                //console.log(res)
+                console.log(res.data)
                 self.cat = ''
                 self.subcat = ''
                 self.selectedBoxes = []
-                self.selectedBoxes_full = []
 
                 self.clicked = ''
 
                 self.suggestions_all=res.data.close_to_suggestions;
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
+                self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
             })
 
             
         },
 
-        selectAll(annots, workers, sugg_cat, sugg_subcat) {
+        selectAll(annots) {
+            this.selectedBoxes = annots
+            /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
@@ -397,10 +424,12 @@ export default {
                 annots[a].cat = this.sel_cat
                 annots[a].subcat = this.sel_subcat
                 tempbox_full.push(annots[a])
-            }
+            }*/
         },
 
-        unselectAll(annots, workers, sugg_cat, sugg_subcat) {
+        unselectAll() {
+            this.selectedBoxes = []
+            /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
             for (var a in annots) {
@@ -411,7 +440,7 @@ export default {
                 annots[a].cat = this.sel_cat
                 annots[a].subcat = this.sel_subcat
                 tempbox_full.splice(tempbox_full.indexOf(annots[a]))
-            }
+            }*/
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
@@ -543,7 +572,7 @@ export default {
 
     computed: {
         disabled() {
-            return this.selectedBoxes_full.length === 0;
+            return this.selectedBoxes.length === 0;
         },
 
         disableSave() {

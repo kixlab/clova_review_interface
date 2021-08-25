@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid fill-height style="padding: 0">
-        <v-row class="fill-height" style="height: 100vh;">
+    <v-container fluid fill-height class="align-start" style="padding: 0; margin-top: 0px;">
+        <v-row class="fill-height" style="height: 85vh; margin-top: 0px;">
             <v-col cols="4" style="border: 1px solid red;">
                 <h2>n/a suggestions</h2>
                 <v-data-table
@@ -27,8 +27,8 @@
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.suggested_boxes, s.workers, s.suggestion_cat, s.suggestion_text)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
