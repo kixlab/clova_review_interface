@@ -311,7 +311,8 @@ export default {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
-                subcategory:self.sel_subcat,
+                subcategory:self.selectedBoxes[0].suggested_subcat,
+                //subcategory:self.sel_subcat,
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
