@@ -220,7 +220,7 @@ export default {
             
             axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
                 description: '',//self.description,
@@ -285,7 +285,7 @@ export default {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             })
 
@@ -294,7 +294,7 @@ export default {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 //console.log(res)
