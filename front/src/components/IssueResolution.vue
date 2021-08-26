@@ -1,45 +1,35 @@
 <template>
-    <v-container fluid fill-height class="align-start" style="padding: 0; margin-top: 0px;">
-        <v-row class="fill-height" style="height: 85vh; margin-top: 0px;">
+    <v-container fluid fill-height style="padding: 0px;">
+        <v-row class="fill-height" style="height: 100%;">
             <v-col cols="4" style="border: 1px solid red;">
-                <h2>n/a suggestions</h2>
-                <v-data-table
-                    dense
-                    :headers="headers"
-                    :items="suggestions_all"
-                    item-key="name"
-                    class="elevation-1"
-                    @click:row="selectSuggestion"
-                >
-                    <template v-slot:[`sugg.suggestion_full`]="{ sugg }">{{ sugg.suggestion_cat }} - {{ sugg.suggestion_text }}</template>
-                </v-data-table>
+                <h2>issues from annotators</h2>
+                <div style="text-align:left;">
+                    <h4 style="background-color: #3F51B5; color: #E8EAF6">Category</h4>
+                    <v-list >
+                    <v-list-item-group v-model="sel_category" active-class="border" color="indigo">
+                        <v-list-item v-for="(category, idx) in na_issues" :key='category.pk' @click="selectIssue(category, idx)" dense style="border: 0px solid red; height: 20px">
+                            <span><b>{{category.category}}</b> ({{na_issues.filter(v => v.category === category.category)[0].annotations.length}})</span>
+                        </v-list-item>
+                    </v-list-item-group>
+                    </v-list>
+                </div>
 
-                <h3 style="margin-top: 20px">{{suggestions_all.length}} suggestions remaining<br/> ( = {{suggestions_all.map(v => v.n_annotations).reduce((a, b) => a + b, 0)}} annotations )<!--(need to be fixed according to # of annotations)--></h3>
+                <h3 style="margin-top: 20px">{{n_issues}} issues remaining<br/> <!--(need to be fixed according to # of annotations)--></h3>
             </v-col>
             <v-col cols="8" style="border: 1px solid red;">
                 <h2 style="margin-bottom: 10px;">corresponding annotations w/ images</h2>
-                <h3>*<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* selected</h3>
+                <h3>*<span style="color: blue;">{{sel_cat}}</span>* category ({{selectedAnnotations.length}} issues selected)</h3>
+                <v-btn x-small outlined @click="selectedAnnotations = []" :disabled="disabled" style="margin: 5px;">unselect all</v-btn>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll;">
-                    
-                    <div v-for="s in suggestions_show" :key="s.suggestion_pk">
-                        <h4 class="suggestion">
-                            Suggestion: <span style="color: blue;">{{ s.suggestion_cat }} - {{s.suggestion_text}}</span> <br/> ({{s.n_annotations}} annotations total, {{selectedBoxes.length}} selected) 
-                            
-                        </h4>
-                        <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll()">unselect all</v-btn>
-                        </div>
                         <v-row>
-                            <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
+                            <v-col cols="auto" v-for="(annot, idx) in suggestions_show" :key="idx" style="margin: 0 10px">
                                 <v-checkbox hide-details
                                     style="margin: 0;"
-                                    v-model="selectedBoxes"
-                                    :label="'Image #'+annot.image_no"
+                                    v-model="selectedAnnotations"
+                                    :label="idx+1+') Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggestion_text)"
+                                    @click.native.stop="check(annot)" 
                                 ></v-checkbox>
-                                <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
                                     <div v-if="annot_boxes[annot.annotation_pk]">
                                         <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">
@@ -55,30 +45,21 @@
                                 Reason: {{annot.reason}}
                                 </div>
                             </v-col>
-                            
                         </v-row>
-                    </div>
                     
                 </div>
                 <v-row justify="center" align="start" class="up_margin" no-gutters style="padding-top: 20px;">
-                    <v-btn :disabled="disabled" @click="approve()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
-                        Approve
-                    </v-btn>
                     <v-btn :disabled="disabled" @click="addAsNew()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
                         Add as new
                     </v-btn>
                     <v-btn :disabled="disabled" @click="addToExisting()" color="indigo lighten-2" class="mr-4 white--text" depressed small>
                         Add to existing
                     </v-btn>
-                    <v-btn :disabled="disabled" @click="ignore()" color="error" class="mr-4 white--text" depressed small>
-                        Ignore
-                    </v-btn>
                 </v-row>
                 <v-row justify="center">
                     <v-spacer/>
                     <template v-if="clicked === 'addasnew'">
-                        <v-combobox
-                            :items="categories" label="Category" v-model="cat" dense solo style="width: 15%; margin-left: 5px" :search-input.sync="search"
+                        <v-combobox :items="categories" label="Category" v-model="cat" :search-input.sync="search" dense solo style="width: 15%; margin-left: 5px"
                         ></v-combobox>
                         <v-text-field
                             label="Sub-category" placeholder="Enter new subcategory" v-model="subcat" dense solo style="width: 20%; margin-left: 5px"
@@ -111,26 +92,37 @@ import BoundingBox from '@/components/BoundingBox.vue'
 import {mapActions} from 'vuex';
 
 export default {
-    name: 'NaResolution',
+    name: 'IssueResolution',
     components: {
         BoundingBox
     },
     data() {
         return {
+            
+            /*
+            cats: ['menu', 'subtotal', 'total', 'payment'],
+            subcats: [],
+            category: '',
+            subcategory: '',
+            */
+
+            search: null,
+            sel_category: 0, 
+
+            
             headers: [
                 { text: 'Category', align: 'start',  value: 'suggestion_cat', },
                 { text: 'Suggested label', sortable: false, value: 'suggestion_text', },
                 { text: '# workers', value: 'n_workers' },
-                //{ text: '# images', value: 'n_images' },
-                { text: '# annotations', value: 'n_annotations' },
+                { text: '# images', value: 'n_images' },
+                { text: '# boxes', value: 'n_boxes' },
             ],
 
+            // 왼쪽 issue list에서  Selected category / subcat
             sel_cat: '',
             sel_subcat: '',
 
-            search: null,
-
-            // Save selection list
+            // selection list 에 보여주는 것들
             categories: [],
             subcategories_all: [], 
             subcategories_show: [],
@@ -138,13 +130,16 @@ export default {
             // Show / hide save inputs
             clicked: '',
 
-            // Selected data to save
+            // selection list에서 고른것 (api로 보내줌)
             cat: '',
             subcat: '',
-            selectedBoxes: [], // Not yet linked!
-            selectedBoxes_full: [],
+            description: '' ,
+            //selectedBoxes: [], // Not yet linked!
+            //selectedBoxes_full: [],
             selectedAnnotations: [],
 
+            na_issues:[],
+            n_issues:0,
             suggestions_all: [],
             suggestions_show: [],
 
@@ -157,29 +152,47 @@ export default {
     mounted: function () {
         const self = this;
 
-        axios.get(self.$store.state.server_url + "/dashboard/get-na-suggestions/",{
+        axios.get(self.$store.state.server_url + "/dashboard/get-na-reasons/",{
         params:{
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType
-            }
+          mturk_id: self.$store.state.mturk_id,
+          doctype: self.$route.params.docType }
+
         })
         .then(function(res){
-            console.log(res.data);
-            window.alert('na suggestions loaded!')
-            self.suggestions_all=res.data.na_suggestions;
-        })
+            window.alert('na issues loaded!')
+            self.na_issues=res.data.na_reasons;
+            var count=0
+            for(var i=0;i<self.na_issues.length;i++){
+                count+=self.na_issues[i]["annotations"].length;
+            }
+            self.n_issues=count;
+            self.updateDistribution(res.data.distribution);
+            console.log(res.data.na_reasons);
 
 
-        axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
+        });
+
+         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
             params: {
-                doctype: self.$route.params.docType,
-                mturk_id: self.$store.state.mturk_id, 
+                doctype: self.$route.params.docType
             }
         })
         .then(function(res){
+     //       console.log(res.data)
+
+            // First thing to show?
+            //self.cats=res.data.cats;
+            //self.subcats=res.data.subcats;
+            //self.category=self.cats[0];
+
+            // Show in selection list
             self.categories = res.data.cats.map(v => v.cat).filter(v => v !== 'n/a')
-            self.subcategories_all = res.data.subcats.filter( v => v.subcat !== 'n/a' && v.cat !== 'n/a')
-        })
+            self.subcategories_all = res.data.subcats
+
+            //console.log(res.data)
+            //console.log("dd", self.categories)
+            self.sel_category = 0;
+        }) 
 
         // final label set 이 바뀌면 바뀐 label set 을 가지고 있기 위해
         self.$store.subscribeAction({after: (action) => {
@@ -203,40 +216,10 @@ export default {
             })
             .then(function(res){
                 //console.log(res.data)
+
                 self.categories = res.data.final_cats.map(v => v.cat).filter(v => v !== 'n/a')
                 self.subcategories_all = res.data.final_subcats
             }) 
-        },
-        
-        approve() {
-            const self = this;
-
-            console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:self.sel_subcat,
-                description: '',//self.description,
-                doctype: self.$route.params.docType})
-            
-            axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
-                mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
-                category:self.sel_cat,
-                subcategory:self.sel_subcat,
-                description: '',//self.description,
-                doctype: self.$route.params.docType
-            }).then(function (res) {
-                //console.log(res)
-                self.selectedBoxes = []
-
-                self.suggestions_all=res.data.na_suggestions;
-                self.updateDistribution(res.data.distribution)
-
-                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
-
-                self.getFinalCat()
-            })
-            
         },
 
         addAsNew() {
@@ -247,60 +230,59 @@ export default {
             this.clicked = this.clicked === 'addtoexisting' ? '' : 'addtoexisting'
         },
 
-        ignore() {
-            const self = this;
-
-            //console.log('ignore clicked')
-            console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:'n/a',
-                description: '',//self.description,
-                doctype: self.$route.params.docType})
-            
-            axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
-                mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:'n/a',
-                description: '',//self.description,
-                doctype: self.$route.params.docType
-            }).then(function (res) {
-                //console.log(res)
-                self.selectedBoxes = []
-
-                self.suggestions_all=res.data.na_suggestions;
-                self.updateDistribution(res.data.distribution)
-
-                self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
-
-                self.getFinalCat()
-            })
-        },
-
         saveLabels(dest) {
             const self = this;
-
-            console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+            console.log('call save with', self.cat, self.subcat, self.description)
+            //issue handling 도 다르게 save
+            axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
+                expert_id: self.$store.state.mturk_id,
+                annotation_pks:self.selectedAnnotations.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
-                description: '',//self.description,
+                description: self.description,
                 doctype: self.$route.params.docType
+            }).then(function (res) {
+            //    console.log(res);
+                self.cat = ''
+                self.subcat = ''
+                self.selectedAnnotations = []
+                self.clicked = ''
+
+                self.na_issues=res.data.na_reasons;
+                //console.log("AFTER SAVING",res.data)
+                self.updateDistribution(res.data.distribution)
+                
+                self.suggestions_show = self.na_issues.filter(v => v.category === self.sel_cat)[0].annotations
+                self.getFinalCat()
+
+             //   self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
             })
 
+            
+        },
+
+
+        /* saveLabels(dest) {
+            const self = this;
+            //console.log(this.cat, "-", this.subcat)
+            var selectedBoxes_final = []
+            for (var b in self.selectedBoxes_full) {
+                var temp = self.selectedBoxes_full[b]
+                temp.cat = self.cat
+                temp.subcat = self.subcat
+                selectedBoxes_final.push(temp)
+            }
+            console.log({expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final})
+
+            //issue handling 도 다르게 save
             axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
-                mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
-                category:self.cat,
-                subcategory:self.subcat,
-                description: '',//self.description,
-                doctype: self.$route.params.docType
+                expert_id: self.$store.state.mturk_id, saved_boxes: selectedBoxes_final
             }).then(function (res) {
                 //console.log(res)
                 self.cat = ''
                 self.subcat = ''
                 self.selectedBoxes = []
+                self.selectedBoxes_full = []
 
                 self.clicked = ''
 
@@ -308,15 +290,32 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.suggestions_show = self.suggestions_all.filter(v => v.suggestion_cat === self.sel_cat && v.suggestion_text === self.sel_subcat)
-
-                self.getFinalCat()
             })
 
             
         },
+ */
+        // FIXME: 실제 쓸거
+        selectIssue(selectedCategory, idx) {
+            this.sel_cat = selectedCategory.category
+            this.sel_category = idx
 
+            this.suggestions_show = this.na_issues.filter(v => v.category === this.sel_cat)[0].annotations
+            //console.log(this.suggestions_show)
+            this.selectedAnnotations = []
+            
+        },
+
+        // close to 에서 이렇게 고름
+        selectCategory(selectedCategory){
+            this.category=selectedCategory;
+            this.addsubcat=false;
+            this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
+        },
+
+        // n/a에서 이렇게 보여줌
         selectSuggestion(value) {
-            console.log('dd', value)
+            //console.log('dd', value)
 
             this.sel_cat = value.suggestion_cat
             this.sel_subcat = value.suggestion_text
@@ -325,36 +324,34 @@ export default {
 
             console.log(this.suggestions_show)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
-            this.selectedBoxes = []
+           // this.selectedBoxes = []
+           // this.selectedBoxes_full = []           
+            
+            this.selectedAnnotations = []
         },
 
-        selectAll(annots) {
-            this.selectedBoxes = annots
-        },
 
-        unselectAll() {
-            this.selectedBoxes = []
-        },
+        check() {
+//            console.log("Hi")
+            //console.log('selected annots', annot)
+            //var tempbox_full = this.selectedAnnotations
+            //console.log("BEFORE", this.selectedAnnotations)
+            //console.log(this.selectedAnnotations.length, "selected")
 
-        check(annot, worker, sugg_cat, sugg_subcat) {
-            console.log(annot, worker, sugg_cat, sugg_subcat)
-            var tempbox_full = this.selectedBoxes_full
-            if (this.selectedBoxes.indexOf(annot) > -1) {
-                annot.worker_id = worker
-                annot.suggested_cat = sugg_cat
-                annot.suggested_subcat = sugg_subcat
-                annot.cat = this.sel_cat
-                annot.subcat = this.sel_subcat
-                tempbox_full.push(annot)
+
+            /*
+            if (this.selectedAnnotations.indexOf(annot) === -1) {
+                this.selectedAnnotations.push(annot)
+                console.log('selannot added')
             }
             else {
-                annot.worker_id = worker
-                annot.cat = this.sel_cat
-                annot.subcat = this.sel_subcat
-                tempbox_full.splice(tempbox_full.indexOf(annot))
+                this.selectedAnnotations.splice(tempbox_full.indexOf(annot))
+                console.log('selannot deleted')
             }
-        },
 
+            console.log(this.selectedAnnotations)
+            */
+        },
 
         setImageBoxes(json) {
             //console.log("NEW JSON --------\n" , json)
@@ -408,6 +405,7 @@ export default {
             var three_digit_id = ("00" + no).slice(-3);
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
+
         imageNo2Json(no, box_id) {
             const self = this;
             var docType= this.$route.params.docType
@@ -418,21 +416,26 @@ export default {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
+
                 const width = 250;//cont_pos.right-cont_pos.left
                 //const height = cont_pos.bottom-cont_pos.top
+
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
                 //self.original_box = json;
+
                 //console.log(resbox)
                 //self.$forceUpdate();
                 self.done = ''
                 
                 var boxes = []
+
                 boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
                 //var texts = boxes.map(v => v.text)
                 
                 return boxes
             })
         },
+
         async waitForJson(pk, no, box_id) {
             //console.log(json)
             //console.log(no, box_id)
@@ -458,19 +461,20 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                console.log("NEW SELECTEDBOXES", this.selectedBoxes)
+                //console.log(this.selectedBoxes)
             }
         },
     },
 
     computed: {
         disabled() {
-            return this.selectedBoxes.length === 0;
+            return this.selectedAnnotations.length === 0;
         },
 
         disableSave() {
-            return this.subcat === '' || this.cat === ''
-        }
+            return this.subcat === '' || this.cat === '' || this.selectedAnnotations.length === 0;
+        },
+
     }
 
 }

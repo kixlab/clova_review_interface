@@ -46,14 +46,14 @@
                 <h3>Suggestions from *<span style="color: blue;">{{sel_cat}} - {{sel_subcat}}</span>* <span style="font-size: 80%">(total {{suggestions_show.length}} suggestions)</span></h3>
                 <div style="height: 60vh; border: 1px solid black; text-align: left; overflow-y: scroll" >
                     
-                    <div v-for="s in suggestions_show" :key="s.suggestion_pk" style="border: 1px solid grey; padding-bottom: 5px; text-align: center;">
+                    <div v-for="s in suggestions_show" :key="s.suggestion_pk" >
                         <h4 class="suggestion">
                             Suggestion: <span style="color: blue;">{{s.suggestion_cat}} - {{s.suggested_subcat}}</span><br/> ({{s.n_annotations}} annotations total, {{selectedBoxes.length}} selected) 
                             
                         </h4>
                         <div style="margin-bottom: 10px">
-                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations)">select all</v-btn>
-                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotations)">unselect all</v-btn>
+                            <v-btn style="margin-left: 20px;" outlined x-small @click="selectAll(s.annotations, s.suggested_subcat)">select all</v-btn>
+                            <v-btn style="margin-left: 10px;" outlined x-small @click="unselectAll(s.annotation)">unselect all</v-btn>
                         </div>
                         <v-row>
                             <v-col cols="auto" v-for="(annot) in s.annotations" :key="annot.annot_pk" style="margin: 0 10px">
@@ -62,7 +62,7 @@
                                     v-model="selectedBoxes"
                                     :label="'Image #'+annot.image_no"
                                     :value="annot"
-                                    @click="check(annot, annot.worker_id, s.suggestion_cat, s.suggested_subcat)"
+                                    @click="check(annot, s.suggested_subcat)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
@@ -168,6 +168,8 @@ export default {
 
             sel_cat: '',
             sel_subcat: '',
+
+            sugg_subcat: '',
 
 
             search: null,
@@ -299,19 +301,22 @@ export default {
 
             
              console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
-                category:self.sel_cat,
-                subcategory:self.sel_subcat,
-                description: '',//self.description,
-                doctype: self.$route.params.docType
-            })
-            
-            console.log('boxex', self.selectedBoxes);
-            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
-                mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
                 category:self.sel_cat,
                 subcategory:self.selectedBoxes[0].suggested_subcat,
+                //subcategory:self.sugg_subcat,
+                description: '',//self.description,
+                doctype: self.$route.params.docType,
+                dd: self.selectedBoxes[0]
+            })
+
+            
+            
+            //console.log('boxex', self.selectedBoxes);
+            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+                mturk_id: self.$store.state.mturk_id, 
+                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
+                category:self.sel_cat,
                 //subcategory:self.sel_subcat,
                 description: '',//self.description,
                 doctype: self.$route.params.docType
@@ -323,14 +328,13 @@ export default {
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
 
                 self.updateDistribution(res.data.distribution)
-                //console.log(self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
+
                 self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
 
                 self.getFinalCat()
 
-                //self.suggestions_show = self.subcat_show_list.filter(v => v.subcat === self.)
-
             })
+            
         },
 
         addAsNew() {
@@ -351,7 +355,7 @@ export default {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             })
             
@@ -397,16 +401,16 @@ export default {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             })
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
                 mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
                 subcategory:self.subcat,
-                description: 'manual description',//self.description,
+                description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
                 console.log(res.data)
@@ -429,8 +433,9 @@ export default {
             
         },
 
-        selectAll(annots) {
+        selectAll(annots, sugg) {
             this.selectedBoxes = annots
+            this.sugg_subcat = sugg
             /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
@@ -447,6 +452,7 @@ export default {
 
         unselectAll() {
             this.selectedBoxes = []
+            this.sugg_subcat = ''
             /*
             var tempbox = this.selectedBoxes
             var tempbox_full = this.selectedBoxes_full
@@ -461,7 +467,11 @@ export default {
             }*/
         },
 
-        check(annot, worker, sugg_cat, sugg_subcat) {
+        check(annot, sugg_subcat) {
+            this.sugg_subcat = sugg_subcat
+            console.log(annot)
+
+            /*
             console.log('sugg_cat', sugg_cat);
             console.log('sugg_subcat', sugg_subcat);
             
@@ -480,6 +490,7 @@ export default {
                 annot.subcat = this.sel_subcat
                 tempbox_full.splice(tempbox_full.indexOf(annot))
             }
+            */
         },
         
         
@@ -581,6 +592,9 @@ export default {
             deep: true,
             handler() {
                 console.log(this.selectedBoxes)
+                if (this.selectedBoxes.length === 0) {
+                    this.sugg_subcat = ''
+                }
             }
         },
         selectedBoxes_full: {

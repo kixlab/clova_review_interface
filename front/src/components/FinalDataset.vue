@@ -420,7 +420,7 @@ export default {
             const self = this
             console.log("CAT CHANGE", self.cat_toedit, "to", self.cat_new)
             axios.post(self.$store.state.server_url + '/dashboard/change-cat-text/', {
-                expert_id: self.$store.state.mturk_id,
+                mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 old_cat: self.cat_toedit,
                 new_cat: self.cat_new
@@ -469,7 +469,7 @@ export default {
                 console.log("DESC CHANGE", desc_old, "to", self.desc_new)
                 
                 axios.post(self.$store.state.server_url + '/dashboard/change-subcat-description/', {
-                    expert_id: self.$store.state.mturk_id,
+                    mturk_id: self.$store.state.mturk_id,
                     doctype: self.$route.params.docType,
                     cat: self.category,
                     subcat: subcat_old,
@@ -497,7 +497,7 @@ export default {
             if (self.subcat_new !== '') {
                 console.log("SUBCAT CHANGE", subcat_old, "to", self.subcat_new)
                 axios.post(self.$store.state.server_url + '/dashboard/change-subcat-text/', {
-                    expert_id: self.$store.state.mturk_id,
+                    mturk_id: self.$store.state.mturk_id,
                     doctype: self.$route.params.docType,
                     cat: self.category,
                     old_subcat: subcat_old,
@@ -540,7 +540,7 @@ export default {
             const self = this
             console.log("MOVE CAT", self.subcat_tomove, "to", self.cat_moveto)
             axios.post(self.$store.state.server_url + '/dashboard/move-subcat/', {
-                expert_id: self.$store.state.mturk_id,
+                mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 old_cat: self.category,
                 new_cat: self.cat_moveto,
@@ -612,7 +612,7 @@ export default {
             const self = this
             console.log("CAT ADD", self.cat_toadd)
             axios.post(self.$store.state.server_url + '/dashboard/add-cat/', {
-                expert_id: self.$store.state.mturk_id,
+                mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 category: self.cat_toadd
             }).then(function () {
@@ -649,7 +649,7 @@ export default {
             const self = this;
             console.log("MERGE CAT", self.cat_tomerge, "to", self.cat_mergeto)
             axios.post(self.$store.state.server_url + '/dashboard/merge-cats/', {
-                expert_id: self.$store.state.mturk_id,
+                mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 from_cat: self.cat_tomerge,
                 to_cat: self.cat_mergeto
@@ -691,7 +691,7 @@ export default {
             const self = this;
             console.log("MERGE SUBCAT", self.subcat_tomerge, "to", self.subcat_mergeto)
             axios.post(self.$store.state.server_url + '/dashboard/merge-subcats/', {
-                expert_id: self.$store.state.mturk_id,
+                mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
                 from_cat: self.category,
                 from_subcat: self.subcat_tomerge,
