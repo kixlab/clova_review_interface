@@ -394,7 +394,7 @@ export default {
             }
             */
             console.log({expert_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes_full.map(v => v.annotation_pk),
+                annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
                 description: 'manual description',//self.description,
