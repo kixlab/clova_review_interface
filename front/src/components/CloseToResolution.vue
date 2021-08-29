@@ -377,7 +377,7 @@ export default {
 
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.subcat_show_list === undefined? [] : self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+                self.suggestions_show = self.subcat_show_list === undefined? [] : (self.subcat_show_list.length===0? []: self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
 
 
                 self.getFinalCat()
