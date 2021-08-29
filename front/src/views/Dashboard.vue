@@ -107,7 +107,9 @@ export default {
     mounted: function(){
         const self=this;
 
-        self.setServerURL('http://3.38.105.16:8000') // change to 'http://3.38.105.16:8000' later
+        self.setServerURL('http://52.78.121.66:8000') 
+        // change to 'http://3.38.105.16:8000' - receipt
+        // 'http://52.78.121.66:8000' - event flyer
         
         setTimeout(
           function(){
