@@ -329,7 +329,7 @@ export default {
 
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.subcat_show_list === undefined? [] : self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+                self.suggestions_show = self.subcat_show_list === undefined? [] :(self.subcat_show_list.length===0? []: self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
 
 
                 self.getFinalCat()
@@ -377,7 +377,7 @@ export default {
 
                 self.updateDistribution(res.data.distribution)
 
-                self.suggestions_show = self.subcat_show_list === undefined? [] : self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+                self.suggestions_show = self.subcat_show_list === undefined? [] : (self.subcat_show_list.length===0? []: self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
 
 
                 self.getFinalCat()
@@ -425,7 +425,7 @@ export default {
                 self.updateDistribution(res.data.distribution)
 
                 self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.sel_cat).map(v => v.subcat)[0]
-                self.suggestions_show = self.subcat_show_list === undefined? [] : self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions
+                self.suggestions_show = self.subcat_show_list === undefined? [] : (self.subcat_show_list.length===0? []: self.subcat_show_list.filter(v => v.subcat === self.sel_subcat)[0].suggestions)
 
 
                 self.getFinalCat()
