@@ -48,7 +48,7 @@
                 <!-- dialog for edit cat -->
                 <v-dialog v-model="editcat_dialog" width="400" persistent>
                     <v-card>
-                        <v-card-text class="text-left" style="height: 200px;" >
+                        <v-card-text class="text-left" style="height: 200px; overflow-y: scroll" >
                             <h1 style="text-align: center; padding-top: 20px; margin: 20px 5px 10px; color: blue">{{cat_toedit}}</h1>
                             <h1 style="text-align: center; margin: 20px 5px 10px"> ⬇️ </h1>
                             <v-text-field hide-details style="margin: 5px"
@@ -77,7 +77,7 @@
                 <!-- dialog for add cat -->
                 <v-dialog v-model="addcat_dialog" width="400" persistent>
                     <v-card>
-                        <v-card-text class="text-left" style="height: 200px;" >
+                        <v-card-text class="text-left" style="height: 200px; overflow-y: scroll" >
                             <h1 style="text-align: center; padding-top: 20px;margin: 20px 5px 10px; line-height: 1.3"> Enter the category you wish to add: </h1>
                             <v-text-field hide-details style="margin: 5px"
                                 v-model="cat_toadd"
@@ -106,7 +106,7 @@
                 <!-- dialog for merge cat -->
                 <v-dialog v-model="mergecat_dialog" width="400" persistent>
                     <v-card>
-                        <v-card-text class="text-left" style="height: 200px;" >
+                        <v-card-text class="text-left" style="height: 200px; overflow-y: scroll" >
                             <h1 style="text-align: center; padding-top: 20px; margin: 20px 5px 10px; color: blue">{{cat_tomerge}}</h1>
                             <h1 style="text-align: center; margin: 20px 5px 10px"> ⬇️ </h1>
                             <v-select
@@ -243,7 +243,7 @@
                 <!-- dialog to merge subcat -->
                 <v-dialog v-model="mergesubcat_dialog" width="400" persistent>
                     <v-card>
-                        <v-card-text class="text-left" style="height: 200px;" >
+                        <v-card-text class="text-left" style="height: 200px; overflow-y: scroll" >
                             <h1 style="text-align: center; padding-top: 20px; margin: 20px 5px 10px; color: blue">{{category}} - {{subcat_tomerge}}</h1>
                             <h1 style="text-align: center; margin: 20px 5px 10px"> ⬇️ </h1>
                             <v-select
@@ -573,6 +573,7 @@ export default {
 
         seeexamples(subcat) {
             this.annot_boxes = {}
+            this.examples_toshow = []
             if (this.edit_bool === false) {
                 //console.log(this.category, subcat.subcat)
                 const self = this
