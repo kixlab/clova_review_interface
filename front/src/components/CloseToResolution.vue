@@ -65,11 +65,13 @@
                                     @click="check(annot, s.suggested_subcat)"
                                 ></v-checkbox>
                                 <!--{{imageNo2Json(annot.image_no)}}-->
+                                <div v-if="annot_boxes[annot.annotation_pk]">
+                                    <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center; width: 250px;">
+                                        {{annot_boxes[annot.annotation_pk].map(v=>v.text)}}
+                                    </div>
+                                </div>
                                 <v-img :src="imageNo2Url(annot.image_no)" width="250">
                                     <div v-if="annot_boxes[annot.annotation_pk]">
-                                        <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center">
-                                            {{annot_boxes[annot.annotation_pk].map(v=>v.text)}}
-                                        </div>
                                         <div v-for="box in annot_boxes[annot.annotation_pk]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
                                             <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                                         </div>
