@@ -48,7 +48,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import axios from 'axios';
 
 export default {
@@ -64,6 +64,7 @@ export default {
     ...mapState(['mturk_id'])
   },
   methods: {
+    ...mapActions(['setServerURL']),
     /* Got from the mturk interface
     onClickNext: function () {
       const self = this;
@@ -89,6 +90,13 @@ export default {
 
     onClickNext: function(doctype) {
       const self = this;
+      if (doctype==='receipt') {
+        self.setServerURL('http://3.38.105.16:8000')
+      }
+      else if (doctype==='event') {
+        self.setServerURL('http://52.78.121.66:8000') 
+      }
+      
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
 
