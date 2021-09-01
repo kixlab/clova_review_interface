@@ -14,11 +14,18 @@ import ResolutionOverall from '../views/ResolutionOverall.vue'
 import Dashboard from '../views/Dashboard.vue'
 import ImageView from '../views/ImageView.vue'
 
+import SeeAnnotations from '../views/SeeAnnotations.vue'
+
 //import Resolution from '../views/Annotation.vue'
 
 Vue.use(VueRouter)
 
   const routes = [
+  {
+    path: '/seeannots/:docType/:type/:idx/',
+    name: 'SeeAnnotations',
+    component: SeeAnnotations
+  },
   {
     path: '/annotation/:docType/',
     name: 'DeferredAnnotation',

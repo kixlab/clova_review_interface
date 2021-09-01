@@ -42,6 +42,20 @@
       Begin (event flyer) <v-icon>mdi-arrow-right</v-icon>
     </v-btn>
   </v-row>
+  <v-row justify="center" style="margin-top: 20px">
+    <v-btn @click="seeAnnotations('receipt', 'baseline')" color="indigo lighten-3" class="mr-4">
+      receipt, baseline
+    </v-btn>
+    <v-btn @click="seeAnnotations('receipt', 'proposed')" color="indigo lighten-3" class="mr-4">
+      receipt, proposed
+    </v-btn>
+    <v-btn @click="seeAnnotations('event', 'baseline')" color="indigo lighten-3" class="mr-4">
+      event, baseline
+    </v-btn>
+    <v-btn @click="seeAnnotations('event','proposed')" color="indigo lighten-3" class="mr-4">
+      event, proposed
+    </v-btn>
+  </v-row>
 </v-container>
 </template>
 
@@ -105,6 +119,11 @@ export default {
         doctype: doctype
       })
       self.$router.push('../dashboard/'+doctype+'/')     
+    },
+
+    seeAnnotations: function(doctype, type) {
+      const self = this;
+      self.$router.push('../seeannots/'+doctype+'/'+type+'/0')
     }
     
   },
