@@ -3,17 +3,21 @@
         <v-row align-content="start">
 
             <v-col cols="12">
+                <v-row>
+                    <h2 style="padding-left: 10px">Total annots: {{all_data.length}}</h2>
+                </v-row>
                 <v-row v-if="image_box && annot_boxes">
                     <v-col cols="auto" v-for="(box, idx) in image_box" :key="idx">
                         <div style="margin: 0; background: gray; color: white; font-size: 90%; text-align: center; width: 250px;">
                             Box #{{$route.params.idx*100+idx+1}} (Image #{{box.image_no}}) <br/>
-                            <!--text: {{annot_boxes[box.image_no+'-'+box.box_id][0].text}}--> | {{box.cat}} - {{box.subcat}}
+                            <!--text: {{annot_boxes[box.image_no+'-'+box.box_id]}} |--> {{box.final_cat}} - {{box.final_subcat}} <!--({{box.rev_type}})--><br/>
+                            <!--Sugg: {{box.suggestion}} | {{box.reason}}-->
                         </div>
                     <v-img :src="imageNo2Url(box.image_no)" width="250">
-                        <div v-for="box in annot_boxes[box.image_no+'-'+box.box_id]" :key="box.id">
+                        <div v-for="box in annot_boxes[box.image_no+'-'+box.boxes_id]" :key="box.id">
                             <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
                         </div>
-                        <div style="opacity: 0.0;">{{waitForJson(box.image_no+'-'+box.box_id, box.image_no, [box.box_id])}}</div>
+                        <div style="opacity: 0.0;">{{waitForJson(box.image_no+'-'+box.boxes_id, box.image_no, [box.boxes_id])}}</div>
                     </v-img>
                     </v-col>
                 </v-row>
@@ -51,6 +55,8 @@ export default {
             currURL: '',
 
             annot_boxes: [],
+
+            all_data: []
         }
     },
 
@@ -73,15 +79,55 @@ export default {
             self.currURL = 'http://52.78.121.66:8000'
         }
 
+        /* sampling final result
         axios.get(self.currURL+ "/dashboard/get-sample-result/", {
 
         })
         .then(function(res) {
-            console.log(res.data.sample)
+            console.log(res.data)
             var idx = self.$route.params.idx
             self.image_box = res.data.sample.slice(idx*100, idx*100+100)
             console.log(idx*100, idx*100+100)
         })
+        */
+
+        
+        axios.get(self.currURL+ "/dashboard/get-fn-candidates/", {
+
+        })
+        .then(function(res) {
+            console.log(res.data)
+            var idx = self.$route.params.idx
+            self.all_data = res.data.annotations // 요부분 바꾸기
+            self.image_box = self.all_data.slice(idx*100, idx*100+100)
+            console.log(idx*100, idx*100+100)
+        })
+        
+        
+
+       /*
+       axios.get(self.currURL+ "/dashboard/get-similarity-samples/", {
+
+        })
+        .then(function(res) {
+            console.log(res.data)
+            var idx = self.$route.params.idx
+            self.all_data = res.data.similar_pairs // 요부분 바꾸기
+            console.log(self.all_data)
+            var flat_data = []
+            for (var i in self.all_data) {
+                //console.log(self.all_data[i].left, self.all_data[i].right)
+                self.all_data[i].left['pair'] = i
+                self.all_data[i].right['pair'] = i
+                flat_data.push(self.all_data[i].left)
+                flat_data.push(self.all_data[i].right)
+            }
+            console.log(flat_data)
+            self.image_box = flat_data.slice(idx*100, idx*100+100)
+            console.log(idx*100, idx*100+100)
+        })
+        */
+        
     },
 
 
@@ -202,7 +248,7 @@ export default {
                 self.done = ''
                 
                 var boxes = []
-                boxes = resbox.filter(v => box_id.includes(v.box_id))
+                boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
                 //var texts = boxes.map(v => v.text)
                 return boxes
             })
