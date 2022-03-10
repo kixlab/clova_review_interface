@@ -126,41 +126,6 @@ def checkUser(request):
             }
         return JsonResponse(response)
 
-        
-""" @csrf_exempt
-def checkUser(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        print(User.objects)
-        if(len(User.objects.filter(username=username))==0):
-            user=User(username=username)
-            user.save()
-            # initialize status 
-            for document in Document.objects.all():
-                Status(user=user, document=document, status=False).save()
-            # initialize usercats
-            for initcat in InitCat.objects.all():
-                usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
-                usercat.save()
-            # add N/A category 
-            for doctype in DocType.objects.all():
-                UserCat(user=user, doctype=doctype, cat_text="N/A").save()
-            # initialize usersubcats 
-            for initsubcat in InitSubCat.objects.all():
-                usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
-                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()   
-            # add N/A subcategory to each category 
-            for usercat in UserCat.objects.filter(user=user):
-                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
-        else: 
-            user=User.objects.get(username=username)
-        user, created = User.objects.get_or_create(username=username)
-        response = {
-            'consent_agreed': user.consentAgreed,
-            'step': 1
-        }
-        return JsonResponse(response) """
-
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'GET':
@@ -171,25 +136,6 @@ def recordconsentAgreed(request):
         profile.consent_agreed=True
         profile.save()
         return HttpResponse('')
-
-""" @csrf_exempt
-def recordInstrDone(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        #user=request.user
-        profile=Profile.objects.get(user=user)
-        profile.instr_read=True
-        profile.starttime=datetime.now()
-
-
-
-
-        if (user.instrEnded == False):
-            valid_usrs = len(list(User.objects.filter(instrEnded = True)))
-            user.startTask(valid_usrs)
-
-        return HttpResponse('') """
 
 @csrf_exempt
 def getDocTypes(request):
@@ -602,13 +548,6 @@ def getImage(request, image_id):
         # item = Image.objects.filter(is_done=True)[int(num)]
         return HttpResponse(item.image.url)
 
-'''
-@csrf_exempt
-def getImageBoxInfo(request, image_id):
-    if request.method == 'GET':
-        item = Image.objects.get(image_id=image_id)
-        return HttpResponse(item.box_info)
-'''
 
 @csrf_exempt
 def uploadImage(request):

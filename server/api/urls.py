@@ -2,10 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    # path(r'image/', views.selectedImage),
-    # path(r'image/box_info/', views.selectedImageBox)
     path('signup/',views.signup),
-    #path('start-task/', views.startTask),
     path('log/', views.recordLog),
     path('check-user/', views.checkUser),
     path('consent-agreed/', views.recordconsentAgreed),
@@ -27,10 +24,4 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
     path('submit/', views.submit),
-    #path('get-worker-annotations/', views.getWorkerAnnotations),
-    #path('get-annotations-by-worker', views.getAnnotationsByWorker),
-    #path(r'image/<image_id>/', views.getImage, name='image_id'),
-    #path(r'upload_image/', views.uploadImage),
-    #path(r'json/<json_id>/', views.getJson, name='json_id'),
-    #path(r'upload_json/', views.uploadJson),
 ]
