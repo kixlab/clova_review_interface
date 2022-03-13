@@ -418,7 +418,7 @@ export default {
 
         savecat() {
             const self = this
-            console.log("CAT CHANGE", self.cat_toedit, "to", self.cat_new)
+            //console.log("CAT CHANGE", self.cat_toedit, "to", self.cat_new)
             axios.post(self.$store.state.server_url + '/dashboard/change-cat-text/', {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
@@ -463,10 +463,10 @@ export default {
             const self = this
             
             const subcat_old = self.subcat_toedit.subcat
-            const desc_old = self.subcat_toedit.description
+            //const desc_old = self.subcat_toedit.description
 
             if (self.desc_new !== '') {
-                console.log("DESC CHANGE", desc_old, "to", self.desc_new)
+                //console.log("DESC CHANGE", desc_old, "to", self.desc_new)
                 
                 axios.post(self.$store.state.server_url + '/dashboard/change-subcat-description/', {
                     mturk_id: self.$store.state.mturk_id,
@@ -495,7 +495,7 @@ export default {
 
 
             if (self.subcat_new !== '') {
-                console.log("SUBCAT CHANGE", subcat_old, "to", self.subcat_new)
+                //console.log("SUBCAT CHANGE", subcat_old, "to", self.subcat_new)
                 axios.post(self.$store.state.server_url + '/dashboard/change-subcat-text/', {
                     mturk_id: self.$store.state.mturk_id,
                     doctype: self.$route.params.docType,
@@ -538,7 +538,7 @@ export default {
 
         movesubcat() {
             const self = this
-            console.log("MOVE CAT", self.subcat_tomove, "to", self.cat_moveto)
+            //console.log("MOVE CAT", self.subcat_tomove, "to", self.cat_moveto)
             axios.post(self.$store.state.server_url + '/dashboard/move-subcat/', {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
@@ -611,7 +611,7 @@ export default {
 
         savenewcat() {
             const self = this
-            console.log("CAT ADD", self.cat_toadd)
+            //console.log("CAT ADD", self.cat_toadd)
             axios.post(self.$store.state.server_url + '/dashboard/add-cat/', {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
@@ -648,7 +648,7 @@ export default {
 
         savemergecat() {
             const self = this;
-            console.log("MERGE CAT", self.cat_tomerge, "to", self.cat_mergeto)
+            //console.log("MERGE CAT", self.cat_tomerge, "to", self.cat_mergeto)
             axios.post(self.$store.state.server_url + '/dashboard/merge-cats/', {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
@@ -684,13 +684,13 @@ export default {
         // Merge subcats
         mergesubcat(subcat) {
             this.subcat_tomerge = subcat.subcat
-            console.log(subcat.subcat)
+            //console.log(subcat.subcat)
             this.mergesubcat_dialog = true
         },
 
         savemergesubcat() {
             const self = this;
-            console.log("MERGE SUBCAT", self.subcat_tomerge, "to", self.subcat_mergeto)
+            //console.log("MERGE SUBCAT", self.subcat_tomerge, "to", self.subcat_mergeto)
             axios.post(self.$store.state.server_url + '/dashboard/merge-subcats/', {
                 mturk_id: self.$store.state.mturk_id,
                 doctype: self.$route.params.docType,
@@ -830,31 +830,23 @@ export default {
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
 
-                const width = 300;//cont_pos.right-cont_pos.left
-                //const height = cont_pos.bottom-cont_pos.top
+                const width = 300;
 
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
-                //self.original_box = json;
 
-                //console.log(resbox)
-                //self.$forceUpdate();
                 self.done = ''
                 
                 var boxes = []
 
                 boxes = resbox.filter(v => box_id.includes(v.box_id))
-                //console.log(boxes)
-                //var texts = boxes.map(v => v.text)
+
                 
                 return boxes
             })
         },
 
         async waitForJson(pk, no, box_id) {
-            //console.log(json)
-            //console.log(pk, no, box_id)
             const response = await this.imageNo2Json(no, box_id)
-            //console.log(response)
             if (this.annot_boxes[pk] === undefined) {
                 this.$set(this.annot_boxes, pk, response)
                 
@@ -866,7 +858,6 @@ export default {
 
     computed: {
         disableSave() {
-            //console.log(this.cat_new.length, "|", this.subcat_new.length, "|", this.desc_new, "|", this.cat_moveto.length)
             return this.cat_new === '' && this.subcat_new === '' && this.desc_new === '' && this.cat_moveto === '' && this.cat_toadd === '' && this.cat_mergeto === '' && this.subcat_mergeto === ''
         },
 

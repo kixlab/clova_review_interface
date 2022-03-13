@@ -9,11 +9,6 @@
     In this task, you will be asked to finalize the label set you made previously and resolve conflicts in the annotation phase.<br>
 
     <br/>
-    <!--
-    You can either choose to ~~~.
-
-    <br/>
-    -->
     <br/>
     
     <h4>Please enter your name to begin label set finalization.</h4>
@@ -65,29 +60,7 @@ export default {
   },
   methods: {
     ...mapActions(['setServerURL']),
-    /* Got from the mturk interface
-    onClickNext: function () {
-      const self = this;
-      self.$refs.form.validate()
-      self.$store.commit('set_mturk_id', self.turk_id.trim())
-      axios.post(self.$store.state.server_url + '/api/signup/', {
-        username: self.$store.state.mturk_id,
-      }).then( function(res){
-//        self.$store.commit('set_mturk_id', self.turk_id.trim())
-        if(res.data.status=='instruction'){
-          self.$router.push('/instruction/')
-        } else{
-          if(res.data.status=='annotation'){
-            self.$store.commit('set_start_image_no', 0);
-            self.$router.push('/resolution/'+res.data.doctype+'/image/')
-          }else{
-            self.$store.commit('update_status', new Array(300).fill(false));
-            self.$router.push('../informed-consent/')                    }
-        }
-      });
-    },
-    */
-
+    
     onClickNext: function(doctype) {
       const self = this;
       if (doctype==='receipt') {

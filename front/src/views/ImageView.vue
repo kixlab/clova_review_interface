@@ -27,19 +27,6 @@ export default {
     components: {
         ImagePanel,
         Progress
-    },
-    data() {
-        return {
-
-        }
-    },
-
-    mounted: function() {
-
-    },
-
-    methods: {
-
     }
 }
 </script>

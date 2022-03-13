@@ -167,7 +167,7 @@ export default {
             }
         })
         .then(function(res){
-            console.log(res.data);
+            //console.log(res.data);
             window.alert('na suggestions loaded!')
             self.suggestions_all=res.data.na_suggestions;
         })
@@ -214,13 +214,15 @@ export default {
         approve() {
             const self = this;
 
+            /*
             console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:self.sel_subcat,
                 description: '',//self.description,
                 doctype: self.$route.params.docType})
-            
+            */
+
             axios.post(self.$store.state.server_url + '/dashboard/save-na-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
@@ -253,23 +255,23 @@ export default {
         ignore() {
             const self = this;
 
-            //console.log('ignore clicked')
+            /*
             console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:'n/a',
                 description: '',//self.description,
                 doctype: self.$route.params.docType})
-            
+            */
+
             axios.post(this.$store.state.server_url + '/dashboard/save-na-ignore/', {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
                 subcategory:'n/a',
-                description: '',//self.description,
+                description: '',
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                //console.log(res)
                 self.selectedBoxes = []
 
                 self.suggestions_all=res.data.na_suggestions;
@@ -284,6 +286,7 @@ export default {
         saveLabels(dest) {
             const self = this;
 
+            /*
             console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.cat,
@@ -291,6 +294,7 @@ export default {
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             })
+            */
 
             axios.post(self.$store.state.server_url + '/dashboard/save-na-'+dest+'/', {
                 mturk_id: self.$store.state.mturk_id, 
@@ -319,14 +323,12 @@ export default {
         },
 
         selectSuggestion(value) {
-            console.log('dd', value)
 
             this.sel_cat = value.suggestion_cat
             this.sel_subcat = value.suggestion_text
 
             this.suggestions_show = this.suggestions_all.filter(v => v.suggestion_cat === this.sel_cat && v.suggestion_text === this.sel_subcat)
 
-            console.log(this.suggestions_show)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
         },
@@ -340,7 +342,7 @@ export default {
         },
 
         check(annot, worker, sugg_cat, sugg_subcat) {
-            console.log(annot, worker, sugg_cat, sugg_subcat)
+            //console.log(annot, worker, sugg_cat, sugg_subcat)
             var tempbox_full = this.selectedBoxes_full
             if (this.selectedBoxes.indexOf(annot) > -1) {
                 annot.worker_id = worker
@@ -368,13 +370,12 @@ export default {
             var padding_y = 0
             if (img_w/json[1] >= img_h/json[2]) {
                 ratio = img_w/json[1]
-                padding_y = 0//(json[2]-(img_h/ratio))/2
+                padding_y = 0
             } else {
                 ratio = img_h/json[2]
                 padding_x = (json[1]-(img_w/ratio))/2
             }
 
-            //commit('setImageRatio', ratio)
             if(json[0].valid_line==undefined){
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
             const processedData = validData.map(function(i) {
@@ -414,13 +415,11 @@ export default {
             else {
             const validData=json[0].valid_line.map(v => v.words).flat(1)
 
-            //const newValidData = []
             for (var d in json[0].valid_line) {
                 var word = json[0].valid_line[d].words
                 var cat = json[0].valid_line[d].category
                 for (var w in word) {
                     word[w]["GTlabel"] = cat
-                    //newValidData.push(word[w])
                 }
             }
             //console.log("VALIDDATA", validData)
@@ -458,29 +457,22 @@ export default {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
-                const width = 250;//cont_pos.right-cont_pos.left
-                //const height = cont_pos.bottom-cont_pos.top
+                const width = 250;
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
-                //self.original_box = json;
-                //console.log(resbox)
-                //self.$forceUpdate();
+
                 self.done = ''
                 
                 var boxes = []
                 boxes = resbox.filter(v => JSON.parse(box_id).includes(v.box_id))
-                //var texts = boxes.map(v => v.text)
                 
                 return boxes
             })
         },
         async waitForJson(pk, no, box_id) {
-            //console.log(json)
-            //console.log(no, box_id)
             const response = await this.imageNo2Json(no, box_id)
             //console.log(response)
             if (this.annot_boxes[pk] === undefined) {
                 this.$set(this.annot_boxes, pk, response)
-                //console.log("ANNOTBOXES", Object.keys(this.annot_boxes).length)
             }
             return response
         },
@@ -498,7 +490,6 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                console.log("NEW SELECTEDBOXES", this.selectedBoxes)
             }
         },
     },

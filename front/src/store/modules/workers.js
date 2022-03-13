@@ -27,7 +27,6 @@ const actions = {
                 end_time: '',
             }
         })
-        console.log("$$ INITIALIZE crowd $$", assigned)
         commit('setAssignedImages', assigned)
     },
 
@@ -38,15 +37,14 @@ const actions = {
         commit('setAnnotatedImages', annotated)
     },  
     setStatus({commit}, status){
-        //console.log('setStatus called with', status)
         commit('update_status', status)
       },
     setAStatus({commit}, payload){
-        console.log(this.state)
+        //console.log(this.state)
         var new_status = this.state.workers.annot_status
-        console.log('before payload', new_status)
+        //console.log('before payload', new_status)
         new_status[payload.idx] = payload.val
-        console.log('after payload', new_status)
+        //console.log('after payload', new_status)
         commit('update_a_status', new_status)      
     },  
 }

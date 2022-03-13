@@ -28,17 +28,6 @@ const getters = {
 }
 
 const actions = {
-    /*
-    async getImages({ commit }) {
-        const response = await axios.get('')
-        commit('setImages', response.data)
-    },
-    */
-/* 
-    initializeImages({ commit }, name) {
-        commit('setCurrImage', name.toString())
-    },
- */
     updateDistribution({ commit }, newdist) {
         commit('setDistribution', newdist)
     },
@@ -49,7 +38,7 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        console.log("NEW JSON --------\n" , json)
+        //console.log("NEW JSON --------\n" , json)
         const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].meta.image_size === undefined? json[0].meta.imageSize.width:json[0].meta.image_size.width)
         const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].meta.image_size === undefined? json[0].meta.imageSize.height:json[0].meta.image_size.height)
         var ratio = 1
@@ -57,7 +46,7 @@ const actions = {
         var padding_y = 0
         if (img_w/json[1] >= img_h/json[2]) {
             ratio = img_w/json[1]
-            padding_y = 0//(json[2]-(img_h/ratio))/2
+            padding_y = 0
         } else {
             ratio = img_h/json[2]
             padding_x = (json[1]-(img_w/ratio))/2
@@ -144,7 +133,6 @@ const actions = {
     },
 
     updateAnnotatedBoxes({ commit }, json) {
-        console.log("JSON", json)
         if (json[1] === "add") {
             commit('addAnnotatedBox', json[0])
         }
@@ -172,7 +160,6 @@ const mutations = {
         //console.log("New RATIO:", state.imageRatio)
     },
     setImageURL: (state, commit, rootState) => {
-        console.log(rootState.image_url)
         state.imageURL = rootState.image_url
         //console.log("New RATIO:", state.imageRatio)
     },
@@ -195,7 +182,7 @@ const mutations = {
 
     setDistribution: (state, distribution) => {
         state.distribution = distribution
-        console.log('new distribution --', state.distribution)
+        //console.log('new distribution --', state.distribution)
     }
 }
 

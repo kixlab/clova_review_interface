@@ -209,11 +209,11 @@ export default {
 
         })
         .then(function(res){
-            console.log("CLOSE TO ---", res.data);
+            //console.log("CLOSE TO ---", res.data);
             self.suggestions_all=res.data.close_to_suggestions;
             self.sel_category = 0;
             self.subcat_show_list = self.suggestions_all.filter(v => v.cat === self.categories[0]).map(v => v.subcat)[0]
-            console.log(self.subcat_show_list)
+            //console.log(self.subcat_show_list)
         })
 
         axios.get(self.$store.state.server_url + "/dashboard/get-cats",{
@@ -264,66 +264,33 @@ export default {
             this.addsubcat=false;
 
             this.subcat_show_list = this.suggestions_all.filter(v => v.cat === selectedCategory.cat).map(v => v.subcat)[0]
-            console.log(this.subcat_show_list)
-
-            //this.subcat_show_list = this.suggestions_all.filter(v => v.suggestion_cat === selectedCategory.cat).map(v => v.suggestion_subcat)
+            //console.log(this.subcat_show_list)
         },
 
         selectSubcat(cat) {
-            //console.log(cat.cat, cat.subcat, '-', cat.description)
             this.sel_cat = this.category.cat
             this.sel_subcat = cat.subcat
 
-            console.log(this.category.cat, '-', cat.subcat)
+            //console.log(this.category.cat, '-', cat.subcat)
 
             this.suggestions_show = cat.suggestions
             
-            //this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(v => v.subcat === this.sel_subcat).suggestions;
-            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat)
-            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat))
-            console.log(this.suggestions_all.find(v => v.cat === this.sel_cat).subcat.find(e=>e.subcat===this.sel_subcat).suggestions)
             // 새로운 label 누를 때 다 초기화 시키기 위해..
             this.selectedBoxes = []
-            //this.selectedBoxes_full = []
         },
 
 
 
         approve() {
-            //console.log('approve clicked')
             const self = this;
-            /*
-            var selectedBoxes_final = []
-            for (var b in self.selectedBoxes_full) {
-                var temp = self.selectedBoxes_full[b]
-                temp.cat = self.selectedBoxes_full[b].suggested_cat
-                temp.subcat = self.selectedBoxes_full[b].suggested_subcat
-                selectedBoxes_final.push(temp)
-            }*/
-
-            
-             console.log({mturk_id: self.$store.state.mturk_id, 
-                annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
-                category:self.sel_cat,
-                subcategory:self.selectedBoxes[0].suggested_subcat,
-                //subcategory:self.sugg_subcat,
-                description: '',//self.description,
-                doctype: self.$route.params.docType,
-                dd: self.selectedBoxes[0]
-            })
-
-            
-            
-            //console.log('boxex', self.selectedBoxes);
-            axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
+                axios.post(self.$store.state.server_url + '/dashboard/save-close-to-approve/', {
                 mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => ({annotation_pk: v.annotation_pk, sugg_subcat: v.suggested_subcategory})),
                 category:self.sel_cat,
-                //subcategory:self.sel_subcat,
-                description: '',//self.description,
+                description: '',
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                console.log(res.data)
+                //console.log(res.data)
                 self.selectedBoxes = []
 
                 self.suggestions_all=res.data.close_to_suggestions;
@@ -341,7 +308,6 @@ export default {
         },
 
         addAsNew() {
-            //console.log('add as new clicked')
             this.clicked = this.clicked === 'addasnew' ? '' : 'addasnew'
         },
 
@@ -354,6 +320,7 @@ export default {
 
             //console.log('ignore clicked')
 
+            /*
             console.log({mturk_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
@@ -361,7 +328,7 @@ export default {
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             })
-            
+            */
             
             axios.post(this.$store.state.server_url + '/dashboard/save-close-to-ignore/', {
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
@@ -371,7 +338,7 @@ export default {
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                console.log(res.data)
+                //console.log(res.data)
                 self.selectedBoxes = []
 
                 self.suggestions_all=res.data.close_to_suggestions;
@@ -392,14 +359,6 @@ export default {
             const self = this;
             //console.log(this.cat, "-", this.subcat)
             /*
-            var selectedBoxes_final = []
-            for (var b in self.selectedBoxes_full) {
-                var temp = self.selectedBoxes_full[b]
-                temp.cat = self.cat
-                temp.subcat = self.subcat
-                selectedBoxes_final.push(temp)
-            }
-            */
             console.log({expert_id: self.$store.state.mturk_id, 
                 annotation_pks:self.selectedBoxes.map(v => v.annotation_pk),
                 category:self.sel_cat,
@@ -407,6 +366,7 @@ export default {
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             })
+            */
 
             axios.post(self.$store.state.server_url + '/dashboard/save-close-to-'+dest+'/', {
                 mturk_id: self.$store.state.mturk_id, 
@@ -416,7 +376,7 @@ export default {
                 description: '',//self.description,
                 doctype: self.$route.params.docType
             }).then(function (res) {
-                console.log(res.data)
+                //console.log(res.data)
                 self.cat = ''
                 self.subcat = ''
                 self.selectedBoxes = []
@@ -439,61 +399,17 @@ export default {
         selectAll(annots, sugg) {
             this.selectedBoxes = annots
             this.sugg_subcat = sugg
-            /*
-            var tempbox = this.selectedBoxes
-            var tempbox_full = this.selectedBoxes_full
-            for (var a in annots) {
-                tempbox.push(annots[a])
-                annots[a].worker_id = workers[a]
-                annots[a].suggested_cat = sugg_cat
-                annots[a].suggested_subcat = sugg_subcat
-                annots[a].cat = this.sel_cat
-                annots[a].subcat = this.sel_subcat
-                tempbox_full.push(annots[a])
-            }*/
         },
 
         unselectAll() {
             this.selectedBoxes = []
             this.sugg_subcat = ''
-            /*
-            var tempbox = this.selectedBoxes
-            var tempbox_full = this.selectedBoxes_full
-            for (var a in annots) {
-                tempbox.splice(tempbox.indexOf(annots[a]), 1)
-                annots[a].worker_id = workers[a]
-                annots[a].suggested_cat = sugg_cat
-                annots[a].suggested_subcat = sugg_subcat
-                annots[a].cat = this.sel_cat
-                annots[a].subcat = this.sel_subcat
-                tempbox_full.splice(tempbox_full.indexOf(annots[a]))
-            }*/
         },
 
         check(annot, sugg_subcat) {
             this.sugg_subcat = sugg_subcat
-            console.log(annot)
+            //console.log(annot)
 
-            /*
-            console.log('sugg_cat', sugg_cat);
-            console.log('sugg_subcat', sugg_subcat);
-            
-            var tempbox_full = this.selectedBoxes_full
-            if (this.selectedBoxes.indexOf(annot) > -1) {
-                annot.worker_id = worker
-                annot.suggested_cat = sugg_cat
-                annot.suggested_subcat = sugg_subcat
-                annot.cat = this.sel_cat
-                annot.subcat = this.sel_subcat
-                tempbox_full.push(annot)
-            }
-            else {
-                annot.worker_id = worker
-                annot.cat = this.sel_cat
-                annot.subcat = this.sel_subcat
-                tempbox_full.splice(tempbox_full.indexOf(annot))
-            }
-            */
         },
         
         
@@ -597,12 +513,9 @@ export default {
                 var json = res.data;
                 var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
                 var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height)
-                const width = 250;//cont_pos.right-cont_pos.left
-                //const height = cont_pos.bottom-cont_pos.top
+                const width = 250;
                 const resbox = self.setImageBoxes([json, width, width*img_height/img_width, true]);
-                //self.original_box = json;
-                //console.log(resbox)
-                //self.$forceUpdate();
+
                 self.done = ''
                 
                 var boxes = []
@@ -631,7 +544,7 @@ export default {
         selectedBoxes: {
             deep: true,
             handler() {
-                console.log(this.selectedBoxes)
+                //console.log(this.selectedBoxes)
                 if (this.selectedBoxes.length === 0) {
                     this.sugg_subcat = ''
                 }

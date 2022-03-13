@@ -116,7 +116,7 @@ export default {
                 mturk_id: self.$store.state.mturk_id, doctype: self.$route.params.docType }
                 })
                 .then(function(res){
-                    console.log('curr', res.data);
+                    //console.log('curr', res.data);
                     self.curr_distribution=res.data.distribution;
                     self.updateDistribution(res.data.distribution)
                 });
@@ -126,7 +126,7 @@ export default {
           mturk_id: self.$store.state.mturk_id, doctype: self.$route.params.docType }
         })
         .then(function(res){
-            console.log('raw', res.data);
+            //console.log('raw', res.data);
             self.raw_distribution=res.data.distribution;
         })
 

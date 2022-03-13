@@ -30,37 +30,6 @@
       </div>
 
   </div>
-  <!--
-  <div style="height: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
-      <template v-for="(status, index) in stats"> 
-        <template v-if="index===img_temp">
-          <template v-if="status===true">
-            <button class="curr done status" v-on:click="goTo(index);" :key='index' >
-            #{{index+1}}
-            </button>
-          </template>
-          <template v-else>
-            <button class="curr yet status" v-on:click="goTo(index);" :key='index'>
-            #{{index+1}}
-            </button>
-          </template>
-        </template>
-        <template v-else>
-          <template v-if="status===true">
-            <button class="done status" v-on:click="goTo(index);" :key='index' >
-            #{{index+1}}
-            </button>
-          </template>
-          <template v-else>
-            <button class="yet status" v-on:click="goTo(index);" :key='index' >
-            #{{index+1}}
-            </button>
-          </template>
-        </template>
-      </template>
-
-  </div>
-  -->
 </div>
 </template>
 
@@ -86,17 +55,6 @@ export default {
     }})
 
   },
- /*  computed: {
-    stats() {
-          return 
-        }
-  }, */
-  /* watch: {
-    stats() {
-      console.log("Hi", this.$store.getters.getStatus);
-          return this.$store.getters.getStatus;
-        }
-  }, */ 
   methods:{
       ...mapActions(['setCurrImage']),
       ...mapGetters(['getStatus']),

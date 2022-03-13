@@ -3,12 +3,8 @@
   <v-card
     tile    
     >
-    <!--
-    <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
-    -->
       <v-card-title >
         <h4 style="margin:auto;">{{this.$router.currentRoute.params.docType}} #{{this.$store.state.image_order+1}} <br></h4> 
-        <!--<h5 style="margin:auto;">Found trollers - A1DVKS3R9SLQ1H & A3JN18TC8GL3IH</h5>-->
         <h5 style="margin: auto;">
           <template v-if="image_box">
             {{image_box.length}} boxes total
@@ -36,18 +32,6 @@
                     <div v-else>
                       <bounding-box-text circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.0;" :box_info="box"/>
                     </div>
-                    <!--
-                    <div v-else-if="box.annotated === true && box.hover === false">
-                      <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
-                    </div>
-                    
-                    <div v-else-if="box.hover === true">
-                      <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
-                    </div>
-                    <div v-else>
-                      <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
-                    </div>
-                    -->
                   </div>
                 </div>
               </template>
@@ -71,13 +55,11 @@ import axios from "axios";
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
 import BoundingBox from '@/components/BoundingBox.vue'
-import BoundingBoxText from '@/components/BoundingBoxText.vue'
 
 export default {
   name: "ImagePanel",
   components: {
     BoundingBox,
-    BoundingBoxText,
     'drag-select-container': DragSelect
   },
   data() {
@@ -97,7 +79,6 @@ export default {
   },
 
   mounted() {
-    //this.loadImageID(function(self) {
     const self = this;
     self.image = self.$store.getters.getImage;
     self.image_box = self.$store.getters.getImageBoxes;
@@ -109,14 +90,6 @@ export default {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})
-    /*
-    self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes') {
-        self.loadNewImage();
-      }
-    }})
-    */
-    //})
   },
 
   watch:{
@@ -124,7 +97,7 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
-        console.log('********** watching!!!')
+        //console.log('********** watching!!!')
       }
     }
     
@@ -132,30 +105,9 @@ export default {
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
 
-    highlight(item) { item.hover = true; console.log(item.text) },
+    highlight(item) { item.hover = true; /*console.log(item.text)*/ },
     undoHighlight(item) { item.hover = false },
 
-    loadImageID: function () {
-      /*
-      const self = this;
-      axios.get(self.$store.state.server_url + "/api/get-image-id", {
-        params: {
-          mturk_id: self.$store.state.mturk_id,
-          doctype: self.$route.params.docType
-        }
-      }).then(function (res) {
-        if (res.data.step >= 20) {
-          alert('You already finished the task!\n');
-          self.$router.push('after-done')
-        }
-        //self.$store.commit('set_step', res.data.step)
-        callback(self);
-
-      }).catch(function(err) {
-        alert('Please refresh this page.\nIf this error repeats, please contact us via jeongeonpark1@gmail.com \n' + err);
-      });
-      */
-    },
     loadNewImage: function() {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
@@ -274,12 +226,9 @@ export default {
         var y1 = boxes[box].y_pos;
         var y2 = boxes[box].y_pos + boxes[box].y_len;
 
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
         if ((start[0] <= x1 || start[0] <= x2) && (end[0] >= x1 || end[0] >= x2) && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
 
           if (this.image_box[box].annotated === false) {
-            //this.image_box[box].selected = !this.image_box[box].selected;
             this.image_box[box].selected = true;
             if (this.image_box[box].selected === true) {
               selected_box.push(this.image_box[box].box_id)
